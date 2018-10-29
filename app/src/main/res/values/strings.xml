@@ -1,3 +1,11 @@
 <resources>
-    <string name="app_name">MySelf</string>
+    <string name="app_name">mySelf</string>
+    <string name="login_with_Facebook">Login with Facebook</string>
+    <string name="login_with_Google">Login with Google</string>
+    <string name="continue_without_account">Continue without an account</string>
+    <string name="imgContentDescription">image</string>
+    <string name="facebook_app_id">710859642327105</string>
+
+    <string name="lbl_tasks">Tasks</string>
+    <string name="lbl_profile">Profile</string>
 </resources>

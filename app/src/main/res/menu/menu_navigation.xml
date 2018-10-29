@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activity.MainActivity">
+
+    <group
+        android:id="@+id/grpMenuFeatures"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/action_tasks"
+            android:title="@string/lbl_tasks" />
+
+        <item
+            android:id="@+id/action_profile"
+            android:title="@string/lbl_profile" />
+
+    </group>
+
+</menu>
