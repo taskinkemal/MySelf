@@ -13,7 +13,7 @@ import com.keplersegg.myself.Fragments.ProfileFragment;
 import com.keplersegg.myself.Fragments.TasksFragment;
 import com.keplersegg.myself.R;
 
-public class MainActivity extends MasterActivity {
+public class MainActivity extends AuthActivity {
 
     DrawerLayout lytDrawerHome;
 

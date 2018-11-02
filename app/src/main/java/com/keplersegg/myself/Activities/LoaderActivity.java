@@ -2,19 +2,19 @@ package com.keplersegg.myself.Activities;
 
 import android.app.ActionBar;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.api.OptionalPendingResult;
-import com.google.android.gms.common.api.Result;
-import com.google.android.gms.common.api.ResultCallback;
+import com.facebook.AccessToken;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.keplersegg.myself.Async.GetFacebookUser;
+import com.keplersegg.myself.Async.ISetUser;
+import com.keplersegg.myself.Models.User;
 import com.keplersegg.myself.R;
 
-public class LoaderActivity extends MasterActivity {
+public class LoaderActivity extends MasterActivity implements ISetUser {
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -25,19 +25,33 @@ public class LoaderActivity extends MasterActivity {
         if (ab != null)
             ab.hide();
 
-//        OptionalPendingResult opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
-//        if (opr.isDone()) {
-//
-//            Result result = opr.get();
-//            handleGPlusSignInResult(result);
-//        } else {
-//            opr.setResultCallback(new ResultCallback() {
-//                @Override
-//                public void onResult(@NonNull Result result) {
-//                    handleGPlusSignInResult(result);
-//                }
-//            });
-//        }
+
+    }
+
+    private void LoginCheck() {
+
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+
+        if (account != null)
+        {
+            if (handleGPlusSignInResult(account)) {
+
+                NavigateToActivity("Main", true);
+                return;
+            }
+        }
+
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+
+        if (isLoggedIn) {
+
+            new GetFacebookUser().Run(this, accessToken);
+        }
+        else {
+
+            NavigateToActivity("Login", true);
+        }
     }
 
     @Override
@@ -63,7 +77,7 @@ public class LoaderActivity extends MasterActivity {
             @Override
             public void onAnimationEnd(Animation animation) {
 
-                OnCreateInternal();
+                LoginCheck();
             }
 
             @Override
@@ -73,5 +87,20 @@ public class LoaderActivity extends MasterActivity {
         });
 
         prgBarLoader.startAnimation(anim);
+    }
+
+    @Override
+    public void setUser(User user) {
+
+        application.user = user;
+
+        if (user != null) {
+
+            NavigateToActivity("Main", true);
+        }
+        else {
+
+            NavigateToActivity("Login", true);
+        }
     }
 }

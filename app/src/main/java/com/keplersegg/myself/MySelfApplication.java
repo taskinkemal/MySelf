@@ -3,10 +3,11 @@ package com.keplersegg.myself;
 import android.app.Application;
 
 import com.facebook.FacebookSdk;
+import com.keplersegg.myself.Models.User;
 
 public class MySelfApplication extends Application {
 
-    public String dummyData;
+    public User user;
 
     @Override
     public void onCreate() {
@@ -14,7 +15,5 @@ public class MySelfApplication extends Application {
         super.onCreate();
 
         FacebookSdk.sdkInitialize(this);
-
-        dummyData = "";
     }
 }

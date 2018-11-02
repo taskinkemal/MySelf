@@ -5,4 +5,5 @@
     <color name="colorPrimaryDark">#607d8b</color>
     <color name="colorAccent">#f9a825</color>
     <color name="colorDivider">#999999</color>
+    <color name="colorBackground">#ffffff</color>
 </resources>
