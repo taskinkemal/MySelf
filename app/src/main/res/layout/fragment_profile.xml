@@ -18,7 +18,6 @@
         android:layout_height="wrap_content"
         android:text="@string/logout"
         android:id="@+id/btnLogout"
-        android:background="@color/colorAccent"
-        android:textColor="@android:color/white"
+        style="@style/StyleButtonBase"
         />
 </LinearLayout>

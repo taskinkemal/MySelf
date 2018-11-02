@@ -1,17 +1,13 @@
 package com.keplersegg.myself.Room.Entity;
 
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
-import android.support.annotation.NonNull;
 
-@Entity
+@Entity(primaryKeys={"Day", "TaskId"})
 public class Entry {
 
-    @PrimaryKey
-    private int Day;
-    @PrimaryKey
-    private int TaskId;
-    private int Value;
+    public int Day;
+    public int TaskId;
+    public int Value;
 
     public int getDay() { return this.Day; }
     public int getTaskId() { return this.TaskId; }
@@ -24,8 +20,10 @@ public class Entry {
     public static Entry CreateItem(int day, int taskId) {
 
         Entry m = new Entry();
-        m.Day = day;
-        m.TaskId = taskId;
+
+        m.setDay(day);
+        m.setTaskId(taskId);
+        m.setValue(0);
 
         return m;
     }

@@ -1,8 +1,6 @@
 package com.keplersegg.myself.Activities;
 
 import android.annotation.SuppressLint;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -16,7 +14,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.keplersegg.myself.Fragments.MasterFragment;
 import com.keplersegg.myself.Models.User;
 import com.keplersegg.myself.MySelfApplication;
 import com.keplersegg.myself.R;
@@ -85,24 +82,6 @@ public class MasterActivity extends AppCompatActivity
 
         if (clearTop) // ana sayfadan geri dön'e tıklandığında çıkış yapma diyaloğu gelmesi için.
             finish();
-    }
-
-    public void NavigateFragment(boolean addToBackStack, MasterFragment fragment) {
-
-        FragmentManager manager = getFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.setCustomAnimations(
-                R.animator.fragment_enter,
-                R.animator.fragment_exit,
-                R.animator.fragment_pop_enter,
-                R.animator.fragment_pop_exit);
-
-        transaction.replace(R.id.fragment_frame, fragment);
-
-        if (addToBackStack)
-            transaction.addToBackStack(null);
-
-        transaction.commit();
     }
 
     private void initializeGPlusSettings(){

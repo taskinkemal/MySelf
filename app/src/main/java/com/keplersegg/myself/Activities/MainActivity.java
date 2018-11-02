@@ -1,5 +1,7 @@
 package com.keplersegg.myself.Activities;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -9,6 +11,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.keplersegg.myself.Fragments.AddTaskFragment;
+import com.keplersegg.myself.Fragments.MasterFragment;
 import com.keplersegg.myself.Fragments.ProfileFragment;
 import com.keplersegg.myself.Fragments.TasksFragment;
 import com.keplersegg.myself.R;
@@ -69,6 +73,10 @@ public class MainActivity extends AuthActivity {
 
                 NavigateFragment(true, ProfileFragment.newInstance());
                 break;
+            case R.id.action_add_task:
+
+                NavigateFragment(true, AddTaskFragment.newInstance(-1));
+                break;
         }
     }
 
@@ -78,5 +86,23 @@ public class MainActivity extends AuthActivity {
             lytDrawerHome.openDrawer(GravityCompat.START);
         }
         return super.onOptionsItemSelected(menuItem);
+    }
+
+    public void NavigateFragment(boolean addToBackStack, MasterFragment fragment) {
+
+        FragmentManager manager = getFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.setCustomAnimations(
+                R.animator.fragment_enter,
+                R.animator.fragment_exit,
+                R.animator.fragment_pop_enter,
+                R.animator.fragment_pop_exit);
+
+        transaction.replace(R.id.fragment_frame, fragment);
+
+        if (addToBackStack)
+            transaction.addToBackStack(null);
+
+        transaction.commit();
     }
 }

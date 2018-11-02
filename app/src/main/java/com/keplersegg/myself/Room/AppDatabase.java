@@ -7,9 +7,10 @@ import android.content.Context;
 
 import com.keplersegg.myself.Room.Dao.EntryDao;
 import com.keplersegg.myself.Room.Dao.TaskDao;
+import com.keplersegg.myself.Room.Entity.Entry;
 import com.keplersegg.myself.Room.Entity.Task;
 
-@Database(entities = {Task.class}, version = 3)
+@Database(entities = {Task.class, Entry.class}, version = 4)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;

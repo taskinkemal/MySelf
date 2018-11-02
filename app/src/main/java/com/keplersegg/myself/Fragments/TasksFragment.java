@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.keplersegg.myself.Activities.MasterActivity;
+import com.keplersegg.myself.Activities.MainActivity;
 import com.keplersegg.myself.Adapters.TasksAdapter;
 import com.keplersegg.myself.Async.GetTasks;
 import com.keplersegg.myself.R;
@@ -34,7 +34,7 @@ public class TasksFragment extends MasterFragment {
         if (rootView == null) {
 
             rootView = inflater.inflate(R.layout.fragment_tasks, container, false);
-            activity = (MasterActivity) rootView.getContext();
+            activity = (MainActivity) rootView.getContext();
 
             RecyclerView rcylTasks = rootView.findViewById(R.id.rcylTasks);
 

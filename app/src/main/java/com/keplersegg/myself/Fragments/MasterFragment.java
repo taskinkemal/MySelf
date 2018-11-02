@@ -3,11 +3,11 @@ package com.keplersegg.myself.Fragments;
 import android.app.Fragment;
 import android.view.View;
 
-import com.keplersegg.myself.Activities.MasterActivity;
+import com.keplersegg.myself.Activities.MainActivity;
 
 public class MasterFragment extends Fragment {
 
-    public MasterActivity activity = null;
+    public MainActivity activity = null;
     protected View rootView = null;
 
     public void SetTitle(int id) {

@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.keplersegg.myself.Activities.MasterActivity;
+import com.keplersegg.myself.Activities.MainActivity;
 import com.keplersegg.myself.Async.ISignOut;
 import com.keplersegg.myself.Async.SignOut;
 import com.keplersegg.myself.Models.User;
@@ -34,7 +34,7 @@ public class ProfileFragment extends MasterFragment
         if (rootView == null) {
 
             rootView = inflater.inflate(R.layout.fragment_profile, container, false);
-            activity = (MasterActivity) rootView.getContext();
+            activity = (MainActivity) rootView.getContext();
 
             lblUserName = rootView.findViewById(R.id.lblUserName);
             Button btnLogout = rootView.findViewById(R.id.btnLogout);
