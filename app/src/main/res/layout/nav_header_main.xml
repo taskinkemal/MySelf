@@ -6,33 +6,36 @@
     android:layout_height="160dp"
     android:gravity="bottom"
     android:orientation="vertical"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+    android:background="@drawable/nav_header_gradient">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="8dp"
+        android:orientation="horizontal"
         android:layout_alignParentBottom="true">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/imgUserPicture"
+            android:contentDescription="@string/imgContentDescription"
+            android:src="@drawable/ic_baseline_account_circle_24px"
+            />
 
         <TextView
             android:id="@+id/lblNavUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
             tools:text="Anthony C. Weston"
             android:textStyle="bold"
             android:textSize="18sp"
+            android:layout_gravity="center_vertical"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:text="Supervisor, Physician"
-            android:layout_below="@id/lblNavUserName"
-            android:textSize="12sp"
-            />
-
-    </RelativeLayout>
+    </LinearLayout>
 
 </RelativeLayout>

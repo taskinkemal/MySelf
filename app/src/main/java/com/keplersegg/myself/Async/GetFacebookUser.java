@@ -29,6 +29,7 @@ public class GetFacebookUser {
                             user.FirstName = object.getString("first_name");
                             user.LastName = object.getString("last_name");
                             user.FacebookToken = accessToken;
+                            user.PictureUrl = object.getJSONObject("picture").getJSONObject("data").getString("url");
 
                             activity.setUser(user);
 
@@ -39,7 +40,7 @@ public class GetFacebookUser {
                     }
                 });
         Bundle parameters = new Bundle();
-        parameters.putString("fields", "id,name,first_name,last_name,email,gender,birthday");
+        parameters.putString("fields", "id,name,first_name,last_name,email,gender,birthday,picture");
         request.setParameters(parameters);
         request.executeAsync();
     }

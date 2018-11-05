@@ -2,6 +2,7 @@ package com.keplersegg.myself.Activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -104,12 +105,13 @@ public class MasterActivity extends AppCompatActivity
 
     protected boolean handleGPlusSignInResult(GoogleSignInAccount account) {
 
-        //String personPhotoUrl = account.getPhotoUrl().toString();
-
         application.user = new User();
         application.user.Email = account.getEmail();
         application.user.FirstName = account.getGivenName();
         application.user.LastName = account.getFamilyName();
+        Uri pictureUri = account.getPhotoUrl();
+        if (pictureUri != null)
+            application.user.PictureUrl = pictureUri.toString();
 
         return true;
     }

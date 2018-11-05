@@ -7,17 +7,44 @@
     android:background="@color/colorBackground"
     android:orientation="vertical">
 
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/imgUserPicture"
+        android:contentDescription="@string/imgContentDescription"
+        android:src="@drawable/ic_baseline_account_circle_24px"
+        android:layout_marginTop="40dp"
+        android:layout_gravity="center"
+        />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/lblUserName"
-        tools:text="Name Surname"/>
+        tools:text="Name Surname"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        />
 
-    <Button
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        style="@style/Divider" />
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/logout"
-        android:id="@+id/btnLogout"
-        style="@style/StyleButtonBase"
+        android:id="@+id/txtLogout"
+        android:padding="10dp"
         />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        style="@style/Divider" />
+
 </LinearLayout>

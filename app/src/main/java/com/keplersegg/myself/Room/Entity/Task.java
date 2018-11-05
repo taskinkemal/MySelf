@@ -7,7 +7,7 @@ import android.arch.persistence.room.PrimaryKey;
 public class Task {
 
     @PrimaryKey(autoGenerate = true)
-    private int TaskId;
+    private int Id;
     private String Label;
     private int DataType;
     private String Unit;
@@ -16,7 +16,7 @@ public class Task {
     private int Goal;
     private int GoalTimeFrame;
 
-    public int getTaskId() { return this.TaskId; }
+    public int getId() { return this.Id; }
     public String getLabel() { return this.Label; }
     public int getDataType() { return this.DataType; }
     public String getUnit() { return this.Unit; }
@@ -25,7 +25,7 @@ public class Task {
     public int getGoalMinMax() { return this.GoalMinMax; }
     public int getGoalTimeFrame() { return this.GoalTimeFrame; }
 
-    public void setTaskId(int taskId) { this.TaskId = taskId; }
+    public void setId(int id) { this.Id = id; }
     public void setLabel(String label) { this.Label = label; }
     public void setDataType(int dataType) { this.DataType = dataType; }
     public void setUnit(String unit) { this.Unit = unit; }

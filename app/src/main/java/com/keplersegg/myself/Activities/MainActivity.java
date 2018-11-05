@@ -1,7 +1,7 @@
 package com.keplersegg.myself.Activities;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -10,11 +10,16 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.keplersegg.myself.Fragments.AddTaskFragment;
 import com.keplersegg.myself.Fragments.MasterFragment;
 import com.keplersegg.myself.Fragments.ProfileFragment;
-import com.keplersegg.myself.Fragments.TasksFragment;
+import com.keplersegg.myself.Fragments.TasksPagerFragment;
 import com.keplersegg.myself.R;
 
 public class MainActivity extends AuthActivity {
@@ -38,7 +43,7 @@ public class MainActivity extends AuthActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
-            //actionBar.setHomeAsUpIndicator(R.mipmap.ic_menu_white_24dp);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24px);
         }
     }
 
@@ -61,21 +66,44 @@ public class MainActivity extends AuthActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        NavigationView navigationView = findViewById(R.id.navigation);
+
+        ImageView imgUserPicture = navigationView.getHeaderView(0).findViewById(R.id.imgUserPicture);
+        TextView lblNavUserName = navigationView.getHeaderView(0).findViewById(R.id.lblNavUserName);
+
+        lblNavUserName.setText((application.user != null) ? application.user.FirstName + " " + application.user.LastName : "Guest");
+
+        if (application.user.PictureUrl != null && !application.user.PictureUrl.isEmpty()) {
+
+            Glide.with(this)
+                    .load(application.user.PictureUrl)
+                    .apply(new RequestOptions()
+                    .placeholder(R.drawable.ic_baseline_account_circle_24px)
+                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE))
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(imgUserPicture);
+        }
+    }
+
     public void NavigateFromMenu(int menuItemID) {
 
         switch (menuItemID) {
 
             case R.id.action_tasks:
 
-                NavigateFragment(true, TasksFragment.newInstance());
+                NavigateFragment(true, TasksPagerFragment.Companion.newInstance());
                 break;
             case R.id.action_profile:
 
-                NavigateFragment(true, ProfileFragment.newInstance());
+                NavigateFragment(true, ProfileFragment.Companion.newInstance());
                 break;
             case R.id.action_add_task:
 
-                NavigateFragment(true, AddTaskFragment.newInstance(-1));
+                NavigateFragment(true, AddTaskFragment.Companion.newInstance(-1));
                 break;
         }
     }
@@ -90,7 +118,7 @@ public class MainActivity extends AuthActivity {
 
     public void NavigateFragment(boolean addToBackStack, MasterFragment fragment) {
 
-        FragmentManager manager = getFragmentManager();
+        FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.setCustomAnimations(
                 R.animator.fragment_enter,

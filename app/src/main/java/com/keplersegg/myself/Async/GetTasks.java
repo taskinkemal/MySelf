@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 
 import com.keplersegg.myself.Activities.MasterActivity;
 import com.keplersegg.myself.Room.Entity.Task;
+import com.keplersegg.myself.Room.Entity.TaskEntry;
 
 import java.util.List;
 
@@ -13,17 +14,19 @@ public class GetTasks extends AsyncMaster {
         super(activity);
     }
 
-    public void Execute() {
+    public void Execute(int day) {
 
-        new GetTasksAsync().execute();
+        new GetTasksAsync().execute(day);
     }
 
-    public void OnSuccess(List<Task> list) { }
+    public void OnSuccess(List<TaskEntry> list) { }
 
-    private class GetTasksAsync extends AsyncTask<Void, Void, List<Task>> {
+    private class GetTasksAsync extends AsyncTask<Integer, Void, List<TaskEntry>> {
 
         @Override
-        protected List<Task> doInBackground(Void... params) {
+        protected List<TaskEntry> doInBackground(Integer... params) {
+
+            int day = params[0];
 
             List<Task> list = activity.AppDB().taskDao().getAll();
 
@@ -34,15 +37,13 @@ public class GetTasks extends AsyncMaster {
                 Task newItem3 = Task.CreateItem("Coffee", 1, "cup(s)", false, 0, 0, 0);
 
                 activity.AppDB().taskDao().insertAll(newItem1, newItem2, newItem3);
-
-                list = activity.AppDB().taskDao().getAll();
             }
 
-            return list;
+            return activity.AppDB().taskEntryDao().getTasks(day);
         }
 
         @Override
-        protected void onPostExecute(List<Task> result) {
+        protected void onPostExecute(List<TaskEntry> result) {
 
             OnSuccess(result);
         }

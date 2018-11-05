@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 28
@@ -33,5 +35,12 @@ dependencies {
     implementation 'com.facebook.android:facebook-android-sdk:4.38.0'
     implementation 'android.arch.persistence.room:runtime:1.1.1'
     annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "org.jetbrains.anko:anko-commons:0.10.4"
+    apply plugin: 'kotlin-android-extensions'
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
     //implementation 'com.google.firebase:firebase-core:16.0.4'
+}
+repositories {
+    mavenCentral()
 }

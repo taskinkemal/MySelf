@@ -16,13 +16,13 @@ public interface TaskDao {
     @Query("SELECT * FROM Task")
     List<Task> getAll();
 
-    @Query("SELECT * FROM Task where TaskId = :id")
+    @Query("SELECT * FROM Task where Id = :id")
     Task get(int id);
 
     @Query("SELECT count(0) FROM Task where Label = :label")
     int getCountByLabel(String label);
 
-    @Query("SELECT * FROM Task where TaskId <> :taskId and Label = :label")
+    @Query("SELECT * FROM Task where Id <> :taskId and Label = :label")
     int getCountByLabelExcludeId(int taskId, String label);
 
     @Query("SELECT COUNT(0) from Task")

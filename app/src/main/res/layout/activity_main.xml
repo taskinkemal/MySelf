@@ -37,8 +37,8 @@
 
             <fragment
                 android:id="@+id/fragment"
-                android:name="com.keplersegg.myself.Fragments.TasksFragment"
-                tools:layout="@layout/fragment_tasks"
+                android:name="com.keplersegg.myself.Fragments.TasksPagerFragment"
+                tools:layout="@layout/fragment_tasks_pager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 />
