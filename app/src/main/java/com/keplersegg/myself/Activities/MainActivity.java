@@ -77,13 +77,20 @@ public class MainActivity extends AuthActivity {
 
         lblNavUserName.setText((application.user != null) ? application.user.FirstName + " " + application.user.LastName : "Guest");
 
-        if (application.user.PictureUrl != null && !application.user.PictureUrl.isEmpty()) {
+        if (application.user != null && application.user.PictureUrl != null && !application.user.PictureUrl.isEmpty()) {
 
             Glide.with(this)
                     .load(application.user.PictureUrl)
                     .apply(new RequestOptions()
                     .placeholder(R.drawable.ic_baseline_account_circle_24px)
                     .diskCacheStrategy(DiskCacheStrategy.RESOURCE))
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(imgUserPicture);
+        }
+        else {
+
+            Glide.with(this)
+                    .load(R.drawable.ic_baseline_account_circle_24px)
                     .apply(RequestOptions.circleCropTransform())
                     .into(imgUserPicture);
         }

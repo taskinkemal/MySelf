@@ -34,7 +34,7 @@ class ProfileFragment : MasterFragment(), ISignOut {
 
         lblUserName!!.text = if (activity!!.application.user != null) activity!!.application.user.FirstName + " " + activity!!.application.user.LastName else "Guest"
 
-        if (!activity!!.application.user.PictureUrl.isNullOrBlank()) {
+        if (!activity!!.application.user?.PictureUrl.isNullOrBlank()) {
 
             Glide.with(this)
                     .load(activity!!.application.user.PictureUrl)
@@ -44,13 +44,23 @@ class ProfileFragment : MasterFragment(), ISignOut {
                     .apply(RequestOptions.circleCropTransform())
                     .into(imgUserPicture)
         }
+        else {
+
+            Glide.with(this)
+                    .load(R.drawable.ic_baseline_account_circle_24px)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(imgUserPicture)
+        }
     }
 
     override fun onSignOut() {
+
+        //TODO: what to do with the user entries and tasks?
+        activity!!.application.user = null;
         activity!!.NavigateToActivity("Login", true)
     }
 
-    override fun GetUser(): User {
+    override fun GetUser(): User? {
         return activity!!.application.user
     }
 
