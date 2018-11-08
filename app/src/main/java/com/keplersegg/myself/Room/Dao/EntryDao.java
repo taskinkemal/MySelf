@@ -25,9 +25,6 @@ public interface EntryDao {
     @Insert
     void insert(Entry entry);
 
-    @Insert
-    void insertAll(Entry... entries);
-
     @Update
     void update(Entry entry);
 

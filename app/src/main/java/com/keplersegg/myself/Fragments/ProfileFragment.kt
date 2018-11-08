@@ -13,6 +13,8 @@ import com.keplersegg.myself.Async.ISignOut
 import com.keplersegg.myself.Async.SignOut
 import com.keplersegg.myself.Models.User
 import com.keplersegg.myself.R
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
 
 class ProfileFragment : MasterFragment(), ISignOut {
@@ -25,7 +27,11 @@ class ProfileFragment : MasterFragment(), ISignOut {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        txtLogin.setOnClickListener { activity!!.NavigateToActivity("Login", true) }
         txtLogout.setOnClickListener { SignOut().Run(this@ProfileFragment) }
+
+        txtLogin.visibility = if (activity!!.application.user == null) View.VISIBLE else View.GONE
+        txtLogout.visibility = if (activity!!.application.user != null) View.VISIBLE else View.GONE
     }
 
     override fun onResume() {
@@ -55,9 +61,18 @@ class ProfileFragment : MasterFragment(), ISignOut {
 
     override fun onSignOut() {
 
-        //TODO: what to do with the user entries and tasks?
-        activity!!.application.user = null;
-        activity!!.NavigateToActivity("Login", true)
+        doAsync {
+
+            activity!!.AppDB().taskDao().deleteAll() // this will also delete the entries.
+
+            uiThread {
+                activity!!.application.user = null
+                activity!!.application.dataStore.setAccessToken(null)
+                activity!!.application.dataStore.setGoogleToken(null)
+                activity!!.application.dataStore.setFacebookToken(null)
+                activity!!.NavigateToActivity("Login", true)
+            }
+        }
     }
 
     override fun GetUser(): User? {

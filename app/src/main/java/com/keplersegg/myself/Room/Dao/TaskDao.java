@@ -3,6 +3,7 @@ package com.keplersegg.myself.Room.Dao;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
@@ -28,15 +29,15 @@ public interface TaskDao {
     @Query("SELECT COUNT(0) from Task")
     int getCount();
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(Task task);
 
-    @Insert
-    void insertAll(Task... tasks);
-
-    @Update
-    void update(Task task);
+    @Update(onConflict = OnConflictStrategy.IGNORE)
+    int update(Task task);
 
     @Delete
     void delete(Task task);
+
+    @Query("DELETE FROM Task")
+    void deleteAll();
 }

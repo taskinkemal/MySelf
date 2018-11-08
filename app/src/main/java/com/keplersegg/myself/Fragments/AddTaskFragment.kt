@@ -5,19 +5,18 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import com.keplersegg.myself.Helper.ServiceMethods
 import kotlinx.android.synthetic.main.fragment_add_task.*
 
 import com.keplersegg.myself.R
 import com.keplersegg.myself.Room.Entity.Task
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
-
-import java.util.Arrays
-import java.util.Locale
+import java.util.*
 
 class AddTaskFragment : MasterFragment() {
 
-    var TaskId = -1 // -1 means new task.
+    var TaskId = 0 // 0 means new task.
     private var task: Task? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +38,7 @@ class AddTaskFragment : MasterFragment() {
 
         btnSave.setOnClickListener { _ -> SaveTask() }
 
-        if (TaskId > -1) {
+        if (TaskId != 0) {
 
             doAsync { task = activity!!.AppDB().taskDao().get(TaskId)
                 uiThread { PrefillTask() }
@@ -107,7 +106,7 @@ class AddTaskFragment : MasterFragment() {
     private fun AddOrUpdateTask(label: String, dataType: Int, unit: String, hasGoal: Boolean, goal: Int,
                                 goalMinMax: Int, goalTimeFrame: Int): Boolean {
 
-        if (this.TaskId > -1) {
+        if (this.TaskId != 0) {
 
             if (this.activity!!.AppDB().taskDao().getCountByLabelExcludeId(TaskId, label) == 0) {
 
@@ -119,19 +118,31 @@ class AddTaskFragment : MasterFragment() {
                 task!!.goalMinMax = goalMinMax
                 task!!.goalTimeFrame = goalTimeFrame
 
-                activity!!.AppDB().taskDao().update(task)
+                val taskId = ServiceMethods.uploadTask(activity!!, task!!)
 
-                return true
+                if (taskId != -1) {
+                    task!!.id = taskId
+                    activity!!.AppDB().taskDao().update(task)
+                    return true
+                }
+                else
+                    return false
             }
         } else {
 
             if (activity!!.AppDB().taskDao().getCountByLabel(label) == 0) {
 
-                val newTask = Task.CreateItem(label, dataType, unit, hasGoal, goal, goalMinMax, goalTimeFrame)
+                val newTask = Task.CreateItem(-1, label, dataType, unit, hasGoal, goal, goalMinMax, goalTimeFrame)
 
-                activity!!.AppDB().taskDao().insert(newTask)
+                val taskId = ServiceMethods.uploadTask(activity!!, newTask)
 
-                return true
+                if (taskId != -1) {
+                    newTask.Id = taskId
+                    activity!!.AppDB().taskDao().insert(newTask)
+                    return true
+                }
+                else
+                    return false
             }
         }
 

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.keplersegg.myself.Helper.TokenType;
 import com.keplersegg.myself.Models.User;
 
 import org.json.JSONException;
@@ -24,6 +25,8 @@ public class GetFacebookUser {
 
                         try {
 
+                            activity.setToken(TokenType.Facebook, accessToken.getToken());
+
                             User user = new User();
                             user.Email = object.getString("email");
                             user.FirstName = object.getString("first_name");
@@ -34,7 +37,8 @@ public class GetFacebookUser {
                             activity.setUser(user);
 
                         } catch (JSONException e) {
-                            e.printStackTrace();
+
+                            activity.logException(e, "GetFacebookUser.Run");
                             activity.setUser(null);
                         }
                     }

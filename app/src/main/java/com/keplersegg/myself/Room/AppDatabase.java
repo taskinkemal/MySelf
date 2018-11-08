@@ -12,7 +12,7 @@ import com.keplersegg.myself.Room.Entity.Entry;
 import com.keplersegg.myself.Room.Entity.Task;
 import com.keplersegg.myself.Room.Entity.TaskEntry;
 
-@Database(entities = {Task.class, Entry.class, TaskEntry.class}, version = 6, exportSchema = false)
+@Database(entities = {Task.class, Entry.class, TaskEntry.class}, version = 9, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;

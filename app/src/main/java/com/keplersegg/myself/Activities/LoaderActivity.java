@@ -2,19 +2,28 @@ package com.keplersegg.myself.Activities;
 
 import android.app.ActionBar;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.facebook.AccessToken;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.keplersegg.myself.Async.GetFacebookUser;
+import com.keplersegg.myself.Async.ILoginHost;
 import com.keplersegg.myself.Async.ISetUser;
+import com.keplersegg.myself.Async.LoginTask;
+import com.keplersegg.myself.Helper.TokenType;
 import com.keplersegg.myself.Models.User;
 import com.keplersegg.myself.R;
 
-public class LoaderActivity extends MasterActivity implements ISetUser {
+import org.jetbrains.annotations.NotNull;
+
+public class LoaderActivity extends MasterActivity implements ISetUser, ILoginHost {
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -25,7 +34,10 @@ public class LoaderActivity extends MasterActivity implements ISetUser {
         if (ab != null)
             ab.hide();
 
-
+        Glide.with(this)
+                .load(R.drawable.login_background)
+                .apply(RequestOptions.centerCropTransform())
+                .into((ImageView)findViewById(R.id.imgLoginBackground));
     }
 
     private void LoginCheck() {
@@ -36,7 +48,7 @@ public class LoaderActivity extends MasterActivity implements ISetUser {
         {
             if (handleGPlusSignInResult(account)) {
 
-                NavigateToActivity("Main", true);
+                new LoginTask(this).Run(TokenType.Google, application.dataStore.getGoogleToken(), application.user.Email);
                 return;
             }
         }
@@ -47,11 +59,31 @@ public class LoaderActivity extends MasterActivity implements ISetUser {
         if (isLoggedIn) {
 
             new GetFacebookUser().Run(this, accessToken);
+            return;
         }
-        else {
 
-            NavigateToActivity("Login", true);
+/*        String googleToken = application.dataStore.getGoogleToken();
+        String facebookToken = application.dataStore.getFacebookToken();
+
+        if (googleToken != null) {
+            //TODO:
         }
+
+        if (facebookToken != null) {
+            //TODO:
+
+            accessToken = new AccessToken(
+                    facebookToken,
+                    getString(R.string.facebook_app_id),
+                    null,
+                    null, null, null, null, null, null);
+
+            new GetFacebookUser().Run(this, accessToken);
+            return;
+        }*/
+
+        application.user = null;
+        NavigateToActivity("Login", true);
     }
 
     @Override
@@ -96,11 +128,37 @@ public class LoaderActivity extends MasterActivity implements ISetUser {
 
         if (user != null) {
 
-            NavigateToActivity("Main", true);
+            new LoginTask(this).Run(TokenType.Facebook, application.dataStore.getFacebookToken(), application.user.Email);
         }
         else {
 
             NavigateToActivity("Login", true);
         }
+    }
+
+    @Override
+    public void setToken(TokenType tokenType, String token) {
+
+        super.setToken(tokenType, token);
+    }
+
+    @Override
+    public void onLoginSuccess() {
+
+        NavigateToActivity("Main", true);
+    }
+
+    @Override
+    public void onLoginError(@NonNull String message) {
+
+        application.user = null;
+        showErrorMessage(message);
+        NavigateToActivity("Login", true);
+    }
+
+    @Override
+    public void setAccessToken(@NotNull String token) {
+
+        application.dataStore.setAccessToken(token);
     }
 }

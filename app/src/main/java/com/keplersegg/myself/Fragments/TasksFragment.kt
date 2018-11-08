@@ -7,13 +7,15 @@ import android.view.View
 import kotlinx.android.synthetic.main.fragment_tasks.*
 
 import com.keplersegg.myself.Adapters.TasksAdapter
-import com.keplersegg.myself.Async.GetTasks
+import com.keplersegg.myself.Async.GetTaskEntries
+import com.keplersegg.myself.Async.IGetTasksHost
 import com.keplersegg.myself.R
+import com.keplersegg.myself.Room.AppDatabase
 import com.keplersegg.myself.Room.Entity.TaskEntry
 import java.util.*
 
 
-class TasksFragment : MasterFragment() {
+class TasksFragment : MasterFragment(), IGetTasksHost {
 
     private var tasks: MutableList<TaskEntry>? = null
     private var adapter: TasksAdapter? = null
@@ -37,29 +39,25 @@ class TasksFragment : MasterFragment() {
         super.onResume()
         SetTitle(R.string.lbl_tasks)
 
-        MyGetTasks().Execute(day)
+        GetTaskEntries(this).execute(day)
     }
 
-    private inner class MyGetTasks internal constructor() : GetTasks(this@TasksFragment.activity) {
+    override fun onGetTasksSuccess(items: List<TaskEntry>) {
 
-        override fun OnSuccess(items: List<TaskEntry>) {
+        tasks!!.clear()
+        tasks!!.addAll(items)
 
-            tasks!!.clear()
-            tasks!!.addAll(items)
-
-            adapter!!.notifyDataSetChanged()
-        }
-
-        override fun OnError(errPhrase: String) {
-
-            //adapter.notifyDataSetChanged();
-        }
-
-        override fun OnConnectionError() {
-
-            //adapter.notifyDataSetChanged();
-        }
+        adapter!!.notifyDataSetChanged()
     }
+
+    override fun onGetTasksError(message: String) {
+
+        showErrorMessage(message)
+    }
+
+    override fun getAppDB(): AppDatabase { return activity!!.AppDB() }
+
+    override fun getDeviceId(): String? { return activity!!.getDeviceId() }
 
     companion object {
 

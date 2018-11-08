@@ -39,7 +39,8 @@ class TasksPagerFragment : MasterFragment() {
         val adapter = TaskPagerAdapter(activity!!.supportFragmentManager)
         viewPager.adapter = adapter
         viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
-        tabLayout.setOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener
+        {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 viewPager.currentItem = tab.position
             }
@@ -76,7 +77,7 @@ class TasksPagerFragment : MasterFragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.getItemId()) {
-            R.id.menu_AddTask -> activity!!.NavigateFragment(true, AddTaskFragment.newInstance(-1))
+            R.id.menu_AddTask -> activity!!.NavigateFragment(true, AddTaskFragment.newInstance(0))
         }
         return true
 

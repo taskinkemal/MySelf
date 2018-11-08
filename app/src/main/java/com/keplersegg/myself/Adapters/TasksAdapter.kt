@@ -12,11 +12,15 @@ import android.widget.TextView
 
 import com.keplersegg.myself.Activities.MainActivity
 import com.keplersegg.myself.Fragments.AddTaskFragment
+import com.keplersegg.myself.Helper.HttpClient
+import com.keplersegg.myself.Helper.ServiceMethods
 import com.keplersegg.myself.R
 import com.keplersegg.myself.Room.Entity.Entry
 import com.keplersegg.myself.Room.Entity.TaskEntry
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
+import org.json.JSONObject
+import java.util.*
 
 class TasksAdapter(private val activity: MainActivity?, private val items: List<TaskEntry>?, private val day: Int) : RecyclerView.Adapter<TasksAdapter.DataObjectHolder>() {
 
@@ -34,7 +38,7 @@ class TasksAdapter(private val activity: MainActivity?, private val items: List<
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataObjectHolder {
 
-        var layout = if (viewType == 0) R.layout.list_item_task_boolean else R.layout.list_item_task_numeric
+        val layout = if (viewType == 0) R.layout.list_item_task_boolean else R.layout.list_item_task_numeric
         val view = LayoutInflater.from(parent.context).inflate(layout, parent, false)
 
         return DataObjectHolder(itemView = view)
@@ -59,9 +63,14 @@ class TasksAdapter(private val activity: MainActivity?, private val items: List<
                 entry.TaskId = item.task.id
                 entry.Day = day
                 entry.Value = 0
+                entry.ModificationDate = Date(System.currentTimeMillis())
                 item.entry = entry
 
-                doAsync { activity!!.AppDB().entryDao().insert(item.entry)
+                doAsync {
+                    activity!!.AppDB().entryDao().insert(item.entry)
+                    if (HttpClient.hasInternetAccess(activity)) {
+                        uploadEntry(item.entry)
+                    }
                 uiThread { updateUi(holder, item, position) }
                 }
             } else {
@@ -69,7 +78,6 @@ class TasksAdapter(private val activity: MainActivity?, private val items: List<
             }
         }
 
-        holder.itemViewType == 0
         holder.itemView.setOnLongClickListener(View.OnLongClickListener {
             if (item != null) {
 
@@ -84,9 +92,15 @@ class TasksAdapter(private val activity: MainActivity?, private val items: List<
             holder.imgDone!!.setOnClickListener {
                 val entry = item!!.entry
                 entry.Value = if (entry.Value == 0) 1 else 0
-                setTint(holder.imgDone!!, entry.Value == 1)
+                entry.ModificationDate = Date(System.currentTimeMillis())
+                setTint(holder.imgDone, entry.Value == 1)
 
-                doAsync { activity!!.AppDB().entryDao().update(item.entry) }
+                doAsync {
+                    activity!!.AppDB().entryDao().update(item.entry)
+                    if (HttpClient.hasInternetAccess(activity)) {
+                        uploadEntry(item.entry)
+                    }
+                }
             }
         }
         else {
@@ -94,20 +108,32 @@ class TasksAdapter(private val activity: MainActivity?, private val items: List<
             holder.imgPlus!!.setOnClickListener {
                 val entry = item!!.entry
                 entry.Value++
+                entry.ModificationDate = Date(System.currentTimeMillis())
 
-                holder.txtValue!!.setText(item.entry.Value.toString())
+                holder.txtValue!!.text = item.entry.Value.toString()
 
-                doAsync { activity!!.AppDB().entryDao().update(item.entry) }
+                doAsync {
+                    activity!!.AppDB().entryDao().update(item.entry)
+                    if (HttpClient.hasInternetAccess(activity)) {
+                        uploadEntry(item.entry)
+                    }
+                }
             }
 
             holder.imgMinus!!.setOnClickListener {
                 val entry = item!!.entry
                 if (entry.Value > 0)
                     entry.Value--
+                entry.ModificationDate = Date(System.currentTimeMillis())
 
-                holder.txtValue!!.setText(item.entry.Value.toString())
+                holder.txtValue!!.text = item.entry.Value.toString()
 
-                doAsync { activity!!.AppDB().entryDao().update(item.entry) }
+                doAsync {
+                    activity!!.AppDB().entryDao().update(item.entry)
+                    if (HttpClient.hasInternetAccess(activity)) {
+                        uploadEntry(item.entry)
+                    }
+                }
             }
         }
     }
@@ -119,8 +145,8 @@ class TasksAdapter(private val activity: MainActivity?, private val items: List<
             setTint(holder.imgDone!!, item.entry.Value == 1)
         }
         else {
-            holder.txtValue!!.setText(item.entry.Value.toString())
-            holder.txtUnit!!.setText(item.task.unit)
+            holder.txtValue!!.text = item.entry.Value.toString()
+            holder.txtUnit!!.text = item.task.unit
         }
         setAnimation(holder.lytListItem, position)
     }
@@ -161,8 +187,13 @@ class TasksAdapter(private val activity: MainActivity?, private val items: List<
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (items != null && items.count() > position)
-            return items[position].task.dataType
-        else return 0
+        return if (items != null && items.count() > position)
+            items[position].task.dataType
+        else 0
+    }
+
+    private fun uploadEntry(entry: Entry) {
+
+        ServiceMethods.uploadEntry(activity!!, entry)
     }
 }

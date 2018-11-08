@@ -11,7 +11,8 @@
         android:layout_height="match_parent"
         android:contentDescription="@string/imgContentDescription"
         android:scaleType="centerCrop"
-        android:src="@drawable/login_background"
+        tools:src="@drawable/login_background"
+        android:id="@+id/imgLoginBackground"
         android:tint="@color/colorPrimaryTransparent"
         android:tintMode="screen" />
 

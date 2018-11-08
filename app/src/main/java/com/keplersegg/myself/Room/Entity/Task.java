@@ -6,15 +6,15 @@ import android.arch.persistence.room.PrimaryKey;
 @Entity
 public class Task {
 
-    @PrimaryKey(autoGenerate = true)
-    private int Id;
-    private String Label;
-    private int DataType;
-    private String Unit;
-    private Boolean HasGoal;
-    private int GoalMinMax;
-    private int Goal;
-    private int GoalTimeFrame;
+    @PrimaryKey
+    public int Id;
+    public String Label;
+    public int DataType;
+    public String Unit;
+    public Boolean HasGoal;
+    public int GoalMinMax;
+    public int Goal;
+    public int GoalTimeFrame;
 
     public int getId() { return this.Id; }
     public String getLabel() { return this.Label; }
@@ -34,10 +34,11 @@ public class Task {
     public void setGoalMinMax(int goalMinMax) { this.GoalMinMax = goalMinMax; }
     public void setGoalTimeFrame(int goalTimeFrame) { this.GoalTimeFrame = goalTimeFrame; }
 
-    public static Task CreateItem(String label, int dataType, String unit, Boolean hasGoal, int goal, int goalMinMax, int goalTimeFrame) {
+    public static Task CreateItem(int id, String label, int dataType, String unit, Boolean hasGoal, int goal, int goalMinMax, int goalTimeFrame) {
 
         Task m = new Task();
 
+        m.setId(id);
         m.setLabel(label);
         m.setDataType(dataType);
         m.setUnit(unit);
