@@ -26,6 +26,9 @@ public interface TaskDao {
     @Query("SELECT * FROM Task where Id <> :taskId and Label = :label")
     int getCountByLabelExcludeId(int taskId, String label);
 
+    @Query("SELECT case when count(0) = 0 then 1 else max(Id)+1 end FROM Task")
+    int getMaxId();
+
     @Query("SELECT COUNT(0) from Task")
     int getCount();
 

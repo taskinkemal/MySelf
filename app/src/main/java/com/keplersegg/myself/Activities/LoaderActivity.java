@@ -98,6 +98,7 @@ public class LoaderActivity extends MasterActivity implements ISetUser, ILoginHo
         }*/
 
         application.user = null;
+        application.dataStore.setAccessToken(null);
         NavigateToActivity("Login", true);
     }
 
@@ -147,6 +148,7 @@ public class LoaderActivity extends MasterActivity implements ISetUser, ILoginHo
         }
         else {
 
+            application.dataStore.setAccessToken(null);
             NavigateToActivity("Login", true);
         }
     }
@@ -167,6 +169,7 @@ public class LoaderActivity extends MasterActivity implements ISetUser, ILoginHo
     public void onLoginError(@NonNull String message) {
 
         application.user = null;
+        application.dataStore.setAccessToken(null);
         showErrorMessage(message);
         NavigateToActivity("Login", true);
     }

@@ -142,7 +142,15 @@ public class LoginActivity extends AuthActivity implements ISetUser, ILoginHost,
 
         application.user = user;
 
-        new LoginTask(this).Run(TokenType.Facebook, application.dataStore.getFacebookToken(), application.user.Email);
+        if (user != null) {
+
+            new LoginTask(this).Run(TokenType.Facebook, application.dataStore.getFacebookToken(), application.user.Email);
+        }
+        else {
+
+            application.dataStore.setAccessToken(null);
+            showErrorMessage("Cannot authenticate via Facebook");
+        }
     }
 
     @Override
@@ -168,6 +176,7 @@ public class LoginActivity extends AuthActivity implements ISetUser, ILoginHost,
     public void setAccessToken(@NotNull String token) {
 
         application.dataStore.setAccessToken(token);
+        new SyncTasks(this).execute();
     }
 
     @Override

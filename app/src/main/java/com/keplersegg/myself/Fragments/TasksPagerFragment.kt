@@ -36,7 +36,7 @@ class TasksPagerFragment : MasterFragment() {
         tabLayout.addTab(tabLayout.newTab().setText("Today"))
         tabLayout.tabGravity = TabLayout.GRAVITY_FILL
 
-        val adapter = TaskPagerAdapter(activity!!.supportFragmentManager)
+        val adapter = TaskPagerAdapter(childFragmentManager) // activity!!.supportFragmentManager)
         viewPager.adapter = adapter
         viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
         tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener

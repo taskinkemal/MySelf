@@ -118,10 +118,15 @@ class AddTaskFragment : MasterFragment() {
                 task!!.goalMinMax = goalMinMax
                 task!!.goalTimeFrame = goalTimeFrame
 
-                val taskId = ServiceMethods.uploadTask(activity!!, task!!)
+                var canUpdate = true
 
-                if (taskId != -1) {
-                    task!!.id = taskId
+                if (!activity!!.application.dataStore.getAccessToken().isNullOrBlank()) {
+                    val taskId = ServiceMethods.uploadTask(activity!!, task!!)
+                    canUpdate = taskId != -1
+                }
+
+                if (canUpdate) {
+
                     activity!!.AppDB().taskDao().update(task)
                     return true
                 }
@@ -134,7 +139,14 @@ class AddTaskFragment : MasterFragment() {
 
                 val newTask = Task.CreateItem(-1, label, dataType, unit, hasGoal, goal, goalMinMax, goalTimeFrame)
 
-                val taskId = ServiceMethods.uploadTask(activity!!, newTask)
+                var taskId = -1
+
+                if (!activity!!.application.dataStore.getAccessToken().isNullOrBlank()) {
+                    taskId = ServiceMethods.uploadTask(activity!!, newTask)
+                }
+                else {
+                    taskId = this.activity!!.AppDB().taskDao().maxId
+                }
 
                 if (taskId != -1) {
                     newTask.Id = taskId
