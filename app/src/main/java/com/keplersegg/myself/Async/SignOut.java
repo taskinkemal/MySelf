@@ -36,13 +36,18 @@ public class SignOut {
 
     private void GoogleSignOut(final ISignOut activity) {
 
-        Auth.GoogleSignInApi.signOut(activity.GetGoogleApiClient()).setResultCallback(new ResultCallback<Status>() {
-            @Override
-            public void onResult(@NonNull Status status) {
+        if (activity.GetGoogleApiClient().isConnected()) {
+            Auth.GoogleSignInApi.signOut(activity.GetGoogleApiClient()).setResultCallback(new ResultCallback<Status>() {
+                @Override
+                public void onResult(@NonNull Status status) {
 
-                FinalizeSignOut(activity);
-            }
-        });
+                    FinalizeSignOut(activity);
+                }
+            });
+        }
+        else {
+            FinalizeSignOut(activity);
+        }
     }
 
     private void FinalizeSignOut(final ISignOut activity) {

@@ -166,9 +166,14 @@ public class MasterActivity extends AppCompatActivity
     public String getDeviceId() { return application.dataStore.getRegisterID(); }
 
     @Override
-    public void showErrorMessage(@NonNull String message) {
+    public void showErrorMessage(@NonNull final String message) {
 
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MasterActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
