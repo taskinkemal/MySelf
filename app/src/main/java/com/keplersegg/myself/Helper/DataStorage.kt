@@ -3,6 +3,7 @@ package com.keplersegg.myself.Helper
 import android.content.Context
 import android.content.SharedPreferences
 import com.keplersegg.myself.MySelfApplication
+import java.util.*
 
 class DataStorage(app: MySelfApplication) {
 
@@ -22,12 +23,22 @@ class DataStorage(app: MySelfApplication) {
     fun getAccessToken(): String? { return getValue(accessToken) }
     fun getFacebookToken(): String? { return getValue(facebookToken) }
     fun getGoogleToken(): String? { return getValue(googleToken) }
-    fun getRegisterID(): String? { return getValue(deviceRegistrationID) }
+    fun getRegisterID(): String? {
+
+        var registerID = getValue(deviceRegistrationID)
+
+        if (registerID.isNullOrBlank()) {
+
+            registerID = UUID.randomUUID().toString()
+            setValue(deviceRegistrationID, registerID)
+        }
+
+        return registerID
+    }
 
     fun setAccessToken(token: String?) { setValue(accessToken, token) }
     fun setFacebookToken(token: String?) { setValue(facebookToken, token) }
     fun setGoogleToken(token: String?) { setValue(googleToken, token) }
-    fun setRegisterID(registerID: String) { setValue(deviceRegistrationID, registerID) }
 
     private fun setValue(key: String, value: String?) {
 

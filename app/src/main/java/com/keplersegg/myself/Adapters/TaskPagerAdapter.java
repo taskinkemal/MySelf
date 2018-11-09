@@ -9,7 +9,7 @@ import com.keplersegg.myself.Helper.Utils;
 
 public class TaskPagerAdapter extends FragmentStatePagerAdapter {
 
-    public static int NumOfTabs = 5;
+    public static int NumOfTabs = 4;
 
     public TaskPagerAdapter(FragmentManager fm) {
         super(fm);

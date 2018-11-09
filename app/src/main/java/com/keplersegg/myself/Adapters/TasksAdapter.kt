@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -19,12 +18,9 @@ import com.keplersegg.myself.Room.Entity.Entry
 import com.keplersegg.myself.Room.Entity.TaskEntry
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
-import org.json.JSONObject
 import java.util.*
 
 class TasksAdapter(private val activity: MainActivity?, private val items: List<TaskEntry>?, private val day: Int) : RecyclerView.Adapter<TasksAdapter.DataObjectHolder>() {
-
-    private var lastPosition = -1
 
     inner class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val lytListItem: LinearLayout? = itemView.findViewById(R.id.lytListItem)
@@ -71,10 +67,10 @@ class TasksAdapter(private val activity: MainActivity?, private val items: List<
                     if (HttpClient.hasInternetAccess(activity)) {
                         uploadEntry(item.entry)
                     }
-                uiThread { updateUi(holder, item, position) }
+                uiThread { updateUi(holder, item) }
                 }
             } else {
-                updateUi(holder, item, position)
+                updateUi(holder, item)
             }
         }
 
@@ -138,7 +134,7 @@ class TasksAdapter(private val activity: MainActivity?, private val items: List<
         }
     }
 
-    private fun updateUi(holder: DataObjectHolder, item: TaskEntry, position: Int) {
+    private fun updateUi(holder: DataObjectHolder, item: TaskEntry) {
 
         holder.lblLabel.text = item.task.label
         if (holder.itemViewType == 0) {
@@ -148,7 +144,6 @@ class TasksAdapter(private val activity: MainActivity?, private val items: List<
             holder.txtValue!!.text = item.entry.Value.toString()
             holder.txtUnit!!.text = item.task.unit
         }
-        setAnimation(holder.lytListItem, position)
     }
 
     private fun setTint(imgDone: ImageButton, isChecked: Boolean) {
@@ -156,17 +151,6 @@ class TasksAdapter(private val activity: MainActivity?, private val items: List<
         val color = if (isChecked) R.color.colorAccent else android.R.color.darker_gray
         imgDone.setColorFilter(ContextCompat.getColor(activity!!, color),
                 android.graphics.PorterDuff.Mode.SRC_IN)
-    }
-
-    private fun setAnimation(viewToAnimate: View?, position: Int) {
-        if (activity == null) return
-
-        // If the bound view wasn't previously displayed on screen, it's animated
-        if (position > lastPosition) {
-            val animation = AnimationUtils.loadAnimation(activity, R.anim.slide_up)
-            viewToAnimate!!.startAnimation(animation)
-            lastPosition = position
-        }
     }
 
     override fun onViewDetachedFromWindow(holder: DataObjectHolder) {

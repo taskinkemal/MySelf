@@ -10,7 +10,6 @@ import com.keplersegg.myself.Adapters.TasksAdapter
 import com.keplersegg.myself.Async.GetTaskEntries
 import com.keplersegg.myself.Async.IGetTasksHost
 import com.keplersegg.myself.R
-import com.keplersegg.myself.Room.AppDatabase
 import com.keplersegg.myself.Room.Entity.TaskEntry
 import java.util.*
 
@@ -54,10 +53,6 @@ class TasksFragment : MasterFragment(), IGetTasksHost {
 
         showErrorMessage(message)
     }
-
-    override fun getAppDB(): AppDatabase { return activity!!.AppDB() }
-
-    override fun getDeviceId(): String? { return activity!!.getDeviceId() }
 
     companion object {
 

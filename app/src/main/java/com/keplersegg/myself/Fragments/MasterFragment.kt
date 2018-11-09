@@ -9,6 +9,7 @@ import android.view.ViewGroup
 
 import com.keplersegg.myself.Activities.MainActivity
 import com.keplersegg.myself.Interfaces.IErrorMessage
+import com.keplersegg.myself.Room.AppDatabase
 import java.lang.Exception
 
 open class MasterFragment : android.support.v4.app.Fragment(), IErrorMessage {
@@ -23,10 +24,14 @@ open class MasterFragment : android.support.v4.app.Fragment(), IErrorMessage {
 
             rootView = inflater.inflate(layout, container, false)
             activity = rootView!!.context as MainActivity
+
+            onCreateViewInternal()
         }
 
         return rootView
     }
+
+    open fun onCreateViewInternal() { }
 
     fun SetTitle(id: Int) {
 
@@ -42,9 +47,11 @@ open class MasterFragment : android.support.v4.app.Fragment(), IErrorMessage {
         return activity!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     }
 
-    fun getAccessToken(): String? {
-        return activity!!.application.dataStore.getAccessToken()
-    }
+    fun getAppDB(): AppDatabase { return activity!!.AppDB() }
+
+    fun getDeviceId(): String? { return activity!!.getDeviceId() }
+
+    fun getAccessToken(): String? { return activity!!.application.dataStore.getAccessToken() }
 
     override fun logException(exception: Exception, message: String) {
 

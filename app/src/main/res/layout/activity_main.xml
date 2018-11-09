@@ -52,6 +52,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:background="@color/colorNavBackground"
+        app:itemBackground="@color/colorNavBackground"
         app:itemTextColor="#333"
         app:itemIconTint="#333"
         app:theme="@style/AppTheme.ActionBar"
