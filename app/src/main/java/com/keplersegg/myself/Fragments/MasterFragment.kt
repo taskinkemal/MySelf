@@ -12,7 +12,7 @@ import com.keplersegg.myself.Interfaces.IErrorMessage
 import com.keplersegg.myself.Room.AppDatabase
 import java.lang.Exception
 
-open class MasterFragment : android.support.v4.app.Fragment(), IErrorMessage {
+abstract class MasterFragment : android.support.v4.app.Fragment(), IErrorMessage {
 
     var activity: MainActivity? = null
     protected var rootView: View? = null

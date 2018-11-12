@@ -38,6 +38,8 @@ class AddTaskFragment : MasterFragment() {
 
         btnSave.setOnClickListener { _ -> SaveTask() }
 
+        btnAddAutoTask.setOnClickListener { activity!!.NavigateFragment(true, AutoTaskSelectorFragment.newInstance()) }
+
         if (TaskId != 0) {
 
             doAsync { task = activity!!.AppDB().taskDao().get(TaskId)
@@ -122,7 +124,7 @@ class AddTaskFragment : MasterFragment() {
 
                 if (!activity!!.application.dataStore.getAccessToken().isNullOrBlank()) {
                     val taskId = ServiceMethods.uploadTask(activity!!, task!!)
-                    canUpdate = taskId != -1
+                    canUpdate = !taskId.equals(-1)
                 }
 
                 if (canUpdate) {
@@ -139,7 +141,7 @@ class AddTaskFragment : MasterFragment() {
 
                 val newTask = Task.CreateItem(-1, label, dataType, unit, hasGoal, goal, goalMinMax, goalTimeFrame)
 
-                var taskId = -1
+                val taskId: Int
 
                 if (!activity!!.application.dataStore.getAccessToken().isNullOrBlank()) {
                     taskId = ServiceMethods.uploadTask(activity!!, newTask)
