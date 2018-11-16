@@ -6,6 +6,7 @@ import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.keplersegg.myself.Helper.TokenType;
+import com.keplersegg.myself.Interfaces.ISetUser;
 import com.keplersegg.myself.Models.User;
 
 import org.json.JSONException;
@@ -28,11 +29,11 @@ public class GetFacebookUser {
                             activity.setToken(TokenType.Facebook, accessToken.getToken());
 
                             User user = new User();
-                            user.Email = object.getString("email");
-                            user.FirstName = object.getString("first_name");
-                            user.LastName = object.getString("last_name");
-                            user.FacebookToken = accessToken;
-                            user.PictureUrl = object.getJSONObject("picture").getJSONObject("data").getString("url");
+                            user.setEmail(object.getString("email"));
+                            user.setFirstName(object.getString("first_name"));
+                            user.setLastName(object.getString("last_name"));
+                            user.setFacebookToken(accessToken);
+                            user.setPictureUrl(object.getJSONObject("picture").getJSONObject("data").getString("url"));
 
                             activity.setUser(user);
 

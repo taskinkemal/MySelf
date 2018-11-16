@@ -1,6 +1,4 @@
-package com.keplersegg.myself.Async
-
-import com.keplersegg.myself.Interfaces.IErrorMessage
+package com.keplersegg.myself.Interfaces
 
 interface ILoginHost : IHttpProvider, IErrorMessage {
 

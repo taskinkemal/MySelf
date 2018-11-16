@@ -1,14 +1,10 @@
 package com.keplersegg.myself.Async;
 
-import android.support.annotation.NonNull;
-
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
+import com.keplersegg.myself.Interfaces.ISignOut;
 import com.keplersegg.myself.Models.User;
 
 public class SignOut {
@@ -17,8 +13,8 @@ public class SignOut {
 
         User user = activity.GetUser();
 
-        if (user != null && user.FacebookToken != null) {
-            new GraphRequest(user.FacebookToken, "/me/permissions/", null, HttpMethod.DELETE, new GraphRequest
+        if (user != null && user.getFacebookToken() != null) {
+            new GraphRequest(user.getFacebookToken(), "/me/permissions/", null, HttpMethod.DELETE, new GraphRequest
                     .Callback() {
                 @Override
                 public void onCompleted(GraphResponse graphResponse) {
@@ -36,18 +32,11 @@ public class SignOut {
 
     private void GoogleSignOut(final ISignOut activity) {
 
-        if (activity.GetGoogleApiClient().isConnected()) {
-            Auth.GoogleSignInApi.signOut(activity.GetGoogleApiClient()).setResultCallback(new ResultCallback<Status>() {
-                @Override
-                public void onResult(@NonNull Status status) {
+        if (activity.GetGoogleSignInClient().asGoogleApiClient().isConnected()) {
+            activity.GetGoogleSignInClient().signOut();
+        }
 
-                    FinalizeSignOut(activity);
-                }
-            });
-        }
-        else {
-            FinalizeSignOut(activity);
-        }
+        FinalizeSignOut(activity);
     }
 
     private void FinalizeSignOut(final ISignOut activity) {

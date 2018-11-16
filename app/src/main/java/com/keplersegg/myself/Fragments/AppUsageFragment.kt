@@ -1,13 +1,16 @@
 package com.keplersegg.myself.Fragments
 
 
+import android.content.Context
+import android.content.pm.ApplicationInfo
 import android.os.Bundle
 
 import com.keplersegg.myself.R
 import com.keplersegg.myself.Models.ListItem
 import kotlinx.android.synthetic.main.fragment_app_usage.*
 import android.content.pm.PackageManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
+import com.keplersegg.myself.Helper.AutoTaskType
 
 class AppUsageFragment : ListFragment() {
 
@@ -27,15 +30,11 @@ class AppUsageFragment : ListFragment() {
         val pm = activity!!.getPackageManager()
         val packages = pm.getInstalledApplications(PackageManager.GET_META_DATA)
 
-        for (appInfo in packages) {
+        packages.forEach { appInfo ->
 
             if (appInfo.sourceDir.startsWith("/data/app/") && pm.getLaunchIntentForPackage(appInfo.packageName) != null) {
 
-                val item = ListItem()
-                item.ItemId = appInfo.uid
-                item.ImageDrawable = pm.getApplicationIcon(appInfo)
-                item.Label = pm.getApplicationLabel(appInfo).toString()
-                list.add(item)
+                list.add(toListItem(pm, appInfo))
             }
         }
 
@@ -48,14 +47,37 @@ class AppUsageFragment : ListFragment() {
         SetTitle(R.string.autotask_appUsage)
     }
 
-    override fun onSelectListItem(itemId: Int) {
-        //TODO:
+    override fun onSelectListItem(item: ListItem) {
+
+        activity!!.NavigateFragment(true, AddTaskFragment.newInstance(AutoTaskType.AppUsage, item))
     }
 
     companion object {
 
         fun newInstance(): AppUsageFragment {
             return AppUsageFragment()
+        }
+
+        fun getItemById(context: Context, id: String): ListItem? {
+
+            val pm = context.getPackageManager()
+            val packages = pm.getInstalledApplications(PackageManager.GET_META_DATA)
+            val appInfo = packages.firstOrNull { p -> p.packageName.hashCode().toString() == id }
+
+            if (appInfo != null)
+                return toListItem(pm, appInfo)
+            else
+                return null
+        }
+
+        private fun toListItem(pm: PackageManager, appInfo: ApplicationInfo): ListItem {
+
+            val item = ListItem()
+            item.ItemId = appInfo.packageName.hashCode()
+            item.ImageDrawable = pm.getApplicationIcon(appInfo)
+            item.Label = pm.getApplicationLabel(appInfo).toString()
+
+            return item
         }
     }
 }

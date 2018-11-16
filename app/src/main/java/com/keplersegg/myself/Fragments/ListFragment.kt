@@ -2,13 +2,13 @@ package com.keplersegg.myself.Fragments
 
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.keplersegg.myself.Adapters.ListItemAdapter
 import com.keplersegg.myself.Models.ListItem
 
-import android.support.v7.widget.RecyclerView
-import com.keplersegg.myself.Async.IListItemHoster
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.keplersegg.myself.Interfaces.IListItemHoster
 import com.keplersegg.myself.Models.ListSource
 
 

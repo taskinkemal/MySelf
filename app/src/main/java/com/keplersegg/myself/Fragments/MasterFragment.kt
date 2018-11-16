@@ -6,13 +6,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 
 import com.keplersegg.myself.Activities.MainActivity
 import com.keplersegg.myself.Interfaces.IErrorMessage
 import com.keplersegg.myself.Room.AppDatabase
 import java.lang.Exception
 
-abstract class MasterFragment : android.support.v4.app.Fragment(), IErrorMessage {
+abstract class MasterFragment : Fragment(), IErrorMessage {
 
     var activity: MainActivity? = null
     protected var rootView: View? = null
@@ -51,7 +52,7 @@ abstract class MasterFragment : android.support.v4.app.Fragment(), IErrorMessage
 
     fun getDeviceId(): String? { return activity!!.getDeviceId() }
 
-    fun getAccessToken(): String? { return activity!!.application.dataStore.getAccessToken() }
+    fun getAccessToken(): String? { return activity!!.application!!.dataStore!!.getAccessToken() }
 
     override fun logException(exception: Exception, message: String) {
 

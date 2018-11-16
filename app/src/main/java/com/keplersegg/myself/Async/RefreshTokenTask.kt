@@ -2,6 +2,7 @@ package com.keplersegg.myself.Async
 
 import android.os.AsyncTask
 import com.keplersegg.myself.Helper.HttpClient
+import com.keplersegg.myself.Interfaces.IRefreshTokenHost
 
 import org.json.JSONObject
 

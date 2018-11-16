@@ -1,6 +1,6 @@
 package com.keplersegg.myself.Helper
 
-import com.keplersegg.myself.Async.IHttpProvider
+import com.keplersegg.myself.Interfaces.IHttpProvider
 
 import org.json.JSONObject
 

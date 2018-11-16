@@ -1,4 +1,4 @@
-package com.keplersegg.myself.Async
+package com.keplersegg.myself.Interfaces
 
 import android.net.ConnectivityManager
 import com.keplersegg.myself.Interfaces.IErrorMessage

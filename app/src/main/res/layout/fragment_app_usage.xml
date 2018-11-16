@@ -6,7 +6,7 @@
     tools:context=".Fragments.AppUsageFragment"
     android:background="@color/colorBackground">
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcylApps"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

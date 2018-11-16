@@ -14,6 +14,7 @@
     <string name="login">Login</string>
     <string name="lbl_task_details">Task Details</string>
     <string name="lbl_add_task">Add Task</string>
+    <string name="lbl_add_automated_task">Add Automated Task</string>
     <string name="lbl_auto_task_selector">Select Auto Task</string>
     <string name="save">Save</string>
     <string name="unit">Unit</string>
@@ -21,13 +22,21 @@
     <string name="q_set_a_goal">Set a goal?</string>
     <string name="q_track_per_unit">Track per unit?</string>
     <string name="eg_units">e.g. hour(s), cup(s)</string>
+    <string name="eg_label">e.g. Exercise, Coffee, etc.</string>
+    <string name="label">Label</string>
 
-    <string name="tooltip_task_label">Label (e.g. Exercise, Coffee, etc.)</string>
+    <string name="timeFrameInADay">in a day</string>
+    <string name="timeFrameInAWeek">in a week</string>
+    <string name="timeFrameInAMonth">in a month</string>
+
+    <string name="minMaxExactly">exactly</string>
+    <string name="minMaxOrMore">or more</string>
+    <string name="minMaxOrLess">or less</string>
 
     <string-array name="spinner_goalMinMax">
-        <item>exactly</item>
-        <item>or more</item>
-        <item>or less</item>
+        <item>@string/minMaxExactly</item>
+        <item>@string/minMaxOrMore</item>
+        <item>@string/minMaxOrLess</item>
     </string-array>
 
     <string-array name="spinner_goalMinMax_values">
@@ -37,9 +46,9 @@
     </string-array>
 
     <string-array name="spinner_goalTimeFrame">
-        <item>in a day</item>
-        <item>in a week</item>
-        <item>in a month</item>
+        <item>@string/timeFrameInADay</item>
+        <item>@string/timeFrameInAWeek</item>
+        <item>@string/timeFrameInAMonth</item>
     </string-array>
 
     <string-array name="spinner_goalTimeFrame_values">

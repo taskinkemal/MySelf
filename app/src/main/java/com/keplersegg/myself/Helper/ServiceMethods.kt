@@ -1,7 +1,7 @@
 package com.keplersegg.myself.Helper
 
 import com.google.gson.GsonBuilder
-import com.keplersegg.myself.Async.IHttpProvider
+import com.keplersegg.myself.Interfaces.IHttpProvider
 import com.keplersegg.myself.Room.Entity.Entry
 import com.keplersegg.myself.Room.Entity.Task
 import org.json.JSONObject
@@ -31,6 +31,8 @@ object ServiceMethods {
         jsonParams.put("GoalMinMax", task.GoalMinMax)
         jsonParams.put("Goal", task.Goal)
         jsonParams.put("GoalTimeFrame", task.GoalTimeFrame)
+        jsonParams.put("AutomationType", task.AutomationType)
+        jsonParams.put("AutomationVar", task.AutomationVar)
 
         val result = HttpClient.send(provider, "tasks", "post", jsonParams)
 
@@ -41,6 +43,11 @@ object ServiceMethods {
         else {
             return -1
         }
+    }
+
+    fun deleteTask(provider: IHttpProvider, taskId: Int) {
+
+        HttpClient.send(provider, "tasks/" + taskId, "delete", null)
     }
 
     fun getTasksFromService(provider: IHttpProvider): List<Task>? {

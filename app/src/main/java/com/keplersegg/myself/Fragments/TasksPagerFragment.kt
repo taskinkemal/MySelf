@@ -6,13 +6,13 @@ import android.view.View
 import kotlinx.android.synthetic.main.fragment_tasks_pager.*
 
 import com.keplersegg.myself.R
-import android.support.design.widget.TabLayout
 import android.view.Menu
 import com.keplersegg.myself.Adapters.TaskPagerAdapter
 import java.text.DateFormatSymbols
 import java.util.*
 import android.view.MenuInflater
 import android.view.MenuItem
+import com.google.android.material.tabs.TabLayout
 
 
 class TasksPagerFragment : MasterFragment() {
@@ -53,6 +53,8 @@ class TasksPagerFragment : MasterFragment() {
 
             }
         })
+
+        fabAdd.setOnClickListener { activity!!.NavigateFragment(true, AddTaskFragment.newInstance(0)) }
     }
 
     private fun dateToString(days: Int): String {

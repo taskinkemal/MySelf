@@ -1,15 +1,15 @@
 package com.keplersegg.myself.Adapters
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
-import com.keplersegg.myself.Async.IListItemHoster
+import com.keplersegg.myself.Interfaces.IListItemHoster
 import com.keplersegg.myself.Models.ListItem
 import com.keplersegg.myself.Models.ListSource
 import com.keplersegg.myself.R
@@ -51,7 +51,7 @@ class ListItemAdapter(private val hoster: IListItemHoster?, private val items: L
             holder.imgIcon.visibility = View.GONE
         }
 
-        holder.itemView.setOnClickListener { hoster!!.onSelectListItem(item.ItemId) }
+        holder.itemView.setOnClickListener { hoster!!.onSelectListItem(item) }
     }
 
     override fun getItemId(position: Int): Long {

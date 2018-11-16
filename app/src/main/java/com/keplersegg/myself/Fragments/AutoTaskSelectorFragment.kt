@@ -31,9 +31,7 @@ class AutoTaskSelectorFragment : MasterFragment() {
 
         when (type) {
 
-            AutoTaskType.CallDuration -> {
-                //TODO:
-            }
+            AutoTaskType.CallDuration -> activity!!.NavigateFragment(true, AddTaskFragment.newInstance(AutoTaskType.CallDuration, null))
             AutoTaskType.AppUsage -> activity!!.NavigateFragment(true, AppUsageFragment.newInstance())
             AutoTaskType.WentTo -> activity!!.NavigateFragment(true, WentToFragment.newInstance())
         }

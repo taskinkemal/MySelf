@@ -2,13 +2,15 @@ package com.keplersegg.myself.Fragments
 
 
 import android.content.Context
+import android.net.wifi.WifiConfiguration
 import android.os.Bundle
 import com.keplersegg.myself.Models.ListItem
 import kotlinx.android.synthetic.main.fragment_went_to.*
 
 import com.keplersegg.myself.R
 import android.net.wifi.WifiManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
+import com.keplersegg.myself.Helper.AutoTaskType
 
 
 class WentToFragment : ListFragment() {
@@ -31,28 +33,49 @@ class WentToFragment : ListFragment() {
 
         val list: ArrayList<ListItem> = ArrayList()
 
-        val wm = activity!!.getSystemService(Context.WIFI_SERVICE) as WifiManager
-        val configs = wm.configuredNetworks
+        val configs = getConfigList(activity!!)
 
-        for (c in configs) {
-
-            val item = ListItem()
-            item.ItemId = c.networkId
-            item.Label = c.SSID
-            list.add(item)
-        }
+        configs?.forEach { c -> list.add(toListItem(c)) }
 
         return list
     }
 
-    override fun onSelectListItem(itemId: Int) {
-        //TODO:
+    override fun onSelectListItem(item: ListItem) {
+
+        activity!!.NavigateFragment(true, AddTaskFragment.newInstance(AutoTaskType.WentTo, item))
     }
 
     companion object {
 
         fun newInstance(): WentToFragment {
             return WentToFragment()
+        }
+
+        fun getItemById(context: Context, id: String): ListItem? {
+
+            val configs = getConfigList(context)
+
+            val wifiConfig = configs?.firstOrNull { p -> p.networkId == id.toInt() }
+
+            if (wifiConfig != null)
+                return toListItem(wifiConfig)
+            else
+                return null
+        }
+
+        private fun getConfigList(context: Context): MutableList<WifiConfiguration>? {
+
+            val wm = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
+            return wm.configuredNetworks
+        }
+
+        private fun toListItem(wifiConfig: WifiConfiguration): ListItem {
+
+            val item = ListItem()
+            item.ItemId = wifiConfig.networkId
+            item.Label = wifiConfig.SSID
+
+            return item
         }
     }
 }

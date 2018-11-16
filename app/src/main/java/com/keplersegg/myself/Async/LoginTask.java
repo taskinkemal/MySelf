@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 
 import com.keplersegg.myself.Helper.HttpClient;
 import com.keplersegg.myself.Helper.TokenType;
+import com.keplersegg.myself.Interfaces.ILoginHost;
 
 import org.json.JSONObject;
 

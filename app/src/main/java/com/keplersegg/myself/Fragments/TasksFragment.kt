@@ -2,21 +2,19 @@ package com.keplersegg.myself.Fragments
 
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_tasks.*
 
 import com.keplersegg.myself.Adapters.TasksAdapter
 import com.keplersegg.myself.Async.GetTaskEntries
-import com.keplersegg.myself.Async.IGetTasksHost
+import com.keplersegg.myself.Interfaces.IGetTasksHost
 import com.keplersegg.myself.R
 import com.keplersegg.myself.Room.Entity.TaskEntry
-import java.util.*
 
 
 class TasksFragment : MasterFragment(), IGetTasksHost {
 
-    private var tasks: MutableList<TaskEntry>? = null
     private var adapter: TasksAdapter? = null
     private var day = 0
 
@@ -28,8 +26,7 @@ class TasksFragment : MasterFragment(), IGetTasksHost {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        tasks = ArrayList()
-        adapter = TasksAdapter(activity, tasks, day)
+        adapter = TasksAdapter(activity!!, day)
         rcylTasks.adapter = adapter
         rcylTasks.layoutManager = LinearLayoutManager(activity)
     }
@@ -43,10 +40,7 @@ class TasksFragment : MasterFragment(), IGetTasksHost {
 
     override fun onGetTasksSuccess(items: List<TaskEntry>) {
 
-        tasks!!.clear()
-        tasks!!.addAll(items)
-
-        adapter!!.notifyDataSetChanged()
+        adapter!!.updateData(items)
     }
 
     override fun onGetTasksError(message: String) {
