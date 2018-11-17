@@ -1,8 +1,12 @@
 package com.keplersegg.myself.Fragments
 
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.keplersegg.myself.Helper.AutoTaskType
 import com.keplersegg.myself.R
 import kotlinx.android.synthetic.main.fragment_auto_task_selector.*
@@ -31,7 +35,15 @@ class AutoTaskSelectorFragment : MasterFragment() {
 
         when (type) {
 
-            AutoTaskType.CallDuration -> activity!!.NavigateFragment(true, AddTaskFragment.newInstance(AutoTaskType.CallDuration, null))
+            AutoTaskType.CallDuration -> {
+                if (ContextCompat.checkSelfPermission(activity!!, Manifest.permission.READ_CALL_LOG)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    // Permission is not granted
+                    // Ask for permision
+                    ActivityCompat.requestPermissions(activity!!, Array(1) { Manifest.permission.READ_CALL_LOG}, 1)
+                }
+                activity!!.NavigateFragment(true, AddTaskFragment.newInstance(AutoTaskType.CallDuration, null))
+            }
             AutoTaskType.AppUsage -> activity!!.NavigateFragment(true, AppUsageFragment.newInstance())
             AutoTaskType.WentTo -> activity!!.NavigateFragment(true, WentToFragment.newInstance())
         }

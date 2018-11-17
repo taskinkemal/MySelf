@@ -75,7 +75,7 @@ class AppUsageFragment : ListFragment() {
             val item = ListItem()
             item.ItemId = appInfo.packageName.hashCode()
             item.ImageDrawable = pm.getApplicationIcon(appInfo)
-            item.Label = pm.getApplicationLabel(appInfo).toString()
+            item.Label = pm.getApplicationLabel(appInfo).toString().trim()
 
             return item
         }

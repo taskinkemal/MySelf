@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.keplersegg.myself.Activities.MainActivity
 import com.keplersegg.myself.Fragments.AddTaskFragment
+import com.keplersegg.myself.Helper.AutoTaskType
 import com.keplersegg.myself.Helper.HttpClient
 import com.keplersegg.myself.Helper.ServiceMethods
 import com.keplersegg.myself.R
@@ -37,7 +38,12 @@ class TasksAdapter(private val activity: MainActivity, private val day: Int) : R
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataObjectHolder {
 
-        val layout = if (viewType == 0) R.layout.list_item_task_boolean else R.layout.list_item_task_numeric
+        val layout = if (viewType == 0)
+            R.layout.list_item_task_boolean
+        else if (viewType == 1)
+            R.layout.list_item_task_numeric
+        else
+            R.layout.list_item_task_minutes
         val view = LayoutInflater.from(parent.context).inflate(layout, parent, false)
 
         return DataObjectHolder(itemView = view)
@@ -102,7 +108,7 @@ class TasksAdapter(private val activity: MainActivity, private val day: Int) : R
                 }
             }
         }
-        else {
+        else if (holder.itemViewType == 1) {
 
             holder.imgPlus!!.setOnClickListener {
                 val entry = item!!.entry
@@ -135,6 +141,11 @@ class TasksAdapter(private val activity: MainActivity, private val day: Int) : R
                 }
             }
         }
+        else {
+
+            //TODO: holder.txtValue!!.text = (item!!.entry!!.Value / 60).toString()
+            holder.txtValue!!.text = (item!!.entry!!.Value).toString()
+        }
     }
 
     private fun updateUi(holder: DataObjectHolder, item: TaskEntry) {
@@ -145,7 +156,8 @@ class TasksAdapter(private val activity: MainActivity, private val day: Int) : R
         }
         else {
             holder.txtValue!!.text = item.entry!!.Value.toString()
-            holder.txtUnit!!.text = item.task!!.Unit
+            if (holder.txtUnit != null)
+                holder.txtUnit.text = item.task!!.Unit
         }
     }
 
@@ -166,8 +178,12 @@ class TasksAdapter(private val activity: MainActivity, private val day: Int) : R
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (items.count() > position)
+        return if (items.count() > position) {
+            if (items[position].task!!.AutomationType == AutoTaskType.CallDuration.typeId ||
+                    items[position].task!!.AutomationType == AutoTaskType.AppUsage.typeId)
+                2 else
             items[position].task!!.DataType
+        }
         else 0
     }
 

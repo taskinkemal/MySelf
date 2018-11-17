@@ -18,7 +18,7 @@ interface EntryDao {
     val count: Int
 
     @Query("SELECT * FROM Entry where Day = :day and TaskId = :taskId")
-    operator fun get(day: Int, taskId: Int): Entry
+    operator fun get(day: Int, taskId: Int): Entry?
 
     @Insert
     fun insert(entry: Entry)

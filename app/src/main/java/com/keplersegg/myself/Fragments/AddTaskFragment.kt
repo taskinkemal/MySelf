@@ -119,10 +119,8 @@ class AddTaskFragment : MasterFragment() {
                     }
                     AutoTaskType.WentTo -> {
                         txtLabel.setText(activity!!.getString(R.string.autotask_wentTo) + " " + lblAutomationVar.text)
-                        swcUnits.isChecked = true
-                        txtUnits.setText("minute(s)")
+                        swcUnits.isChecked = false
                         swcUnits.isEnabled = false
-                        txtUnits.isEnabled = false
                     }
                 }
             }

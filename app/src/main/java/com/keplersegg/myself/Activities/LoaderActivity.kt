@@ -19,6 +19,12 @@ import com.keplersegg.myself.Helper.TokenType
 import com.keplersegg.myself.Models.User
 import com.keplersegg.myself.R
 import kotlinx.android.synthetic.main.activity_loader.*
+import android.app.job.JobScheduler
+import android.content.Context
+import com.keplersegg.myself.Services.AutomatedTaskService
+import android.app.job.JobInfo
+import android.content.ComponentName
+
 
 class LoaderActivity : MasterActivity(), ISetUser, ILoginHost, IRefreshTokenHost {
 
@@ -34,6 +40,8 @@ class LoaderActivity : MasterActivity(), ISetUser, ILoginHost, IRefreshTokenHost
                 .load(R.drawable.login_background)
                 .apply(RequestOptions.centerCropTransform())
                 .into(imgLoginBackground)
+
+        RegisterAutomatedTaskService()
     }
 
     private fun LoginCheck() {
@@ -167,4 +175,21 @@ class LoaderActivity : MasterActivity(), ISetUser, ILoginHost, IRefreshTokenHost
     override fun onRefreshError(message: String) {
         LoginCheckSocial()
     }
+
+    private fun RegisterAutomatedTaskService() {
+
+        val jobScheduler = applicationContext
+                .getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+
+        val componentName = ComponentName(this, AutomatedTaskService::class.java)
+
+        val jobInfo = JobInfo.Builder(1, componentName)
+                .setPeriodic(15 * 60 * 1000, 5000)
+                .setPersisted(true)
+                .build()
+
+        jobScheduler.schedule(jobInfo)
+    }
+
+
 }
