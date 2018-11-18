@@ -15,19 +15,19 @@ interface TaskDao {
     @get:Query("SELECT * FROM Task")
     val all: List<Task>
 
-    @get:Query("SELECT case when count(0) = 0 then 1 else max(Id)+1 end FROM Task")
-    val maxId: Int
+    @Query("SELECT * FROM Task where Status = :status")
+    fun getAll(status: Int): List<Task>
 
-    @get:Query("SELECT COUNT(0) from Task")
-    val count: Int
+    @get:Query("SELECT case when count(0) = 0 then -4 else min(Id)-1 end FROM Task")
+    val minId: Int
 
     @Query("SELECT * FROM Task where Id = :id")
     operator fun get(id: Int): Task
 
-    @Query("SELECT count(0) FROM Task where Label = :label")
+    @Query("SELECT count(0) FROM Task where Label = :label and Status = 1")
     fun getCountByLabel(label: String): Int
 
-    @Query("SELECT * FROM Task where Id <> :taskId and Label = :label")
+    @Query("SELECT * FROM Task where Id <> :taskId and Label = :label and Status = 1")
     fun getCountByLabelExcludeId(taskId: Int, label: String): Int
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -36,8 +36,11 @@ interface TaskDao {
     @Update(onConflict = OnConflictStrategy.IGNORE)
     fun update(task: Task): Int
 
-    @Delete
-    fun delete(task: Task)
+    @Query("update Task set Id = :newId where Id = :currentId")
+    fun updateId(newId: Int, currentId: Int)
+
+    @Query("update Task set Status = 0 where Id = :id")
+    fun delete(id: Int)
 
     @Query("DELETE FROM Task")
     fun deleteAll()

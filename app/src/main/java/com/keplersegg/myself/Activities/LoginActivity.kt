@@ -18,12 +18,14 @@ import com.keplersegg.myself.Interfaces.ISetUser
 import com.keplersegg.myself.Interfaces.ISyncTasksHost
 import com.keplersegg.myself.Async.LoginTask
 import com.keplersegg.myself.Async.SyncTasks
+import com.keplersegg.myself.Helper.AutoTasksManager
 import com.keplersegg.myself.Helper.TokenType
 import com.keplersegg.myself.Models.User
 import com.keplersegg.myself.R
 import kotlinx.android.synthetic.main.activity_login.*
 
 import java.util.Arrays
+
 
 class LoginActivity : AuthActivity(), ISetUser, ILoginHost, ISyncTasksHost {
 
@@ -61,8 +63,9 @@ class LoginActivity : AuthActivity(), ISetUser, ILoginHost, ISyncTasksHost {
         })
 
         txtContinueWithoutAccount.setOnClickListener {
+
             //application.dataStore.setAccessToken("194044032133214245110100013098164116206239065216108230151152227093182051129179034209198215059120005198162060090156001124114155022206198130022107007035033187205131099148147216228217003192152060");
-            NavigateToActivity("Main", true)
+            goToMain()
         }
 
         btnLoginFacebook.setOnClickListener {
@@ -136,7 +139,11 @@ class LoginActivity : AuthActivity(), ISetUser, ILoginHost, ISyncTasksHost {
     }
 
     override fun onSyncTasksSuccess() {
+        goToMain()
+    }
 
+    private fun goToMain() {
+        AutoTasksManager().Run(applicationContext, Runnable { })
         NavigateToActivity("Main", true)
     }
 

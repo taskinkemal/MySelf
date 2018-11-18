@@ -26,16 +26,27 @@ open class SyncTasks(private var activity: ISyncTasksHost) : AsyncTask<Void, Voi
 
             for (i in 0 until listLocal.size) {
 
-                if (!list.any { t -> t.Id == listLocal[i].Id }) {
+                val foundTask = list.firstOrNull { t -> t.Id == listLocal[i].Id }
+                if (foundTask == null) {
 
                     if (listLocal[i].Id < 0) {
 
-                        // reserved default tasks.
+                        // newly added task without internet connection
+
+                        val taskId = ServiceMethods.uploadTask(activity, listLocal[i])
+                        if (taskId > 0) /* check if uploaded successfully */ {
+                            activity.AppDB().taskDao().updateId(taskId, listLocal[i].Id)
+                            listLocal[i].Id = taskId
+                        }
                     }
                     else {
 
-                        removeTask(listLocal[i])
+                        // shouldn't come here
+                        ServiceMethods.uploadTask(activity, listLocal[i])
                     }
+                }
+                else {
+
                 }
             }
 
@@ -112,10 +123,5 @@ open class SyncTasks(private var activity: ISyncTasksHost) : AsyncTask<Void, Voi
         if (rowsAffected == 0) {
             activity.AppDB().taskDao().insert(task)
         }
-    }
-
-    private fun removeTask(task: Task) {
-
-        activity.AppDB().taskDao().delete(task)
     }
 }

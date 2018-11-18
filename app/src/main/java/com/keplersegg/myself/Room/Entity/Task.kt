@@ -18,6 +18,7 @@ class Task {
     var GoalTimeFrame: Int = 0
     var AutomationType: Int? = null
     var AutomationVar: String? = null
+    var Status: Int = 1
 
     companion object {
 
@@ -37,6 +38,7 @@ class Task {
             m.GoalTimeFrame = goalTimeFrame
             m.AutomationType = automationType
             m.AutomationVar = automationVar
+            m.Status = 1
 
             return m
         }

@@ -25,7 +25,6 @@ import com.keplersegg.myself.Services.AutomatedTaskService
 import android.app.job.JobInfo
 import android.content.ComponentName
 
-
 class LoaderActivity : MasterActivity(), ISetUser, ILoginHost, IRefreshTokenHost {
 
     override fun onCreate(savedInstanceState: Bundle?) {

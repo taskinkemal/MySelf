@@ -12,6 +12,7 @@ import java.text.DateFormatSymbols
 import java.util.*
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 
 
@@ -36,7 +37,8 @@ class TasksPagerFragment : MasterFragment() {
         tabLayout.addTab(tabLayout.newTab().setText("Today"))
         tabLayout.tabGravity = TabLayout.GRAVITY_FILL
 
-        val adapter = TaskPagerAdapter(childFragmentManager) // activity!!.supportFragmentManager)
+        val adapter = TaskPagerAdapter(fragmentManager!!) // activity!!.supportFragmentManager)
+        var viewPager = view.findViewById<ViewPager>(R.id.viewPager)
         viewPager.adapter = adapter
         viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
         tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener

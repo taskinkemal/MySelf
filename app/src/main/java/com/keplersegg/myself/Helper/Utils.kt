@@ -32,7 +32,7 @@ object Utils {
 
         val today = getDateWithoutTime()
 
-        today.add(Calendar.DATE, -daysBack)
+        today.add(Calendar.DATE, daysBack)
 
         return today.timeInMillis
     }

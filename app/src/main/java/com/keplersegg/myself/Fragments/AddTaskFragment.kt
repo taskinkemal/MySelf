@@ -249,7 +249,7 @@ class AddTaskFragment : MasterFragment() {
                     taskId = ServiceMethods.uploadTask(activity!!, newTask)
                 }
                 else {
-                    taskId = this.activity!!.AppDB().taskDao().maxId
+                    taskId = this.activity!!.AppDB().taskDao().minId
                 }
 
                 if (taskId != -1) {
@@ -318,9 +318,9 @@ class AddTaskFragment : MasterFragment() {
                     AlertDialog.Builder(activity!!)
                             .setMessage("Do you really want to delete this task?")
                             .setIcon(android.R.drawable.ic_dialog_alert)
-                            .setPositiveButton(android.R.string.yes) { _, which ->
+                            .setPositiveButton(android.R.string.yes) { _, _ ->
                                 doAsync {
-                                    activity!!.AppDB().taskDao().delete(task!!)
+                                    activity!!.AppDB().taskDao().delete(task!!.Id)
                                     ServiceMethods.deleteTask(activity!!, task!!.Id)
 
                                     uiThread {

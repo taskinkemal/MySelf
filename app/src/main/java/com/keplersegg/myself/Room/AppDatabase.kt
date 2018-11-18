@@ -13,7 +13,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = arrayOf(Task::class, Entry::class, TaskEntry::class), version = 10, exportSchema = false)
+@Database(entities = arrayOf(Task::class, Entry::class, TaskEntry::class), version = 11, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun taskDao(): TaskDao

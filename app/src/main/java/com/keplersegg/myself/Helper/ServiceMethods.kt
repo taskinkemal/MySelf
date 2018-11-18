@@ -33,6 +33,7 @@ object ServiceMethods {
         jsonParams.put("GoalTimeFrame", task.GoalTimeFrame)
         jsonParams.put("AutomationType", task.AutomationType)
         jsonParams.put("AutomationVar", task.AutomationVar)
+        jsonParams.put("Status", task.Status)
 
         val result = HttpClient.send(provider, "tasks", "post", jsonParams)
 

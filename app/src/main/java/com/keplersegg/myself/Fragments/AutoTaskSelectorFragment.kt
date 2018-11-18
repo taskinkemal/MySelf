@@ -2,8 +2,13 @@ package com.keplersegg.myself.Fragments
 
 
 import android.Manifest
+import android.app.AppOpsManager
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Process
+import android.provider.Settings
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -44,9 +49,36 @@ class AutoTaskSelectorFragment : MasterFragment() {
                 }
                 activity!!.NavigateFragment(true, AddTaskFragment.newInstance(AutoTaskType.CallDuration, null))
             }
-            AutoTaskType.AppUsage -> activity!!.NavigateFragment(true, AppUsageFragment.newInstance())
+            AutoTaskType.AppUsage -> {
+
+                if (!checkForPermission(activity!!))
+                {
+                    //TODO: show a message here.
+                    startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+                }
+
+                if (!checkForPermission(activity!!)) {
+                    //TODO: show a message here
+                    return
+                }
+                if (ContextCompat.checkSelfPermission(activity!!, Manifest.permission.PACKAGE_USAGE_STATS)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    // Permission is not granted
+                    // Ask for permision
+                    ActivityCompat.requestPermissions(activity!!, Array(1) { Manifest.permission.PACKAGE_USAGE_STATS }, 2)
+
+                }
+
+                activity!!.NavigateFragment(true, AppUsageFragment.newInstance())
+            }
             AutoTaskType.WentTo -> activity!!.NavigateFragment(true, WentToFragment.newInstance())
         }
+    }
+
+    private fun checkForPermission(context: Context): Boolean {
+        val appOps = context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
+        val mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, Process.myUid(), context.packageName)
+        return mode == AppOpsManager.MODE_ALLOWED
     }
 
     companion object {
