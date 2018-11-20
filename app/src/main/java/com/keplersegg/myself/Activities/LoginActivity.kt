@@ -108,7 +108,11 @@ class LoginActivity : AuthActivity(), ISetUser, ILoginHost, ISyncTasksHost {
 
         if (user != null) {
 
-            LoginTask(this).Run(TokenType.Facebook, application!!.dataStore!!.getFacebookToken(), application!!.user!!.Email)
+            LoginTask(this).Run(TokenType.Facebook, application!!.dataStore!!.getFacebookToken(),
+                    application!!.user!!.Email,
+                    application!!.user!!.FirstName,
+                    application!!.user!!.LastName,
+                    application!!.user!!.PictureUrl)
         } else {
 
             application!!.dataStore!!.setAccessToken(null)

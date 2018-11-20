@@ -62,7 +62,11 @@ class LoaderActivity : MasterActivity(), ISetUser, ILoginHost, IRefreshTokenHost
         if (account != null) {
             if (handleGoogleSignInResult(account)) {
 
-                LoginTask(this).Run(TokenType.Google, application!!.dataStore!!.getGoogleToken(), application!!.user!!.Email)
+                LoginTask(this).Run(TokenType.Google, application!!.dataStore!!.getGoogleToken(),
+                        application!!.user!!.Email,
+                        application!!.user!!.FirstName,
+                        application!!.user!!.LastName,
+                        application!!.user!!.PictureUrl)
                 return
             }
         }
@@ -136,7 +140,11 @@ class LoaderActivity : MasterActivity(), ISetUser, ILoginHost, IRefreshTokenHost
 
         if (user != null) {
 
-            LoginTask(this).Run(TokenType.Facebook, application!!.dataStore!!.getFacebookToken(), application!!.user!!.Email)
+            LoginTask(this).Run(TokenType.Facebook, application!!.dataStore!!.getFacebookToken(),
+                    application!!.user!!.Email,
+                    application!!.user!!.FirstName,
+                    application!!.user!!.LastName,
+                    application!!.user!!.PictureUrl)
         } else {
 
             application!!.dataStore!!.setAccessToken(null)

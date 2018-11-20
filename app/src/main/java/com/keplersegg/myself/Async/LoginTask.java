@@ -17,7 +17,7 @@ public class LoginTask extends AsyncTask<String, Void, JSONObject> {
         this.activity = activity;
     }
 
-    public void Run(TokenType tokenType, String token, String email) {
+    public void Run(TokenType tokenType, String token, String email, String firstName, String lastName, String pictureUrl) {
 
         String deviceID = activity.getDeviceId();
         String apiEndpoint = tokenType == TokenType.Google ? "Google" : tokenType == TokenType.Facebook ? "Facebook" : "";
@@ -28,7 +28,7 @@ public class LoginTask extends AsyncTask<String, Void, JSONObject> {
             return;
         }
 
-        execute(apiEndpoint, token, email, deviceID);
+        execute(apiEndpoint, token, email, firstName, lastName, pictureUrl, deviceID);
     }
 
     @Override
@@ -37,13 +37,19 @@ public class LoginTask extends AsyncTask<String, Void, JSONObject> {
         String apiEndpoint = (params != null && params.length > 0) ? params[0] : null;
         String token = (params != null && params.length > 1) ? params[1] : null;
         String email = (params != null && params.length > 2) ? params[2] : null;
-        String deviceID = (params != null && params.length > 3) ? params[3] : null;
+        String firstName = (params != null && params.length > 3) ? params[3] : null;
+        String lastName = (params != null && params.length > 4) ? params[4] : null;
+        String pictureUrl = (params != null && params.length > 5) ? params[5] : null;
+        String deviceID = (params != null && params.length > 6) ? params[6] : null;
         String url = "token/" + apiEndpoint;
 
         JSONObject jsonParams = new JSONObject();
         try {
 
             jsonParams.put("Email", email);
+            jsonParams.put("FirstName", firstName);
+            jsonParams.put("LastName", lastName);
+            jsonParams.put("PictureUrl", pictureUrl);
             if (apiEndpoint.equals("Facebook"))
                 jsonParams.put("FacebookToken", token);
             else

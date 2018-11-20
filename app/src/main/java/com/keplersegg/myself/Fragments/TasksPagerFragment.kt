@@ -30,7 +30,7 @@ class TasksPagerFragment : MasterFragment() {
 
         for (i: Int in 0 .. TaskPagerAdapter.NumOfTabs - 3) {
 
-            val title = dateToString(TaskPagerAdapter.NumOfTabs - i)
+            val title = dateToString(TaskPagerAdapter.NumOfTabs - 1 - i)
             tabLayout.addTab(tabLayout.newTab().setText(title))
         }
         tabLayout.addTab(tabLayout.newTab().setText("Yesterday"))
