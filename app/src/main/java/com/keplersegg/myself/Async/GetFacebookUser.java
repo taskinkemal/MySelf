@@ -26,16 +26,23 @@ public class GetFacebookUser {
 
                         try {
 
-                            activity.setToken(TokenType.Facebook, accessToken.getToken());
+                            if (object != null && object.has("email")) {
 
-                            User user = new User();
-                            user.setEmail(object.getString("email"));
-                            user.setFirstName(object.getString("first_name"));
-                            user.setLastName(object.getString("last_name"));
-                            user.setFacebookToken(accessToken);
-                            user.setPictureUrl(object.getJSONObject("picture").getJSONObject("data").getString("url"));
+                                activity.setToken(TokenType.Facebook, accessToken.getToken());
 
-                            activity.setUser(user);
+                                User user = new User();
+                                user.setEmail(object.getString("email"));
+                                user.setFirstName(object.getString("first_name"));
+                                user.setLastName(object.getString("last_name"));
+                                user.setFacebookToken(accessToken);
+                                user.setPictureUrl(object.getJSONObject("picture").getJSONObject("data").getString("url"));
+
+                                activity.setUser(user);
+                            }
+                            else {
+
+                                activity.setUser(null);
+                            }
 
                         } catch (JSONException e) {
 

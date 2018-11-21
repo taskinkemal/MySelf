@@ -25,6 +25,7 @@ import com.keplersegg.myself.Services.AutomatedTaskService
 import android.app.job.JobInfo
 import android.content.ComponentName
 
+
 class LoaderActivity : MasterActivity(), ISetUser, ILoginHost, IRefreshTokenHost {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,15 +48,18 @@ class LoaderActivity : MasterActivity(), ISetUser, ILoginHost, IRefreshTokenHost
 
         val accessToken = application!!.dataStore!!.getAccessToken()
 
-        if (accessToken != null && !accessToken.isEmpty()) {
+        if (LoginCheckSocialInternal()) {
+
+        }
+        else if (accessToken != null && !accessToken.isEmpty()) {
 
             RefreshTokenTask(this).execute(accessToken, application!!.dataStore!!.getRegisterID())
         } else {
-            LoginCheckSocial()
+            clearToken()
         }
     }
 
-    private fun LoginCheckSocial() {
+    private fun LoginCheckSocialInternal() : Boolean {
 
         val account = GoogleSignIn.getLastSignedInAccount(this)
 
@@ -67,7 +71,7 @@ class LoaderActivity : MasterActivity(), ISetUser, ILoginHost, IRefreshTokenHost
                         application!!.user!!.FirstName,
                         application!!.user!!.LastName,
                         application!!.user!!.PictureUrl)
-                return
+                return true
             }
         }
 
@@ -77,8 +81,17 @@ class LoaderActivity : MasterActivity(), ISetUser, ILoginHost, IRefreshTokenHost
         if (isLoggedIn) {
 
             GetFacebookUser().Run(this, accessToken)
-            return
+            return true
         }
+
+        return false
+    }
+
+    private fun LoginCheckSocial() {
+
+        if (LoginCheckSocialInternal())
+            return
+
 
         /*        String googleToken = application.dataStore.getGoogleToken();
         String facebookToken = application.dataStore.getFacebookToken();
@@ -99,6 +112,11 @@ class LoaderActivity : MasterActivity(), ISetUser, ILoginHost, IRefreshTokenHost
             new GetFacebookUser().Run(this, accessToken);
             return;
         }*/
+
+        clearToken()
+    }
+
+    private fun clearToken() {
 
         application!!.user = null
         application!!.dataStore!!.setAccessToken(null)
