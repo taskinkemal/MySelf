@@ -9,8 +9,11 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" /> <!-- TODO: request this on the fly -->
     <uses-permission android:name="android.permission.READ_CALL_LOG" /> <!-- TODO: request this on the fly -->
-    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" tools:ignore="ProtectedPermissions" /> <!-- TODO: request this on the fly -->
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions" />
 
+    <!-- TODO: request this on the fly -->
     <application
         android:name=".MySelfApplication"
         android:allowBackup="true"
@@ -22,25 +25,32 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".Activities.LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".Activities.MainActivity" />
         <activity android:name=".Activities.LoaderActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
         <service
             android:name=".Services.AutomatedTaskService"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="true" />
-        <receiver android:name=".Services.WifiReceiver" >
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <receiver android:name=".Services.WifiReceiver">
             <intent-filter android:priority="100">
                 <action android:name="android.net.wifi.STATE_CHANGE" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".Activities.TasksActivity"></activity>
     </application>
 
 </manifest>

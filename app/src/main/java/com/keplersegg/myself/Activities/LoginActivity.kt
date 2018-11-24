@@ -95,6 +95,7 @@ class LoginActivity : AuthActivity(), ISetUser, ILoginHost, ISyncTasksHost {
 
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             handleGoogleSignInResult(task.result!!)
+            setUser(application!!.user!!, TokenType.Google)
 
         } else {
             super.onActivityResult(requestCode, resultCode, data)
@@ -102,13 +103,18 @@ class LoginActivity : AuthActivity(), ISetUser, ILoginHost, ISyncTasksHost {
         }
     }
 
-    override fun setUser(user: User?) {
+    override fun setUser(user: User?, tokenType: TokenType) {
 
         application!!.user = user
 
         if (user != null) {
 
-            LoginTask(this).Run(TokenType.Facebook, application!!.dataStore!!.getFacebookToken(),
+            val token = if (tokenType == TokenType.Facebook)
+                application!!.dataStore!!.getFacebookToken()
+            else application!!.dataStore!!.getGoogleToken()
+
+            LoginTask(this).Run(tokenType,
+                    token,
                     application!!.user!!.Email,
                     application!!.user!!.FirstName,
                     application!!.user!!.LastName,

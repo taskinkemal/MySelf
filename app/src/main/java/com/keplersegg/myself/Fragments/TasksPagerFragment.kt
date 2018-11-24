@@ -2,21 +2,22 @@ package com.keplersegg.myself.Fragments
 
 
 import android.os.Bundle
-import android.view.View
-import kotlinx.android.synthetic.main.fragment_tasks_pager.*
+import android.view.*
+import androidx.viewpager.widget.ViewPager
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 import com.keplersegg.myself.R
-import android.view.Menu
 import com.keplersegg.myself.Adapters.TaskPagerAdapter
 import java.text.DateFormatSymbols
 import java.util.*
-import android.view.MenuInflater
-import android.view.MenuItem
-import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 
 
 class TasksPagerFragment : MasterFragment() {
+
+    private var viewPager: ViewPager? = null
+    private var tabLayout: TabLayout? = null
+    private var fabAdd: FloatingActionButton? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,23 +29,52 @@ class TasksPagerFragment : MasterFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+        if (rootView != null)
+        {
+            return rootView
+        }
+
+        rootView = super.onCreateView(inflater, container, savedInstanceState)
+
+        viewPager = rootView!!.findViewById(R.id.viewPager)
+        tabLayout = rootView!!.findViewById(R.id.tabLayout)
+        fabAdd = rootView!!.findViewById(R.id.fabAdd)
+
+        val adapter = TaskPagerAdapter(childFragmentManager) // activity!!.supportFragmentManager)
+        viewPager!!.adapter = adapter
+        viewPager!!.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
+        createAdapter()
+        return rootView
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        viewPager!!.adapter!!.notifyDataSetChanged()
+    }
+
+    private fun createAdapter() {
+
+
         for (i: Int in 0 .. TaskPagerAdapter.NumOfTabs - 3) {
 
             val title = dateToString(TaskPagerAdapter.NumOfTabs - 1 - i)
-            tabLayout.addTab(tabLayout.newTab().setText(title))
+            tabLayout!!.addTab(tabLayout!!.newTab().setText(title))
         }
-        tabLayout.addTab(tabLayout.newTab().setText("Yesterday"))
-        tabLayout.addTab(tabLayout.newTab().setText("Today"))
-        tabLayout.tabGravity = TabLayout.GRAVITY_FILL
+        tabLayout!!.addTab(tabLayout!!.newTab().setText("Yesterday"))
+        tabLayout!!.addTab(tabLayout!!.newTab().setText("Today"))
+        tabLayout!!.tabGravity = TabLayout.GRAVITY_FILL
 
-        val adapter = TaskPagerAdapter(fragmentManager!!) // activity!!.supportFragmentManager)
-        var viewPager = view.findViewById<ViewPager>(R.id.viewPager)
-        viewPager.adapter = adapter
-        viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
-        tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener
+        //var viewPager = view.findViewById<ViewPager>(R.id.viewPager)
+        tabLayout!!.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener
         {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                viewPager.currentItem = tab.position
+                viewPager!!.currentItem = tab.position
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
@@ -56,7 +86,7 @@ class TasksPagerFragment : MasterFragment() {
             }
         })
 
-        fabAdd.setOnClickListener { activity!!.NavigateFragment(true, AddTaskFragment.newInstance(0)) }
+        fabAdd!!.setOnClickListener { activity!!.NavigateFragment(true, AddTaskFragment.newInstance(0)) }
     }
 
     private fun dateToString(days: Int): String {
@@ -69,8 +99,7 @@ class TasksPagerFragment : MasterFragment() {
     override fun onResume() {
         super.onResume()
         SetTitle(R.string.lbl_tasks)
-
-        viewPager.currentItem = TaskPagerAdapter.NumOfTabs - 1
+        viewPager!!.currentItem = TaskPagerAdapter.NumOfTabs - 1
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

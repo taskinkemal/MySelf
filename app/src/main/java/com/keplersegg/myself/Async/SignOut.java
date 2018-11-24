@@ -4,8 +4,12 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.login.LoginManager;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.keplersegg.myself.Interfaces.ISignOut;
 import com.keplersegg.myself.Models.User;
+
+import androidx.annotation.NonNull;
 
 public class SignOut {
 
@@ -32,11 +36,14 @@ public class SignOut {
 
     private void GoogleSignOut(final ISignOut activity) {
 
-        if (activity.GetGoogleSignInClient().asGoogleApiClient().isConnected()) {
-            activity.GetGoogleSignInClient().signOut();
-        }
+        activity.GetGoogleSignInClient().signOut()
+                .addOnCompleteListener(activity.GetMasterActivity(), new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
 
-        FinalizeSignOut(activity);
+                        FinalizeSignOut(activity);
+                    }
+                });
     }
 
     private void FinalizeSignOut(final ISignOut activity) {

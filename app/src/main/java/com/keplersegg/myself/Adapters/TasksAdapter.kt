@@ -22,6 +22,8 @@ import org.jetbrains.anko.uiThread
 import java.util.*
 import kotlin.collections.ArrayList
 
+
+
 class TasksAdapter(private val activity: MainActivity, private val day: Int) : RecyclerView.Adapter<TasksAdapter.DataObjectHolder>() {
 
     val items: ArrayList<TaskEntry> = ArrayList()
@@ -194,8 +196,10 @@ class TasksAdapter(private val activity: MainActivity, private val day: Int) : R
 
     fun updateData(list: List<TaskEntry>) {
 
-        items.clear()
-        items.addAll(list)
-        notifyDataSetChanged()
+        this.activity.runOnUiThread {
+            items.clear()
+            items.addAll(list)
+            notifyDataSetChanged()
+        }
     }
 }

@@ -37,17 +37,17 @@ public class GetFacebookUser {
                                 user.setFacebookToken(accessToken);
                                 user.setPictureUrl(object.getJSONObject("picture").getJSONObject("data").getString("url"));
 
-                                activity.setUser(user);
+                                activity.setUser(user, TokenType.Facebook);
                             }
                             else {
 
-                                activity.setUser(null);
+                                activity.setUser(null, TokenType.Facebook);
                             }
 
                         } catch (JSONException e) {
 
                             activity.logException(e, "GetFacebookUser.Run");
-                            activity.setUser(null);
+                            activity.setUser(null, TokenType.Facebook);
                         }
                     }
                 });

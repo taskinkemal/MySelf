@@ -146,7 +146,8 @@ class AddTaskFragment : MasterFragment() {
             doAsync {
                 AddOrUpdateTask(label, dataType, unit, hasGoal, goal, goalMinMax, goalTimeFrame, automationType, automationVar)
                 uiThread {
-                    activity!!.NavigateFragment(true, TasksPagerFragment.newInstance())
+                    val fragment = TasksPagerFragment.newInstance()
+                    activity!!.NavigateFragment(true, fragment)
                 }
             }
         }

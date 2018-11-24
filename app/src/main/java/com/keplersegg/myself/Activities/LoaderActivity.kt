@@ -24,9 +24,12 @@ import android.content.Context
 import com.keplersegg.myself.Services.AutomatedTaskService
 import android.app.job.JobInfo
 import android.content.ComponentName
+import com.keplersegg.myself.Async.SyncTasks
+import com.keplersegg.myself.Helper.AutoTasksManager
+import com.keplersegg.myself.Interfaces.ISyncTasksHost
 
 
-class LoaderActivity : MasterActivity(), ISetUser, ILoginHost, IRefreshTokenHost {
+class LoaderActivity : MasterActivity(), ISetUser, ILoginHost, IRefreshTokenHost, ISyncTasksHost {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -152,13 +155,18 @@ class LoaderActivity : MasterActivity(), ISetUser, ILoginHost, IRefreshTokenHost
         prgBarLoader.startAnimation(anim)
     }
 
-    override fun setUser(user: User?) {
+    override fun setUser(user: User?, tokenType: TokenType) {
 
         application!!.user = user
 
         if (user != null) {
 
-            LoginTask(this).Run(TokenType.Facebook, application!!.dataStore!!.getFacebookToken(),
+            val token = if (tokenType == TokenType.Facebook)
+                application!!.dataStore!!.getFacebookToken()
+            else application!!.dataStore!!.getGoogleToken()
+
+            LoginTask(this).Run(tokenType,
+                    token,
                     application!!.user!!.Email,
                     application!!.user!!.FirstName,
                     application!!.user!!.LastName,
@@ -177,7 +185,7 @@ class LoaderActivity : MasterActivity(), ISetUser, ILoginHost, IRefreshTokenHost
 
     override fun onLoginSuccess() {
 
-        NavigateToActivity("Main", true)
+        SyncTasks(this).execute()
     }
 
     override fun onLoginError(message: String) {
@@ -194,7 +202,7 @@ class LoaderActivity : MasterActivity(), ISetUser, ILoginHost, IRefreshTokenHost
     }
 
     override fun onRefreshSuccess() {
-        NavigateToActivity("Main", true)
+        SyncTasks(this).execute()
     }
 
     override fun onRefreshError(message: String) {
@@ -216,5 +224,13 @@ class LoaderActivity : MasterActivity(), ISetUser, ILoginHost, IRefreshTokenHost
         jobScheduler.schedule(jobInfo)
     }
 
+    override fun onSyncTasksSuccess() {
 
+        goToMain()
+    }
+
+    private fun goToMain() {
+        AutoTasksManager().Run(applicationContext, Runnable { })
+        NavigateToActivity("Main", true)
+    }
 }

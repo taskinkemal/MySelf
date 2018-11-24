@@ -7,6 +7,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.keplersegg.myself.Activities.MasterActivity
 import kotlinx.android.synthetic.main.fragment_profile.*
 
 import com.keplersegg.myself.Interfaces.ISignOut
@@ -81,6 +82,10 @@ class ProfileFragment : MasterFragment(), ISignOut {
 
     override fun GetGoogleSignInClient(): GoogleSignInClient {
         return activity!!.mGoogleSigninClient!!
+    }
+
+    override fun GetMasterActivity() : MasterActivity {
+        return activity!!
     }
 
     companion object {

@@ -90,7 +90,7 @@ open class MasterActivity : AppCompatActivity(), IHttpProvider, IErrorMessage {
 
     private fun initializeGPlusSettings() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                //.requestIdToken(getString(R.string.google_client_id))
+                .requestIdToken(getString(R.string.google_client_id))
                 //.requestServerAuthCode(getString(R.string.google_client_id))
                 .requestEmail()
                 .build()
@@ -147,5 +147,9 @@ open class MasterActivity : AppCompatActivity(), IHttpProvider, IErrorMessage {
 
         //CrashLogger.AddExceptionLog(message, exc);
         showErrorMessage(message)
+    }
+
+    fun GetMasterActivity() : MasterActivity {
+        return this
     }
 }

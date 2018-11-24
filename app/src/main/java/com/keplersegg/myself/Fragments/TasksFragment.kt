@@ -2,9 +2,11 @@ package com.keplersegg.myself.Fragments
 
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.fragment_tasks.*
+import androidx.recyclerview.widget.RecyclerView
 
 import com.keplersegg.myself.Adapters.TasksAdapter
 import com.keplersegg.myself.Async.GetTaskEntries
@@ -16,6 +18,7 @@ import com.keplersegg.myself.Room.Entity.TaskEntry
 class TasksFragment : MasterFragment(), IGetTasksHost {
 
     private var adapter: TasksAdapter? = null
+    private var rcylTasks: RecyclerView? = null
     private var day = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,12 +26,33 @@ class TasksFragment : MasterFragment(), IGetTasksHost {
         this.layout = R.layout.fragment_tasks
     }
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+        if (rootView != null)
+        {
+            return rootView
+        }
+
+        rootView = super.onCreateView(inflater, container, savedInstanceState)
+
+        rcylTasks = rootView!!.findViewById(R.id.rcylTasks)
+
+        adapter = TasksAdapter(activity!!, day)
+        rcylTasks!!.adapter = adapter
+        rcylTasks!!.layoutManager = LinearLayoutManager(activity)
+        return rootView
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = TasksAdapter(activity!!, day)
-        rcylTasks.adapter = adapter
-        rcylTasks.layoutManager = LinearLayoutManager(activity)
+        adapter!!.notifyDataSetChanged()
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+
     }
 
     override fun onResume() {
@@ -38,9 +62,15 @@ class TasksFragment : MasterFragment(), IGetTasksHost {
         GetTaskEntries(this).execute(day)
     }
 
+    fun notifyUpdate() {
+        GetTaskEntries(this).execute(day)
+    }
+
     override fun onGetTasksSuccess(items: List<TaskEntry>) {
 
-        adapter!!.updateData(items)
+        this.activity!!.runOnUiThread {
+            adapter!!.updateData(items)
+        }
     }
 
     override fun onGetTasksError(message: String) {
