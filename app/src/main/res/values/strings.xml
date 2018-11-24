@@ -6,7 +6,7 @@
     <string name="imgContentDescription">image</string>
     <string name="facebook_app_id">710859642327105</string>
     <!--<string name="google_client_id">746874009854-prbslc7hakb9hbp3ve9anbdgjqfvtvnl.apps.googleusercontent.com</string>-->
-    <string name="google_client_id">746874009854-nrva92kg8jvmsa00nppnplqn97m6bcn8.apps.googleusercontent.com</string>
+    <string name="google_client_id" translatable="false">746874009854-nrva92kg8jvmsa00nppnplqn97m6bcn8.apps.googleusercontent.com</string>
     <string name="google_api_key" translatable="false">AIzaSyB6y45vz3dJfXRiH8l33GmF2kdGmS-7m78</string>
     <string name="lbl_tasks">Tasks</string>
     <string name="lbl_profile">Profile</string>

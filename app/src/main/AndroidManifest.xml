@@ -22,15 +22,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".Activities.LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".Activities.MainActivity" />
-        <activity android:name=".Activities.LoaderActivity">
+            android:name=".activities.LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.MainActivity" />
+        <activity android:name=".activities.LoaderActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -40,17 +40,15 @@
             android:value="@string/facebook_app_id" />
 
         <service
-            android:name=".Services.AutomatedTaskService"
+            android:name=".services.AutomatedTaskService"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
-        <receiver android:name=".Services.WifiReceiver">
+        <receiver android:name=".services.WifiReceiver">
             <intent-filter android:priority="100">
                 <action android:name="android.net.wifi.STATE_CHANGE" />
             </intent-filter>
         </receiver>
-
-        <activity android:name=".Activities.TasksActivity"></activity>
     </application>
 
 </manifest>

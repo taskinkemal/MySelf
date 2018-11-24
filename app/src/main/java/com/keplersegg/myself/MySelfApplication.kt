@@ -2,9 +2,8 @@ package com.keplersegg.myself
 
 import android.app.Application
 
-import com.facebook.FacebookSdk
-import com.keplersegg.myself.Helper.DataStorage
-import com.keplersegg.myself.Models.User
+import com.keplersegg.myself.helper.DataStorage
+import com.keplersegg.myself.models.User
 
 class MySelfApplication : Application() {
 
@@ -16,6 +15,5 @@ class MySelfApplication : Application() {
         super.onCreate()
 
         this.dataStore = DataStorage(this)
-        FacebookSdk.sdkInitialize(this)
     }
 }
