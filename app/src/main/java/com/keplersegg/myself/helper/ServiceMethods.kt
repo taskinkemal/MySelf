@@ -4,11 +4,12 @@ import com.google.gson.GsonBuilder
 import com.keplersegg.myself.interfaces.IHttpProvider
 import com.keplersegg.myself.Room.Entity.Entry
 import com.keplersegg.myself.Room.Entity.Task
+import com.keplersegg.myself.models.UploadEntryResponse
 import org.json.JSONObject
 
 object ServiceMethods {
 
-    fun uploadEntry(provider: IHttpProvider, entry: Entry) {
+    fun uploadEntry(provider: IHttpProvider, entry: Entry) : UploadEntryResponse? {
 
         val jsonParams = JSONObject()
         jsonParams.put("Day", entry.Day)
@@ -16,7 +17,16 @@ object ServiceMethods {
         jsonParams.put("Value", entry.Value)
         //jsonParams.put("ModificationDate", entry.ModificationDate)
 
-        HttpClient.send(provider, "entries", "post", jsonParams)
+        val result = HttpClient.send(provider, "entries", "post", jsonParams)
+
+        if (result == null)
+        {
+            return null
+        }
+
+        val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create()
+
+        return gson.fromJson<UploadEntryResponse>(result.getJSONObject("Value").toString(), UploadEntryResponse::class.java)
     }
 
     fun uploadTask(provider: IHttpProvider, task: Task): Int {

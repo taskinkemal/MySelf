@@ -5,6 +5,7 @@ import com.keplersegg.myself.helper.ServiceMethods
 import com.keplersegg.myself.interfaces.ISyncTasksHost
 
 import com.keplersegg.myself.Room.Entity.Task
+import com.keplersegg.myself.models.UploadEntryResponse
 
 
 open class SyncTasks(private var activity: ISyncTasksHost) : AsyncTask<Void, Void, Boolean>() {
@@ -71,12 +72,14 @@ open class SyncTasks(private var activity: ISyncTasksHost) : AsyncTask<Void, Voi
                         }
                         else if (entry.ModificationDate < entriesLocal[i].ModificationDate) {
 
-                            ServiceMethods.uploadEntry(activity, entriesLocal[i])
+                            val uploadEntryResponse = ServiceMethods.uploadEntry(activity, entriesLocal[i])
+                            upsertBadge(uploadEntryResponse)
                         }
                     }
                     else {
 
-                        ServiceMethods.uploadEntry(activity, entriesLocal[i])
+                        val uploadEntryResponse = ServiceMethods.uploadEntry(activity, entriesLocal[i])
+                        upsertBadge(uploadEntryResponse)
                     }
                 }
 
@@ -122,6 +125,22 @@ open class SyncTasks(private var activity: ISyncTasksHost) : AsyncTask<Void, Voi
         val rowsAffected = activity.AppDB().taskDao().update(task)
         if (rowsAffected == 0) {
             activity.AppDB().taskDao().insert(task)
+        }
+    }
+
+    fun upsertBadge(response: UploadEntryResponse?) {
+
+        if (response != null) {
+
+            activity.GetApplication().user!!.Score = response.Score
+
+            for (i in 0 until response.NewBadges.size) {
+
+                val rowsAffected = activity.AppDB().userBadgeDao().update(response.NewBadges[i])
+                if (rowsAffected == 0) {
+                    activity.AppDB().userBadgeDao().insert(response.NewBadges[i])
+                }
+            }
         }
     }
 }

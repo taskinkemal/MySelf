@@ -12,13 +12,16 @@ import com.keplersegg.myself.Room.Entity.TaskEntry
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.keplersegg.myself.Room.Dao.UserBadgeDao
+import com.keplersegg.myself.Room.Entity.UserBadge
 
-@Database(entities = arrayOf(Task::class, Entry::class, TaskEntry::class), version = 11, exportSchema = false)
+@Database(entities = arrayOf(Task::class, Entry::class, TaskEntry::class, UserBadge::class), version = 12, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun taskDao(): TaskDao
     abstract fun entryDao(): EntryDao
     abstract fun taskEntryDao(): TaskEntryDao
+    abstract fun userBadgeDao(): UserBadgeDao
 
     companion object {
 

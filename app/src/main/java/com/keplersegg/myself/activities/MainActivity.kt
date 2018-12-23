@@ -15,9 +15,19 @@ import com.keplersegg.myself.fragments.ProfileFragment
 import com.keplersegg.myself.fragments.TasksPagerFragment
 import com.keplersegg.myself.R
 import androidx.core.view.GravityCompat
+import com.keplersegg.myself.MySelfApplication
+import com.keplersegg.myself.interfaces.ISyncTasksHost
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AuthActivity() {
+class MainActivity : AuthActivity(), ISyncTasksHost {
+
+    override fun GetApplication(): MySelfApplication {
+        return application!!
+    }
+
+    override fun onSyncTasksSuccess() {
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -12,6 +12,7 @@ import com.facebook.FacebookException
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.keplersegg.myself.MySelfApplication
 import com.keplersegg.myself.async.GetFacebookUser
 import com.keplersegg.myself.interfaces.ILoginHost
 import com.keplersegg.myself.interfaces.ISetUser
@@ -28,6 +29,10 @@ import java.util.Arrays
 
 
 class LoginActivity : AuthActivity(), ISetUser, ILoginHost, ISyncTasksHost {
+
+    override fun GetApplication(): MySelfApplication {
+        return application!!
+    }
 
     private var fbLoginManager: LoginManager? = null
     private var fbCallbackManager: CallbackManager? = null
