@@ -35,11 +35,21 @@
 
     <string-array name="spinner_goalMinMax">
         <item>@string/minMaxExactly</item>
+        <item>@string/minMaxOrLess</item>
+    </string-array>
+
+    <string-array name="spinner_goalMinMax_AutomatedTask">
+        <item>@string/minMaxExactly</item>
         <item>@string/minMaxOrMore</item>
         <item>@string/minMaxOrLess</item>
     </string-array>
 
     <string-array name="spinner_goalMinMax_values">
+        <item>1</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="spinner_goalMinMax_values_AutomatedTask">
         <item>1</item>
         <item>2</item>
         <item>3</item>

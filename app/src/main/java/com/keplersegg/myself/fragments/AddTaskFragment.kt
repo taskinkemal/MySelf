@@ -19,6 +19,9 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.util.*
 import androidx.appcompat.app.AlertDialog
+import android.widget.ArrayAdapter
+
+
 
 
 
@@ -73,6 +76,7 @@ class AddTaskFragment : MasterFragment() {
         lblAutomationSubHeader.visibility = if (automationType != null) View.VISIBLE else View.GONE
         lytAutomation.visibility = if (automationType != null) View.VISIBLE else View.GONE
         lytAutomationVar.visibility = if (automationData != null) View.VISIBLE else View.GONE
+        setGoalMinMaxSource(automationType != null)
 
         if (automationType != null) {
 
@@ -127,6 +131,17 @@ class AddTaskFragment : MasterFragment() {
         }
     }
 
+    private fun setGoalMinMaxSource(isAutomatedTask: Boolean) {
+
+        val resourceId = if (isAutomatedTask) R.array.spinner_goalMinMax_AutomatedTask else R.array.spinner_goalMinMax
+
+        val spinnerArrayAdapter = ArrayAdapter<String>(activity!!, android.R.layout.simple_spinner_item,
+                activity!!.getResources().getStringArray(resourceId))
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout
+                .simple_spinner_dropdown_item)
+        spnGoalMinMax.setAdapter(spinnerArrayAdapter)
+    }
+
     private fun SaveTask() {
 
         val label = txtLabel!!.text.toString()
@@ -134,7 +149,7 @@ class AddTaskFragment : MasterFragment() {
         val unit = if (dataType == 1) txtUnits!!.text.toString() else ""
         val hasGoal = swcHasGoal!!.isChecked
         val goal = if (hasGoal) ConvertToInteger(txtGoal!!.text.toString()) else 0
-        val goalMinMax = if (hasGoal) spnGoalMinMax!!.selectedItemPosition else 0
+        val goalMinMax = if (hasGoal) GetGoalMinMaxValue() else 0
         val goalTimeFrame = if (hasGoal) spnGoalTimeFrame!!.selectedItemPosition else 0
         val automationVar : String? = automationData?.ItemId.toString()
 
@@ -153,6 +168,13 @@ class AddTaskFragment : MasterFragment() {
         }
     }
 
+    private fun GetGoalMinMaxValue() : Int {
+
+        val position = spnGoalMinMax!!.selectedItemPosition
+        val resourceId = if (automationType != null) R.array.spinner_goalMinMax_values_AutomatedTask else R.array.spinner_goalMinMax_values
+        return Arrays.asList(*activity!!.resources.getStringArray(resourceId))[position].toInt()
+    }
+
     private fun PrefillTask() {
 
         if (task != null) {
@@ -168,7 +190,15 @@ class AddTaskFragment : MasterFragment() {
             lblUnits.text = if (unit.length > 0) unit else "items"
             if (task!!.GoalMinMax > 0) {
 
-                val position = Arrays.asList(*activity!!.resources.getStringArray(R.array.spinner_goalMinMax_values)).indexOf(task!!.GoalMinMax.toString())
+                var position = 1
+
+                if (task!!.AutomationType != null) {
+
+                    position = Arrays.asList(*activity!!.resources.getStringArray(R.array.spinner_goalMinMax_values)).indexOf(task!!.GoalMinMax.toString())
+                }
+                else {
+                    position = Arrays.asList(*activity!!.resources.getStringArray(R.array.spinner_goalMinMax_values_AutomatedTask)).indexOf(task!!.GoalMinMax.toString())
+                }
 
                 spnGoalMinMax.setSelection(position)
             }
