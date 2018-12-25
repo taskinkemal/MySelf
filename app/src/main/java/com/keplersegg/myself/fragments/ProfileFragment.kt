@@ -1,8 +1,12 @@
 package com.keplersegg.myself.fragments
 
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageButton
+import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
@@ -14,6 +18,7 @@ import com.keplersegg.myself.interfaces.ISignOut
 import com.keplersegg.myself.async.SignOut
 import com.keplersegg.myself.models.User
 import com.keplersegg.myself.R
+import com.keplersegg.myself.helper.ServiceMethods
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
@@ -39,8 +44,46 @@ class ProfileFragment : MasterFragment(), ISignOut {
         super.onResume()
         SetTitle(R.string.lbl_profile)
 
-        lblUserName!!.text = if (activity!!.application!!.user != null) activity!!.application!!.user!!.FirstName + " " + activity!!.application!!.user!!.LastName else "Guest"
+        if (activity?.application?.user != null) {
+            lblUserName!!.text = activity!!.application!!.user!!.FirstName + " " + activity!!.application!!.user!!.LastName
 
+            doAsync {
+
+                val allBadges = activity!!.AppDB().userBadgeDao().all
+                var user = ServiceMethods.getUser(activity!!)
+                activity!!.application!!.user!!.Score = user!!.Score
+
+                uiThread {
+
+                    lblScore!!.text = activity!!.application!!.user!!.Score.toString()
+
+                    setTint(imgBadge1!!, false)
+                    setTint(imgBadge2!!, false)
+                    setTint(imgBadge3!!, false)
+
+                    for (b in allBadges) {
+
+                        if (b.BadgeId == 1) {
+
+                            setTint(imgBadge1!!, true)
+                        } else if (b.BadgeId == 2) {
+
+                            setTint(imgBadge2!!, true)
+                        } else if (b.BadgeId == 3) {
+
+                            setTint(imgBadge3!!, true)
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            lblUserName!!.text = "Guest"
+            lblScore!!.text = "0"
+            setTint(imgBadge1!!, false)
+            setTint(imgBadge2!!, false)
+            setTint(imgBadge3!!, false)
+        }
         if (!activity!!.application!!.user?.PictureUrl.isNullOrBlank()) {
 
             Glide.with(activity!!)
@@ -57,6 +100,18 @@ class ProfileFragment : MasterFragment(), ISignOut {
                     .load(R.drawable.ic_baseline_account_circle_24px)
                     .apply(RequestOptions.circleCropTransform())
                     .into(imgUserPicture)
+        }
+    }
+
+    private fun setTint(img: ImageView, isEnabled: Boolean) {
+
+        if (isEnabled) {
+            img.clearColorFilter();
+        }
+        else {
+            val semiTransparentGrey = Color.argb(155, 185, 185, 185);
+            img.setColorFilter(semiTransparentGrey,
+                    android.graphics.PorterDuff.Mode.SRC_ATOP)
         }
     }
 

@@ -5,6 +5,7 @@ import com.keplersegg.myself.interfaces.IHttpProvider
 import com.keplersegg.myself.Room.Entity.Entry
 import com.keplersegg.myself.Room.Entity.Task
 import com.keplersegg.myself.models.UploadEntryResponse
+import com.keplersegg.myself.models.User
 import org.json.JSONObject
 
 object ServiceMethods {
@@ -26,7 +27,7 @@ object ServiceMethods {
 
         val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create()
 
-        return gson.fromJson<UploadEntryResponse>(result.getJSONObject("Value").toString(), UploadEntryResponse::class.java)
+        return gson.fromJson<UploadEntryResponse>(result.toString(), UploadEntryResponse::class.java)
     }
 
     fun uploadTask(provider: IHttpProvider, task: Task): Int {
@@ -94,5 +95,19 @@ object ServiceMethods {
         val arrEntries = gson.fromJson<Array<Entry>>(result.getJSONArray("Items").toString(), Array<Entry>::class.java)
 
         return arrEntries.toList()
+    }
+
+    fun getUser(provider: IHttpProvider): User? {
+
+        val result = HttpClient.send(provider, "users", "get", null)
+
+        val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create()
+
+        if (result == null) {
+
+            return null
+        }
+
+        return gson.fromJson(result.toString(), User::class.java)
     }
 }
