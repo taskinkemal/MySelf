@@ -4,6 +4,7 @@ package com.keplersegg.myself.fragments
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.keplersegg.myself.MySelfApplication
 
 import com.keplersegg.myself.R
@@ -29,7 +30,7 @@ class GoalsFragment : MasterFragment(), ISyncGoalsHost {
 
         adapter = GoalsAdapter(activity)
         rcylGoals!!.adapter = adapter
-        rcylGoals.layoutManager = GridLayoutManager(activity, 2)
+        rcylGoals.layoutManager = LinearLayoutManager(activity)
 
         fabAdd!!.setOnClickListener { activity.NavigateFragment(true, AddGoalFragment.newInstance(-1, -1)) }
     }

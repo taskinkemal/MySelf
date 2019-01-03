@@ -4,33 +4,65 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="128dp"
+    android:layout_height="wrap_content"
     app:cardCornerRadius="4dp"
     app:cardElevation="4dp"
-    android:layout_margin="4dp">
+    android:layout_marginBottom="8dp">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="8dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:padding="8dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="Task name"
-            android:id="@+id/lblTask"
-            />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Task name"
+                android:id="@+id/lblTask"
+                android:textStyle="bold"
+                />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="56"
-            android:id="@+id/lblCurrentValue"
-            android:layout_centerInParent="true"
-            android:layout_centerVertical="true"
-            android:textSize="24sp"
-            />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="8 item(s) or less"
+                    android:id="@+id/lblTarget"
+                    />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="27 March (2 days remaining)"
+                android:id="@+id/lblEndDate"
+                />
 
-    </RelativeLayout>
+            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="56"
+                android:id="@+id/lblCurrentValue"
+                android:layout_gravity="center_vertical"
+                android:paddingEnd="8dp"
+                android:paddingStart="8dp"
+                android:textSize="24sp"
+                />
+
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:contentDescription="@string/imgContentDescription"
+                android:src="@drawable/ic_baseline_done_24px"
+                android:layout_gravity="center_vertical"
+                android:id="@+id/imgStatus"
+                />
+
+    </LinearLayout>
 
 </androidx.cardview.widget.CardView>
