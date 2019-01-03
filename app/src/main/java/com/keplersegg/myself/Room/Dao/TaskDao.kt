@@ -44,4 +44,7 @@ interface TaskDao {
 
     @Query("DELETE FROM Task")
     fun deleteAll()
+
+    @Query("DELETE FROM Task where Id >= 0")
+    fun deleteNonLocal()
 }

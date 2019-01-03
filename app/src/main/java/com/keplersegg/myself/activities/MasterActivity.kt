@@ -21,20 +21,25 @@ import com.keplersegg.myself.R
 import com.keplersegg.myself.Room.AppDatabase
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.crashlytics.android.Crashlytics
+import com.google.firebase.analytics.FirebaseAnalytics
+
 
 @SuppressLint("Registered")
 open class MasterActivity : AppCompatActivity(), IHttpProvider, IErrorMessage {
 
-    var application: MySelfApplication? = null
-    var master: MasterActivity? = null
+    lateinit var app: MySelfApplication
+    lateinit var master: MasterActivity
     var mGoogleSigninClient: GoogleSignInClient? = null
+    lateinit var firebaseAnalytics: FirebaseAnalytics
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
 
         master = this
-        application = getApplication() as MySelfApplication
+        app = getApplication() as MySelfApplication
 
         val window = window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
@@ -42,6 +47,13 @@ open class MasterActivity : AppCompatActivity(), IHttpProvider, IErrorMessage {
         window.statusBarColor = GetColor(R.color.colorPrimary)
 
         initializeGPlusSettings()
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        logAnalyticsPageVisit()
     }
 
     fun GetColor(id: Int): Int {
@@ -50,6 +62,18 @@ open class MasterActivity : AppCompatActivity(), IHttpProvider, IErrorMessage {
 
     fun AppDB(): AppDatabase {
         return AppDatabase.getAppDatabase(this)!!
+    }
+
+    fun truncateDB(removeNonLocalsOnly: Boolean) {
+
+        if (removeNonLocalsOnly) {
+            AppDB().taskDao().deleteNonLocal() // this will also delete the entries.
+        }
+        else {
+            AppDB().taskDao().deleteAll() // this will also delete the entries.
+        }
+
+        AppDB().userBadgeDao().deleteAll()
     }
 
     fun NavigateToActivity(activityName: String, clearTop: Boolean) {
@@ -102,13 +126,13 @@ open class MasterActivity : AppCompatActivity(), IHttpProvider, IErrorMessage {
 
         setToken(TokenType.Google, account.idToken)
 
-        application!!.user = User()
-        application!!.user!!.Email = account.email
-        application!!.user!!.FirstName = account.givenName
-        application!!.user!!.LastName = account.familyName
+        app.user = User()
+        app.user!!.Email = account.email
+        app.user!!.FirstName = account.givenName
+        app.user!!.LastName = account.familyName
         val pictureUri = account.photoUrl
         if (pictureUri != null)
-            application!!.user!!.PictureUrl = pictureUri.toString()
+            app.user!!.PictureUrl = pictureUri.toString()
 
         return true
     }
@@ -117,11 +141,32 @@ open class MasterActivity : AppCompatActivity(), IHttpProvider, IErrorMessage {
 
         when (tokenType) {
 
-            TokenType.MySelf -> application!!.dataStore!!.setAccessToken(token)
+            TokenType.MySelf ->
+            {
+                app.dataStore.setAccessToken(token)
 
-            TokenType.Facebook -> application!!.dataStore!!.setFacebookToken(token)
+                if (token != null && token != "") {
+                    logAnalyticsEvent(FirebaseAnalytics.Event.LOGIN, hashMapOf(FirebaseAnalytics.Param.SOURCE to "MySelf"))
+                }
+            }
 
-            TokenType.Google -> application!!.dataStore!!.setGoogleToken(token)
+            TokenType.Facebook ->
+            {
+                app.dataStore.setFacebookToken(token)
+
+                if (token != null && token != "") {
+                    logAnalyticsEvent(FirebaseAnalytics.Event.LOGIN, hashMapOf(FirebaseAnalytics.Param.SOURCE to "Facebook"))
+                }
+            }
+
+            TokenType.Google ->
+            {
+                app.dataStore.setGoogleToken(token)
+
+                if (token != null && token != "") {
+                    logAnalyticsEvent(FirebaseAnalytics.Event.LOGIN, hashMapOf(FirebaseAnalytics.Param.SOURCE to "Google"))
+                }
+            }
 
         }
     }
@@ -131,25 +176,51 @@ open class MasterActivity : AppCompatActivity(), IHttpProvider, IErrorMessage {
     }
 
     override fun getAccessToken(): String? {
-        return application!!.dataStore!!.getAccessToken()
+        return app.dataStore.getAccessToken()
     }
 
     override fun getDeviceId(): String? {
-        return application!!.dataStore!!.getRegisterID()
+        return app.dataStore.getRegisterID()
     }
 
     override fun showErrorMessage(message: String) {
 
-        runOnUiThread { Toast.makeText(this@MasterActivity, message, Toast.LENGTH_SHORT).show() }
+        Crashlytics.log(message)
+        runOnUiThread {
+
+            if (this is MainActivity) {
+                this.showSnackbarMessage(message)
+            }
+            else {
+                Toast.makeText(this@MasterActivity, message, Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     override fun logException(exception: Exception, message: String) {
 
-        //CrashLogger.AddExceptionLog(message, exc);
+        Crashlytics.logException(exception)
         showErrorMessage(message)
     }
 
     fun GetMasterActivity() : MasterActivity {
         return this
+    }
+
+    fun logAnalyticsEvent(eventType: String, params: HashMap<String, String>?) {
+
+        val bundle = Bundle()
+        if (params != null) {
+            for (p in params) {
+                bundle.putString(p.key, p.value)
+            }
+        }
+
+        firebaseAnalytics.logEvent(eventType, bundle) //FirebaseAnalytics.Event
+    }
+
+    fun logAnalyticsPageVisit() {
+
+        firebaseAnalytics.setCurrentScreen(this, javaClass.simpleName, javaClass.simpleName)
     }
 }

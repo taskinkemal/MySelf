@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/txtValue"
                 android:paddingStart="8dp"
-                android:text="0"
+                android:text="@string/n_zero"
                 android:layout_gravity="center_horizontal"
                 android:textSize="14sp"
                 android:paddingEnd="8dp" />
@@ -50,7 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="8dp"
-                android:text="minute(s)"
+                android:text="@string/lbl_minutes"
                 android:textSize="12sp"
                 android:paddingEnd="8dp" />
 

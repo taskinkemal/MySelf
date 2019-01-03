@@ -3,6 +3,7 @@ package com.keplersegg.myself.helper
 import com.google.gson.GsonBuilder
 import com.keplersegg.myself.interfaces.IHttpProvider
 import com.keplersegg.myself.Room.Entity.Entry
+import com.keplersegg.myself.Room.Entity.Goal
 import com.keplersegg.myself.Room.Entity.Task
 import com.keplersegg.myself.models.UploadEntryResponse
 import com.keplersegg.myself.models.User
@@ -38,10 +39,6 @@ object ServiceMethods {
         jsonParams.put("Label", task.Label)
         jsonParams.put("DataType", task.DataType)
         jsonParams.put("Unit", task.Unit)
-        jsonParams.put("HasGoal", task.HasGoal)
-        jsonParams.put("GoalMinMax", task.GoalMinMax)
-        jsonParams.put("Goal", task.Goal)
-        jsonParams.put("GoalTimeFrame", task.GoalTimeFrame)
         jsonParams.put("AutomationType", task.AutomationType)
         jsonParams.put("AutomationVar", task.AutomationVar)
         jsonParams.put("Status", task.Status)
@@ -109,5 +106,49 @@ object ServiceMethods {
         }
 
         return gson.fromJson(result.toString(), User::class.java)
+    }
+
+    fun deleteGoal(provider: IHttpProvider, goalId: Int) {
+
+        HttpClient.send(provider, "goals/" + goalId, "delete", null)
+    }
+
+    fun uploadGoal(provider: IHttpProvider, goal: Goal): Int {
+
+        val jsonParams = JSONObject()
+        if (goal.Id > 0)
+            jsonParams.put("Id", goal.Id)
+        jsonParams.put("TaskId", goal.TaskId)
+        jsonParams.put("MinMax", goal.MinMax)
+        jsonParams.put("Target", goal.Target)
+        jsonParams.put("StartDay", goal.StartDay)
+        jsonParams.put("EndDay", goal.EndDay)
+        jsonParams.put("AchievementStatus", 0)
+
+        val result = HttpClient.send(provider, "goals", "post", jsonParams)
+
+        if (result != null && result.has("Value")) {
+
+            return result.getInt("Value")
+        }
+        else {
+            return -1
+        }
+    }
+
+    fun getGoalsFromService(provider: IHttpProvider): List<Goal>? {
+
+        val result = HttpClient.send(provider, "goals", "get", null)
+
+        val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create()
+
+        if (result == null || !result.has("Items")) {
+
+            return null
+        }
+
+        val arrGoals = gson.fromJson<Array<Goal>>(result.getJSONArray("Items").toString(), Array<Goal>::class.java)
+
+        return arrGoals.toList()
     }
 }

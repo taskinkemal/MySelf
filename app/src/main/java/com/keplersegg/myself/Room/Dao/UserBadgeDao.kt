@@ -21,4 +21,7 @@ interface UserBadgeDao {
 
     @Update(onConflict = OnConflictStrategy.IGNORE)
     fun update(badge: UserBadge): Int
+
+    @Query("DELETE FROM UserBadge")
+    fun deleteAll()
 }

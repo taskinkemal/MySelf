@@ -37,7 +37,7 @@ class TasksFragment : MasterFragment(), IGetTasksHost {
 
         rcylTasks = rootView!!.findViewById(R.id.rcylTasks)
 
-        adapter = TasksAdapter(activity!!, day)
+        adapter = TasksAdapter(activity, day)
         rcylTasks!!.adapter = adapter
         rcylTasks!!.layoutManager = LinearLayoutManager(activity)
         return rootView
@@ -47,12 +47,6 @@ class TasksFragment : MasterFragment(), IGetTasksHost {
         super.onViewCreated(view, savedInstanceState)
 
         adapter!!.notifyDataSetChanged()
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-
     }
 
     override fun onResume() {
@@ -68,7 +62,7 @@ class TasksFragment : MasterFragment(), IGetTasksHost {
 
     override fun onGetTasksSuccess(items: List<TaskEntry>) {
 
-        this.activity!!.runOnUiThread {
+        this.activity.runOnUiThread {
             adapter!!.updateData(items)
         }
     }

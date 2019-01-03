@@ -27,7 +27,7 @@ class AppUsageFragment : ListFragment() {
 
         val list: ArrayList<ListItem> = ArrayList()
 
-        val pm = activity!!.getPackageManager()
+        val pm = activity.getPackageManager()
         val packages = pm.getInstalledApplications(PackageManager.GET_META_DATA)
 
         packages.forEach { appInfo ->
@@ -49,7 +49,7 @@ class AppUsageFragment : ListFragment() {
 
     override fun onSelectListItem(item: ListItem) {
 
-        activity!!.NavigateFragment(true, AddTaskFragment.newInstance(AutoTaskType.AppUsage, item))
+        activity.NavigateFragment(true, AddTaskFragment.newInstance(AutoTaskType.AppUsage, item))
     }
 
     companion object {

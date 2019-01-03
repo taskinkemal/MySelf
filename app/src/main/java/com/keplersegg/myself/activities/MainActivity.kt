@@ -8,21 +8,18 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
-import com.keplersegg.myself.fragments.AddTaskFragment
-import com.keplersegg.myself.fragments.AutoTaskSelectorFragment
-import com.keplersegg.myself.fragments.MasterFragment
-import com.keplersegg.myself.fragments.ProfileFragment
-import com.keplersegg.myself.fragments.TasksPagerFragment
 import com.keplersegg.myself.R
 import androidx.core.view.GravityCompat
+import com.google.android.material.snackbar.Snackbar
 import com.keplersegg.myself.MySelfApplication
+import com.keplersegg.myself.fragments.*
 import com.keplersegg.myself.interfaces.ISyncTasksHost
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AuthActivity(), ISyncTasksHost {
 
     override fun GetApplication(): MySelfApplication {
-        return application!!
+        return app
     }
 
     override fun onSyncTasksSuccess() {
@@ -68,12 +65,12 @@ class MainActivity : AuthActivity(), ISyncTasksHost {
         val imgUserPicture = navigation.getHeaderView(0).findViewById<ImageView>(R.id.imgUserPicture)
         val lblNavUserName = navigation.getHeaderView(0).findViewById<TextView>(R.id.lblNavUserName)
 
-        lblNavUserName.text = if (application!!.user != null) application!!.user!!.FirstName + " " + application!!.user!!.LastName else "Guest"
+        lblNavUserName.text = if (app.user != null) app.user!!.FirstName + " " + app.user!!.LastName else "Guest"
 
-        if (application!!.user != null && application!!.user!!.PictureUrl != null && !application!!.user!!.PictureUrl!!.isEmpty()) {
+        if (app.user != null && app.user!!.PictureUrl != null && !app.user!!.PictureUrl!!.isEmpty()) {
 
             Glide.with(this)
-                    .load(application!!.user!!.PictureUrl)
+                    .load(app.user!!.PictureUrl)
                     .apply(RequestOptions()
                             .placeholder(R.drawable.ic_baseline_account_circle_24px)
                             .diskCacheStrategy(DiskCacheStrategy.RESOURCE))
@@ -93,17 +90,17 @@ class MainActivity : AuthActivity(), ISyncTasksHost {
         when (menuItemID) {
 
             R.id.action_tasks ->
-
                 NavigateFragment(true, TasksPagerFragment.newInstance())
             R.id.action_profile ->
-
                 NavigateFragment(true, ProfileFragment.newInstance())
             R.id.action_add_task ->
-
                 NavigateFragment(true, AddTaskFragment.newInstance(-1))
             R.id.action_add_automated_task ->
-
                 NavigateFragment(true, AutoTaskSelectorFragment.newInstance())
+            R.id.action_add_goal ->
+                NavigateFragment(true, AddGoalFragment.newInstance(-1, -1))
+            R.id.action_goals ->
+                NavigateFragment(true, GoalsFragment.newInstance())
         }
     }
 
@@ -130,5 +127,13 @@ class MainActivity : AuthActivity(), ISyncTasksHost {
             transaction.addToBackStack(null)
 
         transaction.commit()
+    }
+
+    fun showSnackbarMessage(message: String) {
+
+        val snackbar = Snackbar
+                .make(coordinatorLayout, message, Snackbar.LENGTH_LONG)
+
+        snackbar.show()
     }
 }

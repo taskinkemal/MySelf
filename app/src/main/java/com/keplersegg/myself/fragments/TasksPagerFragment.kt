@@ -26,12 +26,6 @@ class TasksPagerFragment : MasterFragment() {
         setHasOptionsMenu(true)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         if (rootView != null)
@@ -86,14 +80,14 @@ class TasksPagerFragment : MasterFragment() {
             }
         })
 
-        fabAdd!!.setOnClickListener { activity!!.NavigateFragment(true, AddTaskFragment.newInstance(0)) }
+        fabAdd!!.setOnClickListener { activity.NavigateFragment(true, AddTaskFragment.newInstance(0)) }
     }
 
     private fun dateToString(days: Int): String {
         val cal = Calendar.getInstance()
         cal.add(Calendar.DATE, -days)
         val dayOfWeek = cal.get(Calendar.DAY_OF_WEEK)
-        return DateFormatSymbols().getShortWeekdays()[dayOfWeek]
+        return DateFormatSymbols().shortWeekdays[dayOfWeek]
     }
 
     override fun onResume() {
@@ -109,8 +103,8 @@ class TasksPagerFragment : MasterFragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.getItemId()) {
-            R.id.menu_AddTask -> activity!!.NavigateFragment(true, AddTaskFragment.newInstance(0))
+        when (item.itemId) {
+            R.id.menu_AddTask -> activity.NavigateFragment(true, AddTaskFragment.newInstance(0))
         }
         return true
 

@@ -24,6 +24,8 @@ import com.keplersegg.myself.helper.TokenType
 import com.keplersegg.myself.models.User
 import com.keplersegg.myself.R
 import kotlinx.android.synthetic.main.activity_login.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
 import java.util.Arrays
 
@@ -31,7 +33,7 @@ import java.util.Arrays
 class LoginActivity : AuthActivity(), ISetUser, ILoginHost, ISyncTasksHost {
 
     override fun GetApplication(): MySelfApplication {
-        return application!!
+        return app
     }
 
     private var fbLoginManager: LoginManager? = null
@@ -56,6 +58,7 @@ class LoginActivity : AuthActivity(), ISetUser, ILoginHost, ISyncTasksHost {
                 // here write code When Login successfully
 
                 GetFacebookUser().Run(this@LoginActivity, loginResult.accessToken)
+                setToken(TokenType.Facebook, loginResult.accessToken.token)
             }
 
             override fun onCancel() {
@@ -69,23 +72,16 @@ class LoginActivity : AuthActivity(), ISetUser, ILoginHost, ISyncTasksHost {
 
         txtContinueWithoutAccount.setOnClickListener {
 
-            //application.dataStore.setAccessToken("194044032133214245110100013098164116206239065216108230151152227093182051129179034209198215059120005198162060090156001124114155022206198130022107007035033187205131099148147216228217003192152060");
-            goToMain()
+            doAsync {
+
+                truncateDB(true)
+                app.clearSession()
+                SyncTasks(this@LoginActivity).execute()
+            }
         }
 
         btnLoginFacebook.setOnClickListener {
             fbLoginManager!!.logInWithReadPermissions(this@LoginActivity, Arrays.asList("email", "public_profile", "user_birthday"))
-
-            /*
-                setToken(TokenType.Facebook, "EAAKGheh3UEEBAFnKaQGbGO2bG6r0zfRZBuk8Seq44Bk7a1hRrkrjpsOmAfK4QvA0UVHtmaoden4rkb4VlmiOsKjQMpuLbkPjWorzBvBgI26k0xSOYNMyfnfX3L3UE6KrsiTtK95N6c7U05qZBw5y0OZChAC4TkGcLQMbgaoO9t210qMgmBqs5oLEu8nptenUGQMZBHzwvMbv0xnvfDqxn3xB2nJPcPwsTQhaV4d3HgZDZD");
-
-                User user = new User();
-                user.Email = "open_ydzjppo_user@tfbnw.net";
-                user.FirstName = "Jacob";
-                user.LastName = "Crafty";
-
-                setUser(user);
-                */
         }
 
         btnLoginGoogle.setOnClickListener {
@@ -100,7 +96,7 @@ class LoginActivity : AuthActivity(), ISetUser, ILoginHost, ISyncTasksHost {
 
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             handleGoogleSignInResult(task.result!!)
-            setUser(application!!.user!!, TokenType.Google)
+            setUser(app.user!!, TokenType.Google)
 
         } else {
             super.onActivityResult(requestCode, resultCode, data)
@@ -110,30 +106,25 @@ class LoginActivity : AuthActivity(), ISetUser, ILoginHost, ISyncTasksHost {
 
     override fun setUser(user: User?, tokenType: TokenType) {
 
-        application!!.user = user
+        app.user = user
 
         if (user != null) {
 
             val token = if (tokenType == TokenType.Facebook)
-                application!!.dataStore!!.getFacebookToken()
-            else application!!.dataStore!!.getGoogleToken()
+                app.dataStore.getFacebookToken()
+            else app.dataStore.getGoogleToken()
 
             LoginTask(this).Run(tokenType,
                     token,
-                    application!!.user!!.Email,
-                    application!!.user!!.FirstName,
-                    application!!.user!!.LastName,
-                    application!!.user!!.PictureUrl)
+                    app.user!!.Email,
+                    app.user!!.FirstName,
+                    app.user!!.LastName,
+                    app.user!!.PictureUrl)
         } else {
 
-            application!!.dataStore!!.setAccessToken(null)
+            app.dataStore.setAccessToken(null)
             showErrorMessage("Cannot authenticate via Facebook")
         }
-    }
-
-    override fun setToken(tokenType: TokenType, token: String?) {
-
-        super.setToken(tokenType, token)
     }
 
     override fun onLoginSuccess() {
@@ -143,13 +134,13 @@ class LoginActivity : AuthActivity(), ISetUser, ILoginHost, ISyncTasksHost {
 
     override fun onLoginError(message: String) {
 
-        application!!.user = null
+        app.user = null
         showErrorMessage(message)
     }
 
     override fun setAccessToken(token: String) {
 
-        application!!.dataStore!!.setAccessToken(token)
+        setToken(TokenType.MySelf, token)
         SyncTasks(this).execute()
     }
 

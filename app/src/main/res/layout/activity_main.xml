@@ -10,7 +10,8 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activity.MainActivity">
+        tools:context=".activity.MainActivity"
+        android:id="@+id/coordinatorLayout">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"

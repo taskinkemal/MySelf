@@ -41,37 +41,37 @@ class AutoTaskSelectorFragment : MasterFragment() {
         when (type) {
 
             AutoTaskType.CallDuration -> {
-                if (ContextCompat.checkSelfPermission(activity!!, Manifest.permission.READ_CALL_LOG)
+                if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_CALL_LOG)
                         != PackageManager.PERMISSION_GRANTED) {
                     // Permission is not granted
                     // Ask for permision
-                    ActivityCompat.requestPermissions(activity!!, Array(1) { Manifest.permission.READ_CALL_LOG}, 1)
+                    ActivityCompat.requestPermissions(activity, Array(1) { Manifest.permission.READ_CALL_LOG}, 1)
                 }
-                activity!!.NavigateFragment(true, AddTaskFragment.newInstance(AutoTaskType.CallDuration, null))
+                activity.NavigateFragment(true, AddTaskFragment.newInstance(AutoTaskType.CallDuration, null))
             }
             AutoTaskType.AppUsage -> {
 
-                if (!checkForPermission(activity!!))
+                if (!checkForPermission(activity))
                 {
                     //TODO: show a message here.
                     startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
                 }
 
-                if (!checkForPermission(activity!!)) {
+                if (!checkForPermission(activity)) {
                     //TODO: show a message here
                     return
                 }
-                if (ContextCompat.checkSelfPermission(activity!!, Manifest.permission.PACKAGE_USAGE_STATS)
+                if (ContextCompat.checkSelfPermission(activity, Manifest.permission.PACKAGE_USAGE_STATS)
                         != PackageManager.PERMISSION_GRANTED) {
                     // Permission is not granted
                     // Ask for permision
-                    ActivityCompat.requestPermissions(activity!!, Array(1) { Manifest.permission.PACKAGE_USAGE_STATS }, 2)
+                    ActivityCompat.requestPermissions(activity, Array(1) { Manifest.permission.PACKAGE_USAGE_STATS }, 2)
 
                 }
 
-                activity!!.NavigateFragment(true, AppUsageFragment.newInstance())
+                activity.NavigateFragment(true, AppUsageFragment.newInstance())
             }
-            AutoTaskType.WentTo -> activity!!.NavigateFragment(true, WentToFragment.newInstance())
+            AutoTaskType.WentTo -> activity.NavigateFragment(true, WentToFragment.newInstance())
         }
     }
 

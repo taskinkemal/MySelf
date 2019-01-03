@@ -4,17 +4,18 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 
-
-
-
 object Utils {
 
     fun getToday(): Int {
 
-        val calZero = Calendar.getInstance()
-        calZero.set(2018, Calendar.JANUARY, 1)
+        return getDay(Calendar.getInstance())
+    }
 
-        val msDiff = Calendar.getInstance().timeInMillis - calZero.timeInMillis
+    fun getDay(calendar: Calendar): Int {
+
+        val calZero = getCalZero()
+
+        val msDiff = calendar.timeInMillis - calZero.timeInMillis
         return TimeUnit.MILLISECONDS.toDays(msDiff).toInt()
     }
 
@@ -35,5 +36,21 @@ object Utils {
         today.add(Calendar.DATE, daysBack)
 
         return today.timeInMillis
+    }
+
+    fun getDate(day: Int): Calendar {
+
+        val cal = getCalZero()
+
+        cal.add(Calendar.DATE, day)
+
+        return cal
+    }
+
+    private fun getCalZero(): Calendar {
+
+        val calZero = Calendar.getInstance()
+        calZero.set(2018, Calendar.JANUARY, 1)
+        return calZero
     }
 }

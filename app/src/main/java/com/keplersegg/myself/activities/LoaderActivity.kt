@@ -37,7 +37,7 @@ class LoaderActivity : MasterActivity(), ISetUser, ILoginHost, IRefreshTokenHost
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_loader)
 
-        val ab = master!!.actionBar
+        val ab = master.actionBar
         ab?.hide()
 
         Glide.with(this)
@@ -50,14 +50,14 @@ class LoaderActivity : MasterActivity(), ISetUser, ILoginHost, IRefreshTokenHost
 
     private fun loginCheck() {
 
-        val accessToken = application!!.dataStore!!.getAccessToken()
+        val accessToken = app.dataStore.getAccessToken()
 
         if (LoginCheckSocialInternal()) {
 
         }
         else if (accessToken != null && !accessToken.isEmpty()) {
 
-            RefreshTokenTask(this).execute(accessToken, application!!.dataStore!!.getRegisterID())
+            RefreshTokenTask(this).execute(accessToken, app.dataStore.getRegisterID())
         } else {
             clearToken()
         }
@@ -70,11 +70,11 @@ class LoaderActivity : MasterActivity(), ISetUser, ILoginHost, IRefreshTokenHost
         if (account != null) {
             if (handleGoogleSignInResult(account)) {
 
-                LoginTask(this).Run(TokenType.Google, application!!.dataStore!!.getGoogleToken(),
-                        application!!.user!!.Email,
-                        application!!.user!!.FirstName,
-                        application!!.user!!.LastName,
-                        application!!.user!!.PictureUrl)
+                LoginTask(this).Run(TokenType.Google, app.dataStore.getGoogleToken(),
+                        app.user!!.Email,
+                        app.user!!.FirstName,
+                        app.user!!.LastName,
+                        app.user!!.PictureUrl)
                 return true
             }
         }
@@ -85,6 +85,7 @@ class LoaderActivity : MasterActivity(), ISetUser, ILoginHost, IRefreshTokenHost
         if (isLoggedIn) {
 
             GetFacebookUser().Run(this, accessToken)
+            setToken(TokenType.Facebook, accessToken.token)
             return true
         }
 
@@ -96,34 +97,13 @@ class LoaderActivity : MasterActivity(), ISetUser, ILoginHost, IRefreshTokenHost
         if (LoginCheckSocialInternal())
             return
 
-
-        /*        String googleToken = application.dataStore.getGoogleToken();
-        String facebookToken = application.dataStore.getFacebookToken();
-
-        if (googleToken != null) {
-            //TODO:
-        }
-
-        if (facebookToken != null) {
-            //TODO:
-
-            accessToken = new AccessToken(
-                    facebookToken,
-                    getString(R.string.facebook_app_id),
-                    null,
-                    null, null, null, null, null, null);
-
-            new GetFacebookUser().Run(this, accessToken);
-            return;
-        }*/
-
         clearToken()
     }
 
     private fun clearToken() {
 
-        application!!.user = null
-        application!!.dataStore!!.setAccessToken(null)
+        app.user = null
+        app.dataStore.setAccessToken(null)
         NavigateToActivity("Login", true)
     }
 
@@ -158,30 +138,25 @@ class LoaderActivity : MasterActivity(), ISetUser, ILoginHost, IRefreshTokenHost
 
     override fun setUser(user: User?, tokenType: TokenType) {
 
-        application!!.user = user
+        app.user = user
 
         if (user != null) {
 
             val token = if (tokenType == TokenType.Facebook)
-                application!!.dataStore!!.getFacebookToken()
-            else application!!.dataStore!!.getGoogleToken()
+                app.dataStore.getFacebookToken()
+            else app.dataStore.getGoogleToken()
 
             LoginTask(this).Run(tokenType,
                     token,
-                    application!!.user!!.Email,
-                    application!!.user!!.FirstName,
-                    application!!.user!!.LastName,
-                    application!!.user!!.PictureUrl)
+                    app.user!!.Email,
+                    app.user!!.FirstName,
+                    app.user!!.LastName,
+                    app.user!!.PictureUrl)
         } else {
 
-            application!!.dataStore!!.setAccessToken(null)
+            app.dataStore.setAccessToken(null)
             NavigateToActivity("Login", true)
         }
-    }
-
-    override fun setToken(tokenType: TokenType, token: String?) {
-
-        super.setToken(tokenType, token)
     }
 
     override fun onLoginSuccess() {
@@ -191,15 +166,15 @@ class LoaderActivity : MasterActivity(), ISetUser, ILoginHost, IRefreshTokenHost
 
     override fun onLoginError(message: String) {
 
-        application!!.user = null
-        application!!.dataStore!!.setAccessToken(null)
+        app.user = null
+        app.dataStore.setAccessToken(null)
         showErrorMessage(message)
         NavigateToActivity("Login", true)
     }
 
     override fun setAccessToken(token: String) {
 
-        application!!.dataStore!!.setAccessToken(token)
+        setToken(TokenType.MySelf, token)
     }
 
     override fun onRefreshSuccess() {
@@ -231,7 +206,7 @@ class LoaderActivity : MasterActivity(), ISetUser, ILoginHost, IRefreshTokenHost
     }
 
     override fun GetApplication(): MySelfApplication {
-        return application!!
+        return app
     }
 
     private fun goToMain() {

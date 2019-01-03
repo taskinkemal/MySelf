@@ -9,8 +9,8 @@ import kotlinx.android.synthetic.main.fragment_went_to.*
 
 import com.keplersegg.myself.R
 import android.net.wifi.WifiManager
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.keplersegg.myself.activities.MainActivity
 import com.keplersegg.myself.helper.AutoTaskType
 
 
@@ -34,7 +34,7 @@ class WentToFragment : ListFragment() {
 
         val list: ArrayList<ListItem> = ArrayList()
 
-        val configs = getConfigList(activity!!)
+        val configs = getConfigList(activity)
 
         configs?.forEach { c -> list.add(toListItem(c)) }
 
@@ -45,7 +45,7 @@ class WentToFragment : ListFragment() {
 
     override fun onSelectListItem(item: ListItem) {
 
-        activity!!.NavigateFragment(true, AddTaskFragment.newInstance(AutoTaskType.WentTo, item))
+        activity.NavigateFragment(true, AddTaskFragment.newInstance(AutoTaskType.WentTo, item))
     }
 
     companion object {
@@ -54,7 +54,7 @@ class WentToFragment : ListFragment() {
             return WentToFragment()
         }
 
-        fun getItemById(context: Context, id: String): ListItem? {
+        fun getItemById(context: MainActivity, id: String): ListItem? {
 
             val configs = getConfigList(context)
 
@@ -66,7 +66,7 @@ class WentToFragment : ListFragment() {
                 return null
         }
 
-        private fun getConfigList(context: Context): MutableList<WifiConfiguration>? {
+        private fun getConfigList(context: MainActivity): MutableList<WifiConfiguration>? {
 
             val wm = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
 
@@ -74,7 +74,7 @@ class WentToFragment : ListFragment() {
 
             if (!wm.isWifiEnabled()) {
 
-                Toast.makeText(context, "temporarily enabling wifi..", Toast.LENGTH_LONG).show()
+                context.showSnackbarMessage("Temporarily enabling wifi..")
                 isWifiDisabled = true
                 wm.setWifiEnabled(true)
             }
@@ -83,7 +83,7 @@ class WentToFragment : ListFragment() {
 
             if (isWifiDisabled) {
                 wm.setWifiEnabled(false)
-                Toast.makeText(context, "wifi is disabled back..", Toast.LENGTH_LONG).show()
+                context.showSnackbarMessage("Wifi is disabled back..")
             }
 
             return result

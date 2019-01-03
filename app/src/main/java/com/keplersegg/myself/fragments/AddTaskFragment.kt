@@ -2,8 +2,6 @@ package com.keplersegg.myself.fragments
 
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -17,12 +15,7 @@ import com.keplersegg.myself.R
 import com.keplersegg.myself.Room.Entity.Task
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
-import java.util.*
 import androidx.appcompat.app.AlertDialog
-import android.widget.ArrayAdapter
-
-
-
 
 
 class AddTaskFragment : MasterFragment() {
@@ -45,18 +38,13 @@ class AddTaskFragment : MasterFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        txtUnits!!.addTextChangedListener(InputTextWatcher())
-
         swcUnits!!.setOnCheckedChangeListener { _, isChecked ->
             SetUnitsVisibility(isChecked)
-            SetUnitsLabel(isChecked, txtUnits!!.text.toString())
         }
-
-        swcHasGoal!!.setOnCheckedChangeListener { _, isChecked -> SetGoalVisibility(isChecked) }
 
         if (TaskId != 0) {
 
-            doAsync { task = activity!!.AppDB().taskDao().get(TaskId)
+            doAsync { task = activity.AppDB().taskDao().get(TaskId)
                 uiThread {
                     PrefillTask()
                     FillAutomationDetails(false)
@@ -65,7 +53,6 @@ class AddTaskFragment : MasterFragment() {
         } else {
 
             SetUnitsVisibility(false)
-            SetGoalVisibility(false)
 
             FillAutomationDetails(true)
         }
@@ -76,7 +63,6 @@ class AddTaskFragment : MasterFragment() {
         lblAutomationSubHeader.visibility = if (automationType != null) View.VISIBLE else View.GONE
         lytAutomation.visibility = if (automationType != null) View.VISIBLE else View.GONE
         lytAutomationVar.visibility = if (automationData != null) View.VISIBLE else View.GONE
-        setGoalMinMaxSource(automationType != null)
 
         if (automationType != null) {
 
@@ -89,14 +75,14 @@ class AddTaskFragment : MasterFragment() {
                 AutoTaskType.WentTo -> { labelResource = R.string.autotask_wentTo }
             }
 
-            lblAutomationType.text = activity!!.getString(labelResource)
+            lblAutomationType.text = activity.getString(labelResource)
 
             if (automationData != null) {
 
                 when (automationType) {
 
-                    AutoTaskType.AppUsage -> { lblAutomationVarHeader.text = "Application:" }
-                    AutoTaskType.WentTo -> { lblAutomationVarHeader.text = "Network:" }
+                    AutoTaskType.AppUsage -> { lblAutomationVarHeader.text = String.format("%s:", getString(R.string.lbl_application)) }
+                    AutoTaskType.WentTo -> { lblAutomationVarHeader.text = String.format("%s:", getString(R.string.lbl_network)) }
                     else -> { }
                 }
 
@@ -108,21 +94,21 @@ class AddTaskFragment : MasterFragment() {
                 when (automationType) {
 
                     AutoTaskType.CallDuration -> {
-                        txtLabel.setText(activity!!.getString(R.string.autotask_callDuration))
+                        txtLabel.setText(activity.getString(R.string.autotask_callDuration))
                         swcUnits.isChecked = true
-                        txtUnits.setText("minute(s)")
+                        txtUnits.setText(R.string.lbl_minutes)
                         swcUnits.isEnabled = false
                         txtUnits.isEnabled = false
                     }
                     AutoTaskType.AppUsage -> {
-                        txtLabel.setText(activity!!.getString(R.string.autotask_appUsage) + " " + lblAutomationVar.text)
+                        txtLabel.setText(activity.getString(R.string.autotask_appUsage) + " " + lblAutomationVar.text)
                         swcUnits.isChecked = true
-                        txtUnits.setText("minute(s)")
+                        txtUnits.setText(R.string.lbl_minutes)
                         swcUnits.isEnabled = false
                         txtUnits.isEnabled = false
                     }
                     AutoTaskType.WentTo -> {
-                        txtLabel.setText(activity!!.getString(R.string.autotask_wentTo) + " " + lblAutomationVar.text)
+                        txtLabel.setText(activity.getString(R.string.autotask_wentTo) + " " + lblAutomationVar.text)
                         swcUnits.isChecked = false
                         swcUnits.isEnabled = false
                     }
@@ -131,48 +117,24 @@ class AddTaskFragment : MasterFragment() {
         }
     }
 
-    private fun setGoalMinMaxSource(isAutomatedTask: Boolean) {
-
-        val resourceId = if (isAutomatedTask) R.array.spinner_goalMinMax_AutomatedTask else R.array.spinner_goalMinMax
-
-        val spinnerArrayAdapter = ArrayAdapter<String>(activity!!, android.R.layout.simple_spinner_item,
-                activity!!.getResources().getStringArray(resourceId))
-        spinnerArrayAdapter.setDropDownViewResource(android.R.layout
-                .simple_spinner_dropdown_item)
-        spnGoalMinMax.setAdapter(spinnerArrayAdapter)
-    }
-
     private fun SaveTask() {
 
         val label = txtLabel!!.text.toString()
         val dataType = if (swcUnits!!.isChecked) 1 else 0
         val unit = if (dataType == 1) txtUnits!!.text.toString() else ""
-        val hasGoal = swcHasGoal!!.isChecked
-        val goal = if (hasGoal) ConvertToInteger(txtGoal!!.text.toString()) else 0
-        val goalMinMax = if (hasGoal) GetGoalMinMaxValue() else 0
-        val goalTimeFrame = if (hasGoal) spnGoalTimeFrame!!.selectedItemPosition else 0
         val automationVar : String? = automationData?.ItemId.toString()
 
         if (label.length > 0 &&
-                (dataType == 0 || unit.length > 0) &&
-                goal >= 0 &&
-                (!hasGoal || goalMinMax >= 1 && goalMinMax <= 3 && goalTimeFrame >= 1 && goalTimeFrame <= 3)) {
+                (dataType == 0 || unit.length > 0)) {
 
             doAsync {
-                AddOrUpdateTask(label, dataType, unit, hasGoal, goal, goalMinMax, goalTimeFrame, automationType, automationVar)
+                AddOrUpdateTask(label, dataType, unit, automationType, automationVar)
                 uiThread {
                     val fragment = TasksPagerFragment.newInstance()
-                    activity!!.NavigateFragment(true, fragment)
+                    activity.NavigateFragment(true, fragment)
                 }
             }
         }
-    }
-
-    private fun GetGoalMinMaxValue() : Int {
-
-        val position = spnGoalMinMax!!.selectedItemPosition
-        val resourceId = if (automationType != null) R.array.spinner_goalMinMax_values_AutomatedTask else R.array.spinner_goalMinMax_values
-        return Arrays.asList(*activity!!.resources.getStringArray(resourceId))[position].toInt()
     }
 
     private fun PrefillTask() {
@@ -183,36 +145,12 @@ class AddTaskFragment : MasterFragment() {
             swcUnits.isChecked = task!!.DataType == 1
             SetUnitsVisibility(task!!.DataType == 1)
             txtUnits.setText(task!!.Unit)
-            swcHasGoal.isChecked = task!!.HasGoal!!
-            SetGoalVisibility(task!!.HasGoal!!)
-            txtGoal.setText(String.format(Locale.getDefault(), "%d", task!!.Goal))
-            val unit = if (task!!.DataType == 0) task!!.Unit else ""
-            lblUnits.text = if (unit.length > 0) unit else "items"
-            if (task!!.GoalMinMax > 0) {
-
-                var position = 1
-
-                if (task!!.AutomationType != null) {
-
-                    position = Arrays.asList(*activity!!.resources.getStringArray(R.array.spinner_goalMinMax_values)).indexOf(task!!.GoalMinMax.toString())
-                }
-                else {
-                    position = Arrays.asList(*activity!!.resources.getStringArray(R.array.spinner_goalMinMax_values_AutomatedTask)).indexOf(task!!.GoalMinMax.toString())
-                }
-
-                spnGoalMinMax.setSelection(position)
-            }
-
-            if (task!!.GoalTimeFrame > 0) {
-
-                val position = Arrays.asList(*activity!!.resources.getStringArray(R.array.spinner_goalTimeFrame_values)).indexOf(task!!.GoalTimeFrame.toString())
-
-                spnGoalTimeFrame.setSelection(position)
-            }
 
             if (task!!.AutomationType != null) {
 
-                GetAutomationDetails(AutoTaskType.valueOf(task!!.AutomationType!!)!!, task!!.AutomationVar)
+                if (task!!.AutomationType!! > 0) {
+                    GetAutomationDetails(AutoTaskType.valueOf(task!!.AutomationType!!)!!, task!!.AutomationVar)
+                }
             }
         }
     }
@@ -224,45 +162,40 @@ class AddTaskFragment : MasterFragment() {
         when (automationType) {
 
             AutoTaskType.AppUsage -> {
-                this.automationData = AppUsageFragment.getItemById(activity!!, automationVar!!)
+                this.automationData = AppUsageFragment.getItemById(activity, automationVar!!)
             }
             AutoTaskType.WentTo -> {
-                this.automationData = WentToFragment.getItemById(activity!!, automationVar!!)
+                this.automationData = WentToFragment.getItemById(activity, automationVar!!)
             }
             else -> {
             }
         }
     }
 
-    private fun AddOrUpdateTask(label: String, dataType: Int, unit: String, hasGoal: Boolean, goal: Int,
-                                goalMinMax: Int, goalTimeFrame: Int, automationType: AutoTaskType?, automationVar: String?): Boolean {
+    private fun AddOrUpdateTask(label: String, dataType: Int, unit: String, automationType: AutoTaskType?, automationVar: String?): Boolean {
 
         val automationTypeInt = if (automationType != null) automationType.typeId else null
 
         if (this.TaskId != 0) {
 
-            if (this.activity!!.AppDB().taskDao().getCountByLabelExcludeId(TaskId, label) == 0) {
+            if (this.activity.AppDB().taskDao().getCountByLabelExcludeId(TaskId, label) == 0) {
 
                 task!!.Label = label
                 task!!.DataType = dataType
                 task!!.Unit = unit
-                task!!.HasGoal = hasGoal
-                task!!.Goal = goal
-                task!!.GoalMinMax = goalMinMax
-                task!!.GoalTimeFrame = goalTimeFrame
                 task!!.AutomationType = automationTypeInt
                 task!!.AutomationVar = automationVar
 
                 var canUpdate = true
 
-                if (!activity!!.application!!.dataStore!!.getAccessToken().isNullOrBlank()) {
-                    val taskId = ServiceMethods.uploadTask(activity!!, task!!)
+                if (!activity.app.dataStore.getAccessToken().isNullOrBlank()) {
+                    val taskId = ServiceMethods.uploadTask(activity, task!!)
                     canUpdate = !taskId.equals(-1)
                 }
 
                 if (canUpdate) {
 
-                    activity!!.AppDB().taskDao().update(task!!)
+                    activity.AppDB().taskDao().update(task!!)
                     return true
                 }
                 else
@@ -270,22 +203,22 @@ class AddTaskFragment : MasterFragment() {
             }
         } else {
 
-            if (activity!!.AppDB().taskDao().getCountByLabel(label) == 0) {
+            if (activity.AppDB().taskDao().getCountByLabel(label) == 0) {
 
-                val newTask = Task.CreateItem(-1, label, dataType, unit, hasGoal, goal, goalMinMax, goalTimeFrame, automationTypeInt, automationVar)
+                val newTask = Task.CreateItem(-1, label, dataType, unit, automationTypeInt, automationVar)
 
                 val taskId: Int
 
-                if (!activity!!.application!!.dataStore!!.getAccessToken().isNullOrBlank()) {
-                    taskId = ServiceMethods.uploadTask(activity!!, newTask)
+                if (!activity.app.dataStore.getAccessToken().isNullOrBlank()) {
+                    taskId = ServiceMethods.uploadTask(activity, newTask)
                 }
                 else {
-                    taskId = this.activity!!.AppDB().taskDao().minId
+                    taskId = this.activity.AppDB().taskDao().minId
                 }
 
                 if (taskId != -1) {
                     newTask.Id = taskId
-                    activity!!.AppDB().taskDao().insert(newTask)
+                    activity.AppDB().taskDao().insert(newTask)
                     return true
                 }
                 else
@@ -296,34 +229,9 @@ class AddTaskFragment : MasterFragment() {
         return false
     }
 
-    private fun ConvertToInteger(text: String): Int {
-
-        var result = 0
-
-        try {
-            result = Integer.parseInt(text)
-        } catch (nfe: NumberFormatException) {
-        }
-
-        return result
-    }
-
     private fun SetUnitsVisibility(isVisible: Boolean) {
 
         tiUnits!!.visibility = if (isVisible) View.VISIBLE else View.GONE
-    }
-
-    private fun SetGoalVisibility(isVisible: Boolean) {
-
-        lytGoal!!.visibility = if (isVisible) View.VISIBLE else View.GONE
-    }
-
-    private fun SetUnitsLabel(isUnitsSelected: Boolean, text: String?) {
-
-        val result = if (isUnitsSelected && text != null && text.length > 0) text else ""
-
-        lblUnits!!.text = if (result.length > 0) result else "items"
-        txtGoal!!.hint = if (result.length > 0) result else "items"
     }
 
     override fun onResume() {
@@ -346,16 +254,16 @@ class AddTaskFragment : MasterFragment() {
             {
                 if (task != null) {
 
-                    AlertDialog.Builder(activity!!)
+                    AlertDialog.Builder(activity)
                             .setMessage("Do you really want to delete this task?")
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .setPositiveButton(android.R.string.yes) { _, _ ->
                                 doAsync {
-                                    activity!!.AppDB().taskDao().delete(task!!.Id)
-                                    ServiceMethods.deleteTask(activity!!, task!!.Id)
+                                    activity.AppDB().taskDao().delete(task!!.Id)
+                                    ServiceMethods.deleteTask(activity, task!!.Id)
 
                                     uiThread {
-                                        activity!!.NavigateFragment(false, TasksPagerFragment.newInstance())
+                                        activity.NavigateFragment(false, TasksPagerFragment.newInstance())
                                     }
                                 }
                             }
@@ -365,22 +273,6 @@ class AddTaskFragment : MasterFragment() {
         }
         return true
 
-    }
-
-    private inner class InputTextWatcher internal constructor() : TextWatcher {
-
-        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-
-        }
-
-        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-
-        }
-
-        override fun afterTextChanged(s: Editable) {
-
-            SetUnitsLabel(swcUnits!!.isChecked, s.toString())
-        }
     }
 
     companion object {

@@ -31,7 +31,7 @@ object HttpClient {
 
             } catch (Exception e) {
 
-                CrashLogger.AddExceptionLog("Error checking internet connection", e);
+                Crashlytics.logException(e)
             }
 
             */

@@ -46,9 +46,6 @@ open class SyncTasks(private var activity: ISyncTasksHost) : AsyncTask<Void, Voi
                         ServiceMethods.uploadTask(activity, listLocal[i])
                     }
                 }
-                else {
-
-                }
             }
 
             val entries = ServiceMethods.getEntriesFromService(activity)
@@ -102,9 +99,9 @@ open class SyncTasks(private var activity: ISyncTasksHost) : AsyncTask<Void, Voi
 
             if (listLocal.isEmpty()) {
 
-                val newItem1 = Task.CreateItem(-2, "Exercise", 0, "", false, 0, 0, 0, null,null)
-                val newItem2 = Task.CreateItem(-3, "Study", 0, "", false, 0, 0, 0, null,null)
-                val newItem3 = Task.CreateItem(-4, "Coffee", 1, "cup(s)", false, 0, 0, 0, null,null)
+                val newItem1 = Task.CreateItem(-2, "Exercise", 0, "", null,null)
+                val newItem2 = Task.CreateItem(-3, "Study", 0, "", null,null)
+                val newItem3 = Task.CreateItem(-4, "Coffee", 1, "cup(s)", null,null)
 
                 activity.AppDB().taskDao().insert(newItem1)
                 activity.AppDB().taskDao().insert(newItem2)

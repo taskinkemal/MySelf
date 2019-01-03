@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.crashlytics.android.Crashlytics
 
 import com.keplersegg.myself.activities.MainActivity
 import com.keplersegg.myself.interfaces.IErrorMessage
@@ -15,7 +16,7 @@ import java.lang.Exception
 
 abstract class MasterFragment : Fragment(), IErrorMessage {
 
-    var activity: MainActivity? = null
+    lateinit protected var activity: MainActivity
     protected var rootView: View? = null
     protected var layout: Int = 0
 
@@ -32,37 +33,48 @@ abstract class MasterFragment : Fragment(), IErrorMessage {
         return rootView
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        logAnalyticsPageVisit()
+    }
+
     open fun onCreateViewInternal() { }
 
     fun SetTitle(id: Int) {
 
-        activity!!.setTitle(id)
+        activity.setTitle(id)
     }
 
     fun SetTitle(title: String) {
 
-        activity!!.title = title
+        activity.title = title
     }
 
     fun getConnectivityManager(): ConnectivityManager {
-        return activity!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return activity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     }
 
-    fun getAppDB(): AppDatabase { return activity!!.AppDB() }
+    fun getAppDB(): AppDatabase { return activity.AppDB() }
 
-    fun getDeviceId(): String? { return activity!!.getDeviceId() }
+    fun getDeviceId(): String? { return activity.getDeviceId() }
 
-    fun getAccessToken(): String? { return activity!!.application!!.dataStore!!.getAccessToken() }
+    fun getAccessToken(): String? { return activity.app.dataStore.getAccessToken() }
 
     override fun logException(exception: Exception, message: String) {
 
-        //CrashLogger.AddExceptionLog(message, exc);
-
-        activity!!.showErrorMessage(message)
+        Crashlytics.logException(exception)
+        activity.showErrorMessage(message)
     }
 
     override fun showErrorMessage(message: String) {
 
-        activity!!.showErrorMessage(message)
+        activity.showErrorMessage(message)
+    }
+
+
+    fun logAnalyticsPageVisit() {
+
+        activity.firebaseAnalytics.setCurrentScreen(activity, javaClass.simpleName, javaClass.simpleName)
     }
 }
