@@ -15,6 +15,8 @@ import com.keplersegg.myself.MySelfApplication
 import com.keplersegg.myself.fragments.*
 import com.keplersegg.myself.interfaces.ISyncTasksHost
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
 class MainActivity : AuthActivity(), ISyncTasksHost {
 
@@ -83,6 +85,8 @@ class MainActivity : AuthActivity(), ISyncTasksHost {
                     .apply(RequestOptions.circleCropTransform())
                     .into(imgUserPicture)
         }
+
+        showNewBadgeDialog()
     }
 
     fun NavigateFromMenu(menuItemID: Int) {
@@ -135,5 +139,34 @@ class MainActivity : AuthActivity(), ISyncTasksHost {
                 .make(coordinatorLayout, message, Snackbar.LENGTH_LONG)
 
         snackbar.show()
+    }
+
+    fun showNewBadgeDialog() {
+
+        val newBadgeId = app.dataStore.popNewBadge()
+
+        if (newBadgeId != null) {
+
+            doAsync {
+
+                val badge = AppDB().userBadgeDao().get(newBadgeId)
+                val imageResourceId =
+                        if (newBadgeId == 1) R.drawable.ic_badge1_1
+                        else if (newBadgeId == 2) R.drawable.ic_badge1_2
+                        else R.drawable.ic_badge1_3
+
+                uiThread {
+
+                    if (badge != null) {
+                        val dialog = DialogNewBadgeFragment()
+                        dialog.badgeId = newBadgeId
+                        dialog.imageResourceId = imageResourceId
+                        dialog.level = badge.Level
+
+                        dialog.show(supportFragmentManager, "")
+                    }
+                }
+            }
+        }
     }
 }

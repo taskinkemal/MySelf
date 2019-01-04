@@ -18,6 +18,7 @@ import com.keplersegg.myself.R
 import com.keplersegg.myself.Room.Entity.Entry
 import com.keplersegg.myself.Room.Entity.TaskEntry
 import com.keplersegg.myself.async.SyncTasks
+import com.keplersegg.myself.fragments.DialogNewBadgeFragment
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.util.*
@@ -195,6 +196,7 @@ class TasksAdapter(private val activity: MainActivity, private val day: Int) : R
         val response = ServiceMethods.uploadEntry(activity, entry)
 
         SyncTasks(this.activity).upsertBadge(response)
+        activity.showNewBadgeDialog()
     }
 
     fun updateData(list: List<TaskEntry>) {

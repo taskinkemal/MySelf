@@ -2,6 +2,7 @@ package com.keplersegg.myself.async
 
 import android.os.AsyncTask
 import com.keplersegg.myself.Room.Entity.Goal
+import com.keplersegg.myself.Room.Entity.UserBadge
 import com.keplersegg.myself.helper.ServiceMethods
 import com.keplersegg.myself.interfaces.ISyncGoalsHost
 
@@ -32,10 +33,12 @@ open class SyncGoals(private var activity: ISyncGoalsHost) : AsyncTask<Void, Voi
 
                         // newly added goal without internet connection
 
-                        val goalId = ServiceMethods.uploadGoal(activity, listLocal[i])
-                        if (goalId > 0) /* check if uploaded successfully */ {
-                            activity.AppDB().goalDao().updateId(goalId, listLocal[i].Id)
-                            listLocal[i].Id = goalId
+                        val response = ServiceMethods.uploadGoal(activity, listLocal[i])
+                        if (response != null) /* check if uploaded successfully */ {
+                            activity.AppDB().goalDao().updateId(response.GoalId, listLocal[i].Id)
+                            listLocal[i].Id = response.GoalId
+
+                            SyncBadges(activity).upsertBadge(response.Score, response.NewBadges)
                         }
                     }
                     else {

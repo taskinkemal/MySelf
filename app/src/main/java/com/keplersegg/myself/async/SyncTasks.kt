@@ -129,15 +129,7 @@ open class SyncTasks(private var activity: ISyncTasksHost) : AsyncTask<Void, Voi
 
         if (response != null) {
 
-            activity.GetApplication().user!!.Score = response.Score
-
-            for (i in 0 until response.NewBadges.size) {
-
-                val rowsAffected = activity.AppDB().userBadgeDao().update(response.NewBadges[i])
-                if (rowsAffected == 0) {
-                    activity.AppDB().userBadgeDao().insert(response.NewBadges[i])
-                }
-            }
+            SyncBadges(activity).upsertBadge(response.Score, response.NewBadges)
         }
     }
 }

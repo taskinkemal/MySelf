@@ -14,6 +14,7 @@ class DataStorage(app: MySelfApplication) {
     private val facebookToken = "facebookToken"
     private val googleToken = "googleToken"
     private val deviceRegistrationID = "deviceRegistrationID"
+    private val newBadges = "newBadges"
 
     init {
 
@@ -55,5 +56,41 @@ class DataStorage(app: MySelfApplication) {
             preferences.getString(key, null)
         else
             null
+    }
+
+    fun popNewBadge(): Int? {
+
+        if (preferences.contains(newBadges)) {
+            val list = preferences.getStringSet(newBadges, null)
+            if (list != null) {
+                val result = list.firstOrNull()
+
+                if (result != null) {
+                    val badgeId = result.toInt()
+                    list.remove(result)
+                    pushNewBadges(list)
+                    return badgeId
+                }
+            }
+        }
+        return null
+    }
+
+    fun pushNewBadge(badgeId: Int) {
+
+        if (!preferences.contains(newBadges)) {
+            pushNewBadges(hashSetOf())
+        }
+
+        val list = preferences.getStringSet(newBadges, null)
+        list!!.add(badgeId.toString())
+        pushNewBadges(list)
+    }
+
+    private fun pushNewBadges(list: MutableSet<String>) {
+
+        val editor = preferences.edit()
+        editor.putStringSet(newBadges, list)
+        editor.apply()
     }
 }

@@ -9,5 +9,5 @@ class User {
     var Email: String? = null
     var PictureUrl: String? = null
     var FacebookToken: AccessToken? = null
-    var Score: Int? = null
+    var Score: Int = 0
 }

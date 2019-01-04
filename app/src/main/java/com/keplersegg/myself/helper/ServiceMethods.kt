@@ -6,6 +6,7 @@ import com.keplersegg.myself.Room.Entity.Entry
 import com.keplersegg.myself.Room.Entity.Goal
 import com.keplersegg.myself.Room.Entity.Task
 import com.keplersegg.myself.models.UploadEntryResponse
+import com.keplersegg.myself.models.UploadGoalResponse
 import com.keplersegg.myself.models.User
 import org.json.JSONObject
 
@@ -113,7 +114,7 @@ object ServiceMethods {
         HttpClient.send(provider, "goals/" + goalId, "delete", null)
     }
 
-    fun uploadGoal(provider: IHttpProvider, goal: Goal): Int {
+    fun uploadGoal(provider: IHttpProvider, goal: Goal): UploadGoalResponse? {
 
         val jsonParams = JSONObject()
         if (goal.Id > 0)
@@ -127,13 +128,14 @@ object ServiceMethods {
 
         val result = HttpClient.send(provider, "goals", "post", jsonParams)
 
-        if (result != null && result.has("Value")) {
+        if (result == null)
+        {
+            return null
+        }
 
-            return result.getInt("Value")
-        }
-        else {
-            return -1
-        }
+        val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create()
+
+        return gson.fromJson<UploadGoalResponse>(result.toString(), UploadGoalResponse::class.java)
     }
 
     fun getGoalsFromService(provider: IHttpProvider): List<Goal>? {

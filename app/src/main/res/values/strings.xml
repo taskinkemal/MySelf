@@ -84,7 +84,24 @@
     <string name="autotask_appUsage">App usage</string>
     <string name="autotask_wentTo">Went to</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="badge_name_1_1">Beginner</string>
+    <string name="badge_name_1_2">Adapt</string>
+    <string name="badge_name_1_3">Dedicated</string>
+    <string name="badge_name_2_1">Silver Star</string>
+    <string name="badge_name_2_2">Silver Expert</string>
+    <string name="badge_name_2_3">Silver Master</string>
+    <string name="badge_name_3_1">Golden Star</string>
+    <string name="badge_name_3_2">Golden Expert</string>
+    <string name="badge_name_3_3">Golden Master</string>
+
+    <string name="badge_desc_1_1">Enter data for 5 different tasks.</string>
+    <string name="badge_desc_1_2">Enter data for 5 consecutive days.</string>
+    <string name="badge_desc_1_3">Enter data for 30 consecutive days.</string>
+    <string name="badge_desc_2_1">Add a goal.</string>
+    <string name="badge_desc_2_2">Add 5 goals.</string>
+    <string name="badge_desc_2_3">Add 25 goals.</string>
+    <string name="badge_desc_3_1">Achieve a goal.</string>
+    <string name="badge_desc_3_2">Achieve 5 goals.</string>
+    <string name="badge_desc_3_3">Achieve 25 goals.</string>
 
 </resources>

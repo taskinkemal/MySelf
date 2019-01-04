@@ -3,7 +3,6 @@ package com.keplersegg.myself.fragments
 
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
@@ -18,8 +17,6 @@ import com.keplersegg.myself.R
 import com.keplersegg.myself.helper.ServiceMethods
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
-import android.graphics.ColorMatrixColorFilter
-import android.graphics.ColorMatrix
 
 
 
@@ -58,21 +55,21 @@ class ProfileFragment : MasterFragment(), ISignOut {
 
                     lblScore!!.text = activity.app.user!!.Score.toString()
 
-                    setTint(imgBadge1!!, false)
-                    setTint(imgBadge2!!, false)
-                    setTint(imgBadge3!!, false)
+                    bvBadge1.setLevel(0)
+                    bvBadge2.setLevel(0)
+                    bvBadge3.setLevel(0)
 
                     for (b in allBadges) {
 
                         if (b.BadgeId == 1) {
 
-                            setTint(imgBadge1!!, true)
+                            bvBadge1.setLevel(b.Level)
                         } else if (b.BadgeId == 2) {
 
-                            setTint(imgBadge2!!, true)
+                            bvBadge2.setLevel(b.Level)
                         } else if (b.BadgeId == 3) {
 
-                            setTint(imgBadge3!!, true)
+                            bvBadge3.setLevel(b.Level)
                         }
                     }
                 }
@@ -81,9 +78,9 @@ class ProfileFragment : MasterFragment(), ISignOut {
         else {
             lblUserName!!.text = activity.getString(R.string.lbl_guest)
             lblScore!!.text = "0"
-            setTint(imgBadge1!!, false)
-            setTint(imgBadge2!!, false)
-            setTint(imgBadge3!!, false)
+            bvBadge1.setLevel(0)
+            bvBadge2.setLevel(0)
+            bvBadge3.setLevel(0)
         }
         if (!activity.app.user?.PictureUrl.isNullOrBlank()) {
 
@@ -103,19 +100,19 @@ class ProfileFragment : MasterFragment(), ISignOut {
                     .into(imgUserPicture)
         }
     }
-
-    private fun setTint(img: ImageView, isEnabled: Boolean) {
-
-        if (isEnabled) {
-            img.clearColorFilter()
-        }
-        else {
-            val matrix = ColorMatrix()
-            matrix.setSaturation(0f)
-            val filter = ColorMatrixColorFilter(matrix)
-            img.colorFilter = filter
-        }
-    }
+//
+//    private fun setTint(img: ImageView, isEnabled: Boolean) {
+//
+//        if (isEnabled) {
+//            img.clearColorFilter()
+//        }
+//        else {
+//            val matrix = ColorMatrix()
+//            matrix.setSaturation(0f)
+//            val filter = ColorMatrixColorFilter(matrix)
+//            img.colorFilter = filter
+//        }
+//    }
 
     override fun onSignOut() {
 

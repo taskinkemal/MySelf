@@ -20,6 +20,7 @@ import kotlin.collections.ArrayList
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.TextView
+import com.keplersegg.myself.async.SyncBadges
 import com.keplersegg.myself.helper.Utils
 import java.text.SimpleDateFormat
 
@@ -247,8 +248,13 @@ class AddGoalFragment : MasterFragment() {
             var canUpdate = true
 
             if (!activity.app.dataStore.getAccessToken().isNullOrBlank()) {
-                val goalId = ServiceMethods.uploadGoal(activity, goal)
-                canUpdate = !goalId.equals(-1)
+                val response = ServiceMethods.uploadGoal(activity, goal)
+                canUpdate = response != null
+
+                if (response != null) {
+                    SyncBadges(activity).upsertBadge(response.Score, response.NewBadges)
+                    activity.showNewBadgeDialog()
+                }
             }
 
             if (canUpdate) {
@@ -263,10 +269,15 @@ class AddGoalFragment : MasterFragment() {
 
             val newGoal = Goal.CreateItem(-1, TaskId, minMax, target, startDay, endDay)
 
-            var goalId: Int
+            var goalId: Int = -1
 
             if (!activity.app.dataStore.getAccessToken().isNullOrBlank()) {
-                goalId = ServiceMethods.uploadGoal(activity, newGoal)
+                val response = ServiceMethods.uploadGoal(activity, newGoal)
+                if (response != null) {
+                    goalId = response.GoalId
+                    SyncBadges(activity).upsertBadge(response.Score, response.NewBadges)
+                    activity.showNewBadgeDialog()
+                }
             }
             else {
                 goalId = this.activity.AppDB().goalDao().minId

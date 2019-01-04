@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.ProfileFragment"
     android:background="@color/colorBackground"
     android:orientation="vertical">
@@ -82,30 +83,30 @@
         android:orientation="horizontal"
         android:gravity="center_horizontal">
 
-        <ImageView
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:src="@drawable/ic_badge1_1"
-            android:id="@+id/imgBadge1"
+        <com.keplersegg.myself.components.BadgeView
+            android:layout_width="wrap_content"
+            android:layout_height="72dp"
+            app:badgeId="1"
+            app:iconSrc="@drawable/ic_badge1_1"
+            android:id="@+id/bvBadge1"
             android:layout_marginEnd="24dp"
-            android:contentDescription="@string/imgContentDescription"
             />
 
-        <ImageView
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:src="@drawable/ic_badge1_2"
-            android:id="@+id/imgBadge2"
-            android:contentDescription="@string/imgContentDescription"
+        <com.keplersegg.myself.components.BadgeView
+            android:layout_width="wrap_content"
+            android:layout_height="72dp"
+            app:badgeId="2"
+            app:iconSrc="@drawable/ic_badge1_2"
+            android:id="@+id/bvBadge2"
+            android:layout_marginEnd="24dp"
             />
 
-        <ImageView
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:src="@drawable/ic_badge1_3"
-            android:id="@+id/imgBadge3"
-            android:layout_marginStart="24dp"
-            android:contentDescription="@string/imgContentDescription"
+        <com.keplersegg.myself.components.BadgeView
+            android:layout_width="wrap_content"
+            android:layout_height="72dp"
+            app:badgeId="3"
+            app:iconSrc="@drawable/ic_badge1_3"
+            android:id="@+id/bvBadge3"
             />
 
     </LinearLayout>

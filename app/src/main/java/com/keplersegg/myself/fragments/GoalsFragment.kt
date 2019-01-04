@@ -44,6 +44,7 @@ class GoalsFragment : MasterFragment(), ISyncGoalsHost {
     override fun onSyncGoalsSuccess(list: List<Goal>) {
 
         adapter.updateData(list)
+        activity.showNewBadgeDialog()
     }
 
     override fun AppDB(): AppDatabase {
