@@ -40,13 +40,18 @@
             android:value="@string/facebook_app_id" />
 
         <meta-data
-            android:name="firebase_crashlytics_collection_enabled"
-            android:value="false" />
+            android:name="io.fabric.ApiKey"
+            android:value="b2460d4812c0d18ce7003688a8cd4ec7b866744b"
+            />
 
         <service
             android:name=".services.AutomatedTaskService"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-4857110393196284~6736902199"/>
 
         <receiver android:name=".services.WifiReceiver">
             <intent-filter android:priority="100">

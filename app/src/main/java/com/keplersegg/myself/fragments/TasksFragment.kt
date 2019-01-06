@@ -13,6 +13,8 @@ import com.keplersegg.myself.async.GetTaskEntries
 import com.keplersegg.myself.interfaces.IGetTasksHost
 import com.keplersegg.myself.R
 import com.keplersegg.myself.Room.Entity.TaskEntry
+import com.keplersegg.myself.helper.AdMobHelper
+import kotlinx.android.synthetic.main.fragment_tasks.*
 
 
 class TasksFragment : MasterFragment(), IGetTasksHost {
@@ -47,6 +49,8 @@ class TasksFragment : MasterFragment(), IGetTasksHost {
         super.onViewCreated(view, savedInstanceState)
 
         adapter!!.notifyDataSetChanged()
+
+        AdMobHelper.initAdUnit(activity, adView, R.string.adTasksPage)
     }
 
     override fun onResume() {

@@ -26,4 +26,6 @@ internal object Constant {
                     || "google_sdk" == Build.PRODUCT)
         }
     }
+
+    val isTest = true // to view test ads instead of production ads.
 }

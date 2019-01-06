@@ -2,6 +2,7 @@ package com.keplersegg.myself
 
 import android.app.Application
 import com.crashlytics.android.Crashlytics
+import com.google.android.gms.ads.MobileAds
 
 import com.keplersegg.myself.helper.DataStorage
 import com.keplersegg.myself.models.User
@@ -26,6 +27,8 @@ class MySelfApplication : Application() {
         Fabric.with(this, Crashlytics())
         androidDefaultUEH = Thread.getDefaultUncaughtExceptionHandler()
         Thread.setDefaultUncaughtExceptionHandler(handler)
+
+        MobileAds.initialize(this, "ca-app-pub-4857110393196284~6736902199");
     }
 
     fun clearSession() {
