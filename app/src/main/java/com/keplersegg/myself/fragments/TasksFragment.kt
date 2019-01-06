@@ -58,6 +58,13 @@ class TasksFragment : MasterFragment(), IGetTasksHost {
         SetTitle(R.string.lbl_tasks)
 
         GetTaskEntries(this).execute(day)
+
+        if (!activity.app.dataStore.getTutorialDone()) {
+
+            val tutorial = DialogAppTutorial()
+            tutorial.activity = activity
+            tutorial.show(fragmentManager, "tutorial")
+        }
     }
 
     fun notifyUpdate() {

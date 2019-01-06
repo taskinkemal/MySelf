@@ -15,18 +15,19 @@ class DataStorage(app: MySelfApplication) {
     private val googleToken = "googleToken"
     private val deviceRegistrationID = "deviceRegistrationID"
     private val newBadges = "newBadges"
+    private val tutorialDone = "tutorialDone"
 
     init {
 
         preferences = app.getSharedPreferences(preferencesKey, Context.MODE_PRIVATE)
     }
 
-    fun getAccessToken(): String? { return getValue(accessToken) }
-    fun getFacebookToken(): String? { return getValue(facebookToken) }
-    fun getGoogleToken(): String? { return getValue(googleToken) }
+    fun getAccessToken(): String? { return getString(accessToken) }
+    fun getFacebookToken(): String? { return getString(facebookToken) }
+    fun getGoogleToken(): String? { return getString(googleToken) }
     fun getRegisterID(): String? {
 
-        var registerID = getValue(deviceRegistrationID)
+        var registerID = getString(deviceRegistrationID)
 
         if (registerID.isNullOrBlank()) {
 
@@ -36,10 +37,12 @@ class DataStorage(app: MySelfApplication) {
 
         return registerID
     }
+    fun getTutorialDone() : Boolean { return getBoolean(tutorialDone) }
 
     fun setAccessToken(token: String?) { setValue(accessToken, token) }
     fun setFacebookToken(token: String?) { setValue(facebookToken, token) }
     fun setGoogleToken(token: String?) { setValue(googleToken, token) }
+    fun setTutorialDone() { setBoolean(tutorialDone, true) }
 
     private fun setValue(key: String, value: String?) {
 
@@ -50,12 +53,29 @@ class DataStorage(app: MySelfApplication) {
         editor.apply()
     }
 
-    private fun getValue(key: String): String? {
+    private fun setBoolean(key: String, value: Boolean) {
+
+        val editor = preferences.edit()
+
+        editor.putBoolean(key, value)
+
+        editor.apply()
+    }
+
+    private fun getString(key: String): String? {
 
         return if (preferences.contains(key))
             preferences.getString(key, null)
         else
             null
+    }
+
+    private fun getBoolean(key: String): Boolean {
+
+        return if (preferences.contains(key))
+            preferences.getBoolean(key, false)
+        else
+            false
     }
 
     fun popNewBadge(): Int? {
