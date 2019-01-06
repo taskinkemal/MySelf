@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.keplersegg.myself.R
 import com.keplersegg.myself.Room.Entity.Goal
 import com.keplersegg.myself.activities.MainActivity
+import com.keplersegg.myself.fragments.AddGoalFragment
 import com.keplersegg.myself.helper.Utils
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -46,6 +47,15 @@ class GoalsAdapter(private val activity: MainActivity) : RecyclerView.Adapter<Go
 
         // object item based on the position
         val item = if (items.size > position) items[position] else null
+
+        holder.itemView.setOnLongClickListener(View.OnLongClickListener {
+            if (item != null) {
+
+                activity.NavigateFragment(true, AddGoalFragment.newInstance(item.TaskId, item.Id))
+                return@OnLongClickListener true
+            }
+            false
+        })
 
         updateUi(holder, item!!)
     }

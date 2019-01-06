@@ -105,6 +105,8 @@ class MainActivity : AuthActivity(), ISyncTasksHost {
                 NavigateFragment(true, AddGoalFragment.newInstance(-1, -1))
             R.id.action_goals ->
                 NavigateFragment(true, GoalsFragment.newInstance())
+            R.id.action_statistics ->
+                NavigateFragment(true, StatsMainFragment.newInstance())
         }
     }
 

@@ -19,6 +19,7 @@
     <string name="lbl_auto_task_selector">Select Auto Task</string>
     <string name="lbl_goals">Goals</string>
     <string name="lbl_add_goal">New Goal</string>
+    <string name="lbl_statistics">Statistics</string>
     <string name="save">Save</string>
     <string name="unit">Unit</string>
     <string name="time_plural">time(s)</string>

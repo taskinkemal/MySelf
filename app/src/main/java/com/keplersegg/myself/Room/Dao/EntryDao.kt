@@ -28,4 +28,12 @@ interface EntryDao {
 
     @Delete
     fun delete(entry: Entry)
+
+    @Query("SELECT TaskId, sum(Value) AS EntryCount FROM Entry group by TaskId")
+    fun getCounts(): List<TaskEntryCount>
+
+    class TaskEntryCount {
+        var TaskId: Int? = null
+        var EntryCount: Int? = null
+    }
 }

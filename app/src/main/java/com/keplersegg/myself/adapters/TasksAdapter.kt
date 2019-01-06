@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -18,7 +19,7 @@ import com.keplersegg.myself.R
 import com.keplersegg.myself.Room.Entity.Entry
 import com.keplersegg.myself.Room.Entity.TaskEntry
 import com.keplersegg.myself.async.SyncTasks
-import com.keplersegg.myself.fragments.DialogNewBadgeFragment
+import com.keplersegg.myself.models.TaskGeneralStats
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.util.*
@@ -38,6 +39,7 @@ class TasksAdapter(private val activity: MainActivity, private val day: Int) : R
         val imgMinus: ImageButton? = itemView.findViewById(R.id.imgMinus)
         val txtValue: TextView? = itemView.findViewById(R.id.txtValue)
         val txtUnit: TextView? = itemView.findViewById(R.id.txtUnit)
+        val imgTaskType: ImageView? = itemView.findViewById(R.id.imgTaskType)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataObjectHolder {
@@ -163,6 +165,20 @@ class TasksAdapter(private val activity: MainActivity, private val day: Int) : R
             if (holder.txtUnit != null)
                 holder.txtUnit.text = item.task!!.Unit
         }
+        if (item.task!!.AutomationType == null || item.task!!.AutomationType == 0) {
+
+            holder.imgTaskType!!.visibility = View.INVISIBLE
+
+        } else {
+
+            holder.imgTaskType!!.visibility = View.VISIBLE
+            holder.imgTaskType.setImageResource(getTaskTypeImageResource(item.task!!.AutomationType!!))
+        }
+    }
+
+    private fun getTaskTypeImageResource(automationType: Int): Int {
+
+        return TaskGeneralStats.taskTypeImageResourceId(automationType)!!
     }
 
     private fun setTint(imgDone: ImageButton, isChecked: Boolean) {

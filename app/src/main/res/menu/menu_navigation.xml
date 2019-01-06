@@ -39,6 +39,10 @@
         android:checkableBehavior="single">
 
         <item
+            android:id="@+id/action_statistics"
+            android:title="@string/lbl_statistics" />
+
+        <item
             android:id="@+id/action_profile"
             android:title="@string/lbl_profile" />
 
