@@ -53,12 +53,12 @@ class AutoTaskSelectorFragment : MasterFragment() {
 
                 if (!checkForPermission(activity))
                 {
-                    //TODO: show a message here.
+                    showErrorMessage(getString(R.string.permission_required_apps))
                     startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
                 }
 
                 if (!checkForPermission(activity)) {
-                    //TODO: show a message here
+                    showErrorMessage(getString(R.string.permission_error_apps))
                     return
                 }
                 if (ContextCompat.checkSelfPermission(activity, Manifest.permission.PACKAGE_USAGE_STATS)

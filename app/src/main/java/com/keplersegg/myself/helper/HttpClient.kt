@@ -18,26 +18,7 @@ object HttpClient {
 
     fun hasInternetAccess(provider: IHttpProvider): Boolean {
 
-        if (isNetworkAvailable(provider)) {
-
-            return true
-
-            /* TODO: couldn't do ping from the emulator.
-            try {
-
-                Process p1 = java.lang.Runtime.getRuntime().exec("ping -c 1    www.google.com");
-                int returnVal = p1.waitFor();
-                return returnVal == 0;
-
-            } catch (Exception e) {
-
-                Crashlytics.logException(e)
-            }
-
-            */
-        }
-
-        return false
+        return isNetworkAvailable(provider)
     }
 
     fun send(provider: IHttpProvider, url: String, method: String, objParam: JSONObject?): JSONObject? {

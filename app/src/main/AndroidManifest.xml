@@ -7,13 +7,12 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" /> <!-- TODO: request this on the fly -->
-    <uses-permission android:name="android.permission.READ_CALL_LOG" /> <!-- TODO: request this on the fly -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_CALL_LOG" />
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
 
-    <!-- TODO: request this on the fly -->
     <application
         android:name=".MySelfApplication"
         android:allowBackup="true"
