@@ -67,7 +67,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="successful"
+                    android:text="@string/lbl_successful"
                     android:gravity="center_horizontal"
                     android:textSize="16sp"
                     />
@@ -103,7 +103,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="failed"
+                    android:text="@string/lbl_failed"
                     android:gravity="center_horizontal"
                     android:textSize="16sp"
                     />
@@ -141,7 +141,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="in progress"
+                    android:text="@string/lbl_in_progress"
                     android:gravity="center_horizontal"
                     android:textSize="16sp"
                     />

@@ -44,26 +44,26 @@ class AppTutorialAdapter : PagerAdapter() {
             0 -> {
 
                 imgTutorial.setImageResource(R.drawable.ic_badge1_1)
-                lblTutorialHeader.setText("Welcome to MySelf!")
-                lblTutorial.setText("MySelf will help you track your daily routines.")
+                lblTutorialHeader.setText(R.string.tutorial_1)
+                lblTutorial.setText(R.string.tutorial_1_desc)
             }
             1 -> {
 
                 imgTutorial.setImageResource(R.drawable.ic_badge1_2)
-                lblTutorialHeader.setText("Tasks to help track yourself.")
-                lblTutorial.setText("Setup your tasks to track your daily routines. Cups of coffee, hour of exercise.")
+                lblTutorialHeader.setText(R.string.tutorial_2)
+                lblTutorial.setText(R.string.tutorial_2_desc)
             }
             2 -> {
 
                 imgTutorial.setImageResource(R.drawable.ic_badge1_1)
-                lblTutorialHeader.setText("Goals to help achieve the results.")
-                lblTutorial.setText("Set your own goals to help achieve your results.")
+                lblTutorialHeader.setText(R.string.tutorial_3)
+                lblTutorial.setText(R.string.tutorial_3_desc)
             }
             3 -> {
 
                 imgTutorial.setImageResource(R.drawable.ic_badge1_3)
-                lblTutorialHeader.setText("Check your stats.")
-                lblTutorial.setText("Statistics will show you your tracking history.")
+                lblTutorialHeader.setText(R.string.tutorial_4)
+                lblTutorial.setText(R.string.tutorial_4_desc)
             }
             else -> { }
         }

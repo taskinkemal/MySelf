@@ -113,9 +113,9 @@ class AddGoalFragment : MasterFragment() {
 
             doAsync {
 
-                goal = activity.AppDB().goalDao().get(GoalId)
+                goal = activity.AppDB().goalDao()[GoalId]
                 TaskId = goal.TaskId
-                task = activity.AppDB().taskDao().get(goal.TaskId)
+                task = activity.AppDB().taskDao()[goal.TaskId]
 
                 allTasks.clear()
                 allTasks.addAll(activity.AppDB().taskDao().getAll(1))

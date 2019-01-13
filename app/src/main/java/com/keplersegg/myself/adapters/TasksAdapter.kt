@@ -29,7 +29,7 @@ import kotlin.collections.ArrayList
 
 class TasksAdapter(private val activity: MainActivity, private val day: Int) : RecyclerView.Adapter<TasksAdapter.DataObjectHolder>() {
 
-    val items: ArrayList<TaskEntry> = ArrayList()
+    private val items: ArrayList<TaskEntry> = ArrayList()
 
     inner class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val lytListItem: LinearLayout? = itemView.findViewById(R.id.lytListItem)
@@ -44,12 +44,11 @@ class TasksAdapter(private val activity: MainActivity, private val day: Int) : R
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataObjectHolder {
 
-        val layout = if (viewType == 0)
-            R.layout.list_item_task_boolean
-        else if (viewType == 1)
-            R.layout.list_item_task_numeric
-        else
-            R.layout.list_item_task_minutes
+        val layout = when (viewType) {
+            0 -> R.layout.list_item_task_boolean
+            1 -> R.layout.list_item_task_numeric
+            else -> R.layout.list_item_task_minutes
+        }
         val view = LayoutInflater.from(parent.context).inflate(layout, parent, false)
 
         return DataObjectHolder(itemView = view)
@@ -98,9 +97,8 @@ class TasksAdapter(private val activity: MainActivity, private val day: Int) : R
             false
         })
 
-        if (holder.itemViewType == 0) {
-
-            holder.imgDone!!.setOnClickListener {
+        when {
+            holder.itemViewType == 0 -> holder.imgDone!!.setOnClickListener {
                 val entry = item!!.entry
                 entry!!.Value = if (entry.Value == 0) 1 else 0
                 entry.ModificationDate = Date(System.currentTimeMillis())
@@ -113,44 +111,41 @@ class TasksAdapter(private val activity: MainActivity, private val day: Int) : R
                     }
                 }
             }
-        }
-        else if (holder.itemViewType == 1) {
+            holder.itemViewType == 1 -> {
 
-            holder.imgPlus!!.setOnClickListener {
-                val entry = item!!.entry
-                entry!!.Value++
-                entry.ModificationDate = Date(System.currentTimeMillis())
+                holder.imgPlus!!.setOnClickListener {
+                    val entry = item!!.entry
+                    entry!!.Value++
+                    entry.ModificationDate = Date(System.currentTimeMillis())
 
-                holder.txtValue!!.text = item.entry!!.Value.toString()
+                    holder.txtValue!!.text = item.entry!!.Value.toString()
 
-                doAsync {
-                    activity.AppDB().entryDao().update(item.entry!!)
-                    if (HttpClient.hasInternetAccess(activity)) {
-                        uploadEntry(item.entry!!)
+                    doAsync {
+                        activity.AppDB().entryDao().update(item.entry!!)
+                        if (HttpClient.hasInternetAccess(activity)) {
+                            uploadEntry(item.entry!!)
+                        }
+                    }
+                }
+
+                holder.imgMinus!!.setOnClickListener {
+                    val entry = item!!.entry
+                    if (entry!!.Value > 0)
+                        entry.Value--
+                    entry.ModificationDate = Date(System.currentTimeMillis())
+
+                    holder.txtValue!!.text = item.entry!!.Value.toString()
+
+                    doAsync {
+                        activity.AppDB().entryDao().update(item.entry!!)
+                        if (HttpClient.hasInternetAccess(activity)) {
+                            uploadEntry(item.entry!!)
+                        }
                     }
                 }
             }
-
-            holder.imgMinus!!.setOnClickListener {
-                val entry = item!!.entry
-                if (entry!!.Value > 0)
-                    entry.Value--
-                entry.ModificationDate = Date(System.currentTimeMillis())
-
-                holder.txtValue!!.text = item.entry!!.Value.toString()
-
-                doAsync {
-                    activity.AppDB().entryDao().update(item.entry!!)
-                    if (HttpClient.hasInternetAccess(activity)) {
-                        uploadEntry(item.entry!!)
-                    }
-                }
-            }
-        }
-        else {
-
-            //TODO: holder.txtValue!!.text = (item!!.entry!!.Value / 60).toString()
-            holder.txtValue!!.text = (item!!.entry!!.Value).toString()
+            else -> //TODO: holder.txtValue!!.text = (item!!.entry!!.Value / 60).toString()
+                holder.txtValue!!.text = (item!!.entry!!.Value).toString()
         }
     }
 

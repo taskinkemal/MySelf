@@ -13,7 +13,7 @@ open class SyncBadges(private var activity: ISyncHost) {
         for (i in 0 until badges.size) {
 
             doAsync {
-                val existingBadge = activity.AppDB().userBadgeDao().get(badges[i].BadgeId)
+                val existingBadge = activity.AppDB().userBadgeDao()[badges[i].BadgeId]
 
                 val pushNewBadge = existingBadge != null && existingBadge.Level < badges[i].Level
 

@@ -14,7 +14,7 @@ import java.util.*
 
 class StatsMainAdapter(private val activity: MainActivity) : RecyclerView.Adapter<StatsMainAdapter.DataObjectHolder>() {
 
-    val items: ArrayList<TaskGeneralStats> = ArrayList()
+    private val items: ArrayList<TaskGeneralStats> = ArrayList()
 
     inner class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 

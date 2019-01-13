@@ -9,7 +9,7 @@ import android.widget.TextView
 import com.keplersegg.myself.Room.Entity.Task
 import com.keplersegg.myself.activities.MainActivity
 
-class TaskSpinnerAdapter(private val activity: MainActivity, textViewResourceId: Int,
+class TaskSpinnerAdapter(activity: MainActivity, textViewResourceId: Int,
                          private val values: ArrayList<Task>) : ArrayAdapter<Task>(activity, textViewResourceId, values) {
 
     override fun getCount(): Int {

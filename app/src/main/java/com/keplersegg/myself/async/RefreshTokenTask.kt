@@ -11,7 +11,7 @@ open class RefreshTokenTask(private var activity: IRefreshTokenHost) : AsyncTask
 
     override fun doInBackground(vararg params: String?): JSONObject? {
 
-        val token = if (params.size > 0) params[0] else null
+        val token = if (params.isNotEmpty()) params[0] else null
         val deviceID = if (params.size > 1) params[1] else null
 
         val jsonParams = JSONObject()

@@ -19,9 +19,7 @@ class DialogBadgeInfoFragment : DialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        val view = inflater.inflate(R.layout.dialog_badge_info, container, false)
-
-        return view
+        return inflater.inflate(R.layout.dialog_badge_info, container, false)
     }
 
     override fun onResume() {
@@ -62,7 +60,7 @@ class DialogBadgeInfoFragment : DialogFragment() {
         else {
 
             lytNextLevel.visibility = View.GONE
-            lblDescNextLevel.text = "You've completed this achievement!"
+            lblDescNextLevel.setText(R.string.lblBadge_completed)
         }
 
 

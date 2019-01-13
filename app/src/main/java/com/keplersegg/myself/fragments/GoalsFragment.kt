@@ -3,7 +3,6 @@ package com.keplersegg.myself.fragments
 
 import android.os.Bundle
 import android.view.View
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.keplersegg.myself.MySelfApplication
 
@@ -59,9 +58,7 @@ class GoalsFragment : MasterFragment(), ISyncGoalsHost {
 
         fun newInstance(): GoalsFragment {
 
-            val fragment = GoalsFragment()
-
-            return fragment
+            return GoalsFragment()
         }
     }
 }

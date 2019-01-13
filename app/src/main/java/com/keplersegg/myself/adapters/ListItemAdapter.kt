@@ -39,7 +39,7 @@ class ListItemAdapter(private val hoster: IListItemHoster?, private val items: L
         // object item based on the position
         val item = if (items != null) items.list[position] else null
 
-        holder.lblLabel.setText(item!!.Label)
+        holder.lblLabel.text = item!!.Label
 
         if (items!!.showImage) {
             holder.imgIcon.visibility = View.VISIBLE
