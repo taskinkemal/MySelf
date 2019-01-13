@@ -36,6 +36,7 @@ class GoalsFragment : MasterFragment(), ISyncGoalsHost {
 
     override fun onResume() {
         super.onResume()
+        SetTitle(R.string.lbl_goals)
 
         SyncGoals(this).execute()
     }

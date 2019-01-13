@@ -36,6 +36,7 @@ class StatsMainFragment : MasterFragment() {
 
     override fun onResume() {
         super.onResume()
+        SetTitle(R.string.lbl_statistics)
 
         doAsync {
 

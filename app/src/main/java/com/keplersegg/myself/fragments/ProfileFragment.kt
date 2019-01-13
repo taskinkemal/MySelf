@@ -47,9 +47,26 @@ class ProfileFragment : MasterFragment(), ISignOut {
 
             doAsync {
 
-                val allBadges = activity.AppDB().userBadgeDao().all
                 val user = ServiceMethods.getUser(activity)
                 activity.app.user!!.Score = user!!.Score
+
+                if (user.Badges != null) {
+                    for (s in user.Badges!!) {
+
+                        val localBadge = activity.AppDB().userBadgeDao().get(s.BadgeId)
+
+                        if (localBadge == null) {
+
+                            activity.AppDB().userBadgeDao().insert(s)
+                        }
+                        else if (s.Level > localBadge.Level) {
+
+                            activity.AppDB().userBadgeDao().update(s)
+                        }
+                    }
+                }
+
+                val allBadges = activity.AppDB().userBadgeDao().all
 
                 uiThread {
 
