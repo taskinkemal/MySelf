@@ -81,6 +81,7 @@ public class LoginTask extends AsyncTask<String, Void, JSONObject> {
         catch (Exception exc) {
 
             activity.logException(exc, "LoginTask.onPostExecute");
+            activity.onLoginError("General error");
         }
     }
 }

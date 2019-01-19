@@ -1,9 +1,12 @@
 package com.keplersegg.myself.activities
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.app.ActivityCompat
 
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -13,6 +16,7 @@ import androidx.core.view.GravityCompat
 import com.google.android.material.snackbar.Snackbar
 import com.keplersegg.myself.MySelfApplication
 import com.keplersegg.myself.fragments.*
+import com.keplersegg.myself.helper.AutoTaskType
 import com.keplersegg.myself.interfaces.ISyncTasksHost
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.doAsync
@@ -24,8 +28,9 @@ class MainActivity : AuthActivity(), ISyncTasksHost {
         return app
     }
 
-    override fun onSyncTasksSuccess() {
+    override fun onSyncTasksSuccess(missingPermissions: List<AutoTaskType>) {
 
+        requestPermissions(missingPermissions)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -166,6 +171,59 @@ class MainActivity : AuthActivity(), ISyncTasksHost {
                         dialog.level = badge.Level
 
                         dialog.show(supportFragmentManager, "")
+                    }
+                }
+            }
+        }
+    }
+
+    private fun NavigateToCallDuration() {
+        NavigateFragment(true, AddTaskFragment.newInstance(AutoTaskType.CallDuration, null))
+    }
+
+    private fun NavigateToAppUsage() {
+        NavigateFragment(true, AppUsageFragment.newInstance())
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+
+        if (grantResults.isNotEmpty()) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                when (requestCode) {
+                    1 -> {
+                        NavigateToCallDuration()
+                    }
+                    2 -> {
+                        NavigateToAppUsage()
+                    }
+                    else -> {
+
+                    }
+                }
+            } else if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
+
+                when (requestCode) {
+                    1 -> {
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CALL_LOG)) {
+                            showErrorMessage(getString(R.string.permission_error_phoneCalls))
+                        }
+                        else {
+                            //Never ask again selected, or device policy prohibits the app from having that permission.
+                            //TODO: improvement : completely disabling the feature.
+                        }
+                    }
+                    2 -> {
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.PACKAGE_USAGE_STATS)) {
+                            showErrorMessage(getString(R.string.permission_error_apps))
+                        }
+                        else {
+                            //Never ask again selected, or device policy prohibits the app from having that permission.
+                            //TODO: improvement : completely disabling the feature.
+                        }
+                    }
+                    else -> {
+
                     }
                 }
             }

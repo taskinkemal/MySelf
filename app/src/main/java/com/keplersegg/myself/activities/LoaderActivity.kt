@@ -12,7 +12,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.keplersegg.myself.async.GetFacebookUser
 import com.keplersegg.myself.interfaces.ILoginHost
 import com.keplersegg.myself.interfaces.IRefreshTokenHost
-import com.keplersegg.myself.interfaces.ISetUser
+import com.keplersegg.myself.interfaces.ISetFacebookUser
 import com.keplersegg.myself.async.LoginTask
 import com.keplersegg.myself.async.RefreshTokenTask
 import com.keplersegg.myself.helper.TokenType
@@ -26,11 +26,12 @@ import android.app.job.JobInfo
 import android.content.ComponentName
 import com.keplersegg.myself.MySelfApplication
 import com.keplersegg.myself.async.SyncTasks
+import com.keplersegg.myself.helper.AutoTaskType
 import com.keplersegg.myself.helper.AutoTasksManager
 import com.keplersegg.myself.interfaces.ISyncTasksHost
 
 
-class LoaderActivity : MasterActivity(), ISetUser, ILoginHost, IRefreshTokenHost, ISyncTasksHost {
+class LoaderActivity : MasterActivity(), ISetFacebookUser, ILoginHost, IRefreshTokenHost, ISyncTasksHost {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -85,7 +86,6 @@ class LoaderActivity : MasterActivity(), ISetUser, ILoginHost, IRefreshTokenHost
         if (isLoggedIn) {
 
             GetFacebookUser().Run(this, accessToken)
-            setToken(TokenType.Facebook, accessToken.token)
             return true
         }
 
@@ -136,7 +136,17 @@ class LoaderActivity : MasterActivity(), ISetUser, ILoginHost, IRefreshTokenHost
         prgBarLoader.startAnimation(anim)
     }
 
-    override fun setUser(user: User?, tokenType: TokenType) {
+    override fun onSetFacebookUser(user: User?, token: String?) {
+
+        if (user != null) {
+
+            setToken(TokenType.Facebook, token)
+        }
+
+        setUser(user, TokenType.Facebook)
+    }
+
+    private fun setUser(user: User?, tokenType: TokenType) {
 
         app.user = user
 
@@ -200,8 +210,9 @@ class LoaderActivity : MasterActivity(), ISetUser, ILoginHost, IRefreshTokenHost
         jobScheduler.schedule(jobInfo)
     }
 
-    override fun onSyncTasksSuccess() {
+    override fun onSyncTasksSuccess(missingPermissions: List<AutoTaskType>) {
 
+        requestPermissions(missingPermissions)
         goToMain()
     }
 

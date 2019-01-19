@@ -3,9 +3,7 @@ package com.keplersegg.myself.fragments
 import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import com.crashlytics.android.Crashlytics
 
@@ -44,11 +42,6 @@ abstract class MasterFragment : Fragment(), IErrorMessage {
     fun SetTitle(id: Int) {
 
         activity.setTitle(id)
-    }
-
-    fun SetTitle(title: String) {
-
-        activity.title = title
     }
 
     fun getConnectivityManager(): ConnectivityManager {

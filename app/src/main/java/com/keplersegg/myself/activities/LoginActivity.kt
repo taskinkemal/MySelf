@@ -15,7 +15,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.keplersegg.myself.MySelfApplication
 import com.keplersegg.myself.async.GetFacebookUser
 import com.keplersegg.myself.interfaces.ILoginHost
-import com.keplersegg.myself.interfaces.ISetUser
+import com.keplersegg.myself.interfaces.ISetFacebookUser
 import com.keplersegg.myself.interfaces.ISyncTasksHost
 import com.keplersegg.myself.async.LoginTask
 import com.keplersegg.myself.async.SyncTasks
@@ -23,14 +23,14 @@ import com.keplersegg.myself.helper.AutoTasksManager
 import com.keplersegg.myself.helper.TokenType
 import com.keplersegg.myself.models.User
 import com.keplersegg.myself.R
+import com.keplersegg.myself.helper.AutoTaskType
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
 
 import java.util.Arrays
 
 
-class LoginActivity : AuthActivity(), ISetUser, ILoginHost, ISyncTasksHost {
+class LoginActivity : AuthActivity(), ISetFacebookUser, ILoginHost, ISyncTasksHost {
 
     override fun GetApplication(): MySelfApplication {
         return app
@@ -58,15 +58,15 @@ class LoginActivity : AuthActivity(), ISetUser, ILoginHost, ISyncTasksHost {
                 // here write code When Login successfully
 
                 GetFacebookUser().Run(this@LoginActivity, loginResult.accessToken)
-                setToken(TokenType.Facebook, loginResult.accessToken.token)
             }
 
             override fun onCancel() {
-
+                toggleProgressBar(lytProgressBar, false)
             }
 
             override fun onError(e: FacebookException) {
-                // here write code when get error
+                logException(e, "Facebook login error")
+                toggleProgressBar(lytProgressBar, false)
             }
         })
 
@@ -81,10 +81,12 @@ class LoginActivity : AuthActivity(), ISetUser, ILoginHost, ISyncTasksHost {
         }
 
         btnLoginFacebook.setOnClickListener {
+            toggleProgressBar(lytProgressBar, true)
             fbLoginManager!!.logInWithReadPermissions(this@LoginActivity, Arrays.asList("email", "public_profile", "user_birthday"))
         }
 
         btnLoginGoogle.setOnClickListener {
+            toggleProgressBar(lytProgressBar, true)
             val signInIntent = mGoogleSigninClient!!.signInIntent
             startActivityForResult(signInIntent, RC_SIGN_IN)
         }
@@ -96,7 +98,7 @@ class LoginActivity : AuthActivity(), ISetUser, ILoginHost, ISyncTasksHost {
 
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             handleGoogleSignInResult(task.result!!)
-            setUser(app.user!!, TokenType.Google)
+            setUser(app.user, TokenType.Google)
 
         } else {
             super.onActivityResult(requestCode, resultCode, data)
@@ -104,7 +106,17 @@ class LoginActivity : AuthActivity(), ISetUser, ILoginHost, ISyncTasksHost {
         }
     }
 
-    override fun setUser(user: User?, tokenType: TokenType) {
+    override fun onSetFacebookUser(user: User?, token: String?) {
+
+        if (user != null) {
+
+            setToken(TokenType.Facebook, token)
+        }
+
+        setUser(user, TokenType.Facebook)
+    }
+
+    private fun setUser(user: User?, tokenType: TokenType) {
 
         app.user = user
 
@@ -123,7 +135,15 @@ class LoginActivity : AuthActivity(), ISetUser, ILoginHost, ISyncTasksHost {
         } else {
 
             app.dataStore.setAccessToken(null)
-            showErrorMessage("Cannot authenticate via Facebook")
+
+            toggleProgressBar(lytProgressBar, false)
+
+            if (tokenType == TokenType.Facebook)
+                showErrorMessage("Cannot authenticate via Facebook")
+            else if (tokenType == TokenType.Google)
+                showErrorMessage("Cannot authenticate via Google")
+            else
+                showErrorMessage("Cannot authenticate user")
         }
     }
 
@@ -135,20 +155,18 @@ class LoginActivity : AuthActivity(), ISetUser, ILoginHost, ISyncTasksHost {
     override fun onLoginError(message: String) {
 
         app.user = null
+        toggleProgressBar(lytProgressBar, false)
         showErrorMessage(message)
     }
 
     override fun setAccessToken(token: String) {
 
         setToken(TokenType.MySelf, token)
-        SyncTasks(this).execute()
     }
 
-    override fun onSyncTasksSuccess() {
-        goToMain()
-    }
+    override fun onSyncTasksSuccess(missingPermissions: List<AutoTaskType>) {
 
-    private fun goToMain() {
+        requestPermissions(missingPermissions)
         AutoTasksManager().Run(applicationContext, Runnable { })
         NavigateToActivity("Main", true)
     }

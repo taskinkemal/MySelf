@@ -5,8 +5,7 @@ import android.os.Bundle;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.keplersegg.myself.helper.TokenType;
-import com.keplersegg.myself.interfaces.ISetUser;
+import com.keplersegg.myself.interfaces.ISetFacebookUser;
 import com.keplersegg.myself.models.User;
 
 import org.json.JSONException;
@@ -15,7 +14,7 @@ import org.json.JSONObject;
 
 public class GetFacebookUser {
 
-    public void Run(final ISetUser activity, final AccessToken accessToken) {
+    public void Run(final ISetFacebookUser activity, final AccessToken accessToken) {
 
         GraphRequest request = GraphRequest.newMeRequest(
                 accessToken,
@@ -24,31 +23,29 @@ public class GetFacebookUser {
                     public void onCompleted(JSONObject object,
                                             GraphResponse response) {
 
+                        User user = null;
+                        String tokenString = null;
+
                         try {
 
                             if (object != null && object.has("email")) {
 
-                                activity.setToken(TokenType.Facebook, accessToken.getToken());
+                                tokenString = accessToken.getToken();
 
-                                User user = new User();
+                                user = new User();
                                 user.setEmail(object.getString("email"));
                                 user.setFirstName(object.getString("first_name"));
                                 user.setLastName(object.getString("last_name"));
                                 user.setFacebookToken(accessToken);
                                 user.setPictureUrl(object.getJSONObject("picture").getJSONObject("data").getString("url"));
-
-                                activity.setUser(user, TokenType.Facebook);
-                            }
-                            else {
-
-                                activity.setUser(null, TokenType.Facebook);
                             }
 
                         } catch (JSONException e) {
 
                             activity.logException(e, "GetFacebookUser.Run");
-                            activity.setUser(null, TokenType.Facebook);
                         }
+
+                        activity.onSetFacebookUser(user, tokenString);
                     }
                 });
         Bundle parameters = new Bundle();

@@ -53,4 +53,10 @@ object Utils {
         calZero.set(2018, Calendar.JANUARY, 1)
         return calZero
     }
+
+    fun toInt(value: String?): Int? {
+
+        if (value == null) return null
+        return value.toIntOrNull()
+    }
 }

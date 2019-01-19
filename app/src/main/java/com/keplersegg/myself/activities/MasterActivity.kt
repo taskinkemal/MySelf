@@ -1,11 +1,14 @@
 package com.keplersegg.myself.activities
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.os.Bundle
+import android.view.View
 import android.view.WindowManager
+import android.widget.RelativeLayout
 import android.widget.Toast
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -23,6 +26,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.crashlytics.android.Crashlytics
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.keplersegg.myself.helper.AutoTaskType
+import com.keplersegg.myself.helper.PermissionsHelper
 
 
 @SuppressLint("Registered")
@@ -207,6 +212,31 @@ open class MasterActivity : AppCompatActivity(), IHttpProvider, IErrorMessage {
         return this
     }
 
+    fun requestPermissions(missingPermissions: List<AutoTaskType>) {
+
+        for (taskType in missingPermissions) {
+
+            when (taskType) {
+                AutoTaskType.CallDuration -> {
+                    PermissionsHelper.CheckPermission(this, Manifest.permission.READ_CALL_LOG, 1, Runnable { })
+                }
+                AutoTaskType.AppUsage -> {
+
+                    PermissionsHelper.CheckActionUsageSettingsPermission(this)
+
+                    //if (PermissionsHelper.CheckActionUsageSettingsPermission(this)) {
+                    //    return
+                    //}
+
+                    //PermissionsHelper.CheckPermission(this, Manifest.permission.PACKAGE_USAGE_STATS, 2, Runnable { })
+                }
+                AutoTaskType.WentTo -> {
+
+                }
+            }
+        }
+    }
+
     fun logAnalyticsEvent(eventType: String, params: HashMap<String, String>?) {
 
         val bundle = Bundle()
@@ -222,5 +252,17 @@ open class MasterActivity : AppCompatActivity(), IHttpProvider, IErrorMessage {
     fun logAnalyticsPageVisit() {
 
         firebaseAnalytics.setCurrentScreen(this, javaClass.simpleName, javaClass.simpleName)
+    }
+
+    fun toggleProgressBar(lytProgressBar: RelativeLayout, isVisible: Boolean) {
+
+        if (isVisible) {
+
+            lytProgressBar.visibility = View.VISIBLE
+        }
+        else {
+
+            lytProgressBar.visibility = View.GONE
+        }
     }
 }

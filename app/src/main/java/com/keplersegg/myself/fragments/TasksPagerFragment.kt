@@ -28,11 +28,6 @@ class TasksPagerFragment : MasterFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        if (rootView != null)
-        {
-            return rootView
-        }
-
         rootView = super.onCreateView(inflater, container, savedInstanceState)
 
         viewPager = rootView!!.findViewById(R.id.viewPager)
@@ -43,6 +38,14 @@ class TasksPagerFragment : MasterFragment() {
         viewPager!!.adapter = adapter
         viewPager!!.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
         createAdapter()
+
+        if (!activity.app.dataStore.getTutorialDone()) {
+
+            val tutorial = DialogAppTutorial()
+            tutorial.activity = activity
+            tutorial.show(fragmentManager, "tutorial")
+        }
+
         return rootView
     }
 

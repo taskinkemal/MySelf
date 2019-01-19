@@ -27,8 +27,14 @@ open class AutoTasksManager {
                 when (AutoTaskType.valueOf(task.AutomationType!!)) {
 
                     AutoTaskType.CallDuration -> { getCallDurations(context, task.Id) }
-                    AutoTaskType.AppUsage -> { getAppUsage(context, task.Id, task.AutomationVar!!.toInt()) }
-                    AutoTaskType.WentTo -> { if (task.AutomationVar!!.toInt() == networkId) updateEntry(context, task.Id, Utils.getToday(), 1) }
+                    AutoTaskType.AppUsage -> { getAppUsage(context, task.Id, Utils.toInt(task.AutomationVar)) }
+                    AutoTaskType.WentTo -> {
+
+                        if (networkId != null && Utils.toInt(task.AutomationVar) == networkId) {
+
+                            updateEntry(context, task.Id, Utils.getToday(), 1)
+                        }
+                    }
                 }
             }
 
@@ -36,7 +42,12 @@ open class AutoTasksManager {
         }
     }
 
-    private fun getAppUsage(context: Context, taskId: Int, id: Int) {
+    private fun getAppUsage(context: Context, taskId: Int, id: Int?) {
+
+        if (id == null)
+        {
+            return
+        }
 
         for (i: Int in -5 .. 0) {
 

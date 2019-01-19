@@ -1,17 +1,21 @@
 package com.keplersegg.myself.async
 
+import android.Manifest
 import android.os.AsyncTask
 import com.keplersegg.myself.helper.ServiceMethods
 import com.keplersegg.myself.interfaces.ISyncTasksHost
 
 import com.keplersegg.myself.Room.Entity.Task
+import com.keplersegg.myself.helper.AutoTaskType
+import com.keplersegg.myself.helper.PermissionsHelper
 import com.keplersegg.myself.models.UploadEntryResponse
 
 
-open class SyncTasks(private var activity: ISyncTasksHost) : AsyncTask<Void, Void, Boolean>() {
+open class SyncTasks(private var activity: ISyncTasksHost) : AsyncTask<Void, Void, List<AutoTaskType>>() {
 
-    override fun doInBackground(vararg params: Void?): Boolean {
+    override fun doInBackground(vararg params: Void?): List<AutoTaskType> {
 
+        val missingPermissions = ArrayList<AutoTaskType>()
         val list = ServiceMethods.getTasksFromService(activity)
 
         if (list != null) {
@@ -21,6 +25,8 @@ open class SyncTasks(private var activity: ISyncTasksHost) : AsyncTask<Void, Voi
             for (i in 0 until list.size) {
 
                 upsertTask(list[i])
+
+                if (isPermissionMissing(list[i].AutomationType)) missingPermissions.add(AutoTaskType.valueOf(list[i].AutomationType!!)!!)
             }
 
             val listLocal = activity.AppDB().taskDao().all
@@ -45,6 +51,8 @@ open class SyncTasks(private var activity: ISyncTasksHost) : AsyncTask<Void, Voi
                         // shouldn't come here
                         ServiceMethods.uploadTask(activity, listLocal[i])
                     }
+
+                    if (isPermissionMissing(listLocal[i].AutomationType)) missingPermissions.add(AutoTaskType.valueOf(listLocal[i].AutomationType!!)!!)
                 }
             }
 
@@ -109,12 +117,35 @@ open class SyncTasks(private var activity: ISyncTasksHost) : AsyncTask<Void, Voi
             }
         }
 
-        return true
+        return missingPermissions.distinct()
     }
 
-    override fun onPostExecute(result: Boolean) {
+    private fun isPermissionMissing(autoTaskType: Int?) : Boolean {
 
-        activity.onSyncTasksSuccess()
+        if (autoTaskType == null || autoTaskType < 1 || autoTaskType > 3) return false
+
+        var result = false
+
+        when (AutoTaskType.valueOf(autoTaskType)!!) {
+
+            AutoTaskType.CallDuration -> {
+
+                result = PermissionsHelper.shouldRequestForPermission(activity.GetMasterActivity(), Manifest.permission.READ_CALL_LOG)
+            }
+            AutoTaskType.AppUsage -> {
+
+                result = PermissionsHelper.checkForUsageSettingsPermission(activity.GetMasterActivity())
+                         // || PermissionsHelper.shouldRequestForPermission(activity.GetMasterActivity(), Manifest.permission.PACKAGE_USAGE_STATS)
+            }
+            AutoTaskType.WentTo -> { }
+        }
+
+        return result
+    }
+
+    override fun onPostExecute(result: List<AutoTaskType>) {
+
+        activity.onSyncTasksSuccess(result)
     }
 
     private fun upsertTask(task: Task) {

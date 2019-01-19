@@ -58,7 +58,7 @@ class WentToFragment : ListFragment() {
 
             val configs = getConfigList(context)
 
-            val wifiConfig = configs?.firstOrNull { p -> p.networkId == id.toInt() }
+            val wifiConfig = configs?.firstOrNull { p -> p.networkId == id.toIntOrNull() }
 
             if (wifiConfig != null)
                 return toListItem(wifiConfig)

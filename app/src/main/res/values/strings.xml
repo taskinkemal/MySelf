@@ -130,4 +130,6 @@
 
     <string name="permission_required_apps">MySelf requires your permission to access application usage data.</string>
     <string name="permission_error_apps">Please give permission to access application usage data.</string>
+    <string name="permission_required_phoneCalls">MySelf requires your permission to access phone call durations.</string>
+    <string name="permission_error_phoneCalls">Please give permission to access phone call durations.</string>
 </resources>
