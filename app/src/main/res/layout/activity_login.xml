@@ -5,17 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.LoginActivity">
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:contentDescription="@string/imgContentDescription"
-        android:scaleType="centerCrop"
-        tools:src="@drawable/login_background"
-        android:id="@+id/imgLoginBackground"
-        android:tint="@color/colorPrimaryTransparent"
-        android:tintMode="screen" />
+    tools:context=".activities.LoginActivity"
+    android:background="@drawable/app_background">
 
     <RelativeLayout
         android:layout_width="match_parent"

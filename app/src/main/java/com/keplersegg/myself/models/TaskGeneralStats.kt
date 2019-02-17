@@ -17,15 +17,15 @@ class TaskGeneralStats {
             }
             else if (automationType == 1) {
 
-                return R.drawable.ic_baseline_auto_phone_24px
+                return R.drawable.ic_phone
             }
             else if (automationType == 2) {
 
-                return R.drawable.ic_baseline_auto_app_24px
+                return R.drawable.ic_mobile_phone
             }
             else {
 
-                return R.drawable.ic_baseline_auto_wifi_24px
+                return R.drawable.ic_wifi
             }
         }
     }

@@ -49,7 +49,7 @@ public class GetFacebookUser {
                     }
                 });
         Bundle parameters = new Bundle();
-        parameters.putString("fields", "id,name,first_name,last_name,email,gender,birthday,picture");
+        parameters.putString("fields", "id,name,first_name,last_name,email,gender,birthday,picture.height(961)");
         request.setParameters(parameters);
         request.executeAsync();
     }

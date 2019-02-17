@@ -8,7 +8,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.keplersegg.myself.R
 import com.keplersegg.myself.activities.MainActivity
+import com.keplersegg.myself.fragments.AppUsageFragment
 import com.keplersegg.myself.fragments.StatsTaskFragment
+import com.keplersegg.myself.helper.AutoTaskType
 import com.keplersegg.myself.models.TaskGeneralStats
 import java.util.*
 
@@ -50,7 +52,11 @@ class StatsMainAdapter(private val activity: MainActivity) : RecyclerView.Adapte
         } else {
 
             holder.imgAutomationType.visibility = View.VISIBLE
-            holder.imgAutomationType.setImageResource(imgResourceId)
+            if (item.task!!.AutomationType == AutoTaskType.AppUsage.typeId) {
+                holder.imgAutomationType.setImageDrawable(AppUsageFragment.getApplicationIcon(activity, item.task!!.AutomationVar!!))
+            } else {
+                holder.imgAutomationType.setImageResource(imgResourceId)
+            }
         }
 
         holder.itemView.setOnClickListener {

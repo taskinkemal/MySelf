@@ -43,25 +43,25 @@ class AppTutorialAdapter : PagerAdapter() {
         when (position) {
             0 -> {
 
-                imgTutorial.setImageResource(R.drawable.ic_badge1_1)
+                imgTutorial.setImageResource(R.drawable.ic_logo)
                 lblTutorialHeader.setText(R.string.tutorial_1)
                 lblTutorial.setText(R.string.tutorial_1_desc)
             }
             1 -> {
 
-                imgTutorial.setImageResource(R.drawable.ic_badge1_2)
+                imgTutorial.setImageResource(R.drawable.ic_startup)
                 lblTutorialHeader.setText(R.string.tutorial_2)
                 lblTutorial.setText(R.string.tutorial_2_desc)
             }
             2 -> {
 
-                imgTutorial.setImageResource(R.drawable.ic_badge1_1)
+                imgTutorial.setImageResource(R.drawable.ic_target)
                 lblTutorialHeader.setText(R.string.tutorial_3)
                 lblTutorial.setText(R.string.tutorial_3_desc)
             }
             3 -> {
 
-                imgTutorial.setImageResource(R.drawable.ic_badge1_3)
+                imgTutorial.setImageResource(R.drawable.ic_laptop)
                 lblTutorialHeader.setText(R.string.tutorial_4)
                 lblTutorial.setText(R.string.tutorial_4_desc)
             }

@@ -9,8 +9,10 @@ import com.keplersegg.myself.R
 import com.keplersegg.myself.models.ListItem
 import kotlinx.android.synthetic.main.fragment_app_usage.*
 import android.content.pm.PackageManager
+import android.graphics.drawable.Drawable
 import androidx.recyclerview.widget.RecyclerView
 import com.keplersegg.myself.helper.AutoTaskType
+import org.jetbrains.anko.doAsync
 
 class AppUsageFragment : ListFragment() {
 
@@ -78,6 +80,24 @@ class AppUsageFragment : ListFragment() {
             item.Label = pm.getApplicationLabel(appInfo).toString().trim()
 
             return item
+        }
+
+        private var appIcon : Drawable? = null
+
+        fun getApplicationIcon(context: Context, id: String) : Drawable? {
+
+            if (appIcon != null) return appIcon
+            doAsync {
+                val pm = context.getPackageManager()
+                val packages = pm.getInstalledApplications(PackageManager.GET_META_DATA)
+                val appInfo = packages.firstOrNull { p -> p.packageName.hashCode().toString() == id }
+
+                if (appInfo != null) {
+                    appIcon = pm.getApplicationIcon(appInfo)
+                }
+            }
+
+            return appIcon
         }
     }
 }

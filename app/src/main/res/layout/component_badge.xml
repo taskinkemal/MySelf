@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     app:cardCornerRadius="4dp"
     app:cardElevation="4dp"
-    app:cardBackgroundColor="@color/colorControlBackground">
+    app:cardBackgroundColor="#f1f1f1">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            tools:src="@drawable/ic_badge1_1"
+            tools:src="@drawable/ic_startup"
             android:id="@+id/imgBadge"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"

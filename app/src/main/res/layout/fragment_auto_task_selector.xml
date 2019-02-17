@@ -4,7 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.AutoTaskSelectorFragment"
-    android:background="@color/colorBackground"
+    android:background="@drawable/app_background"
+    android:backgroundTint="@color/colorPrimaryLight"
+    android:backgroundTintMode="screen"
     android:orientation="vertical">
 
     <LinearLayout
@@ -12,12 +14,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="16dp"
+        android:background="@android:color/white"
         android:id="@+id/lytCallDuration">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_auto_phone_24px"
+            android:src="@drawable/ic_phone"
             android:layout_gravity="center_vertical"
             android:contentDescription="@string/imgContentDescription"
             android:layout_marginStart="0dp"
@@ -52,12 +55,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="16dp"
+        android:background="@android:color/white"
         android:id="@+id/lytAppUsage">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_auto_app_24px"
+            android:src="@drawable/ic_mobile_phone"
             android:layout_gravity="center_vertical"
             android:contentDescription="@string/imgContentDescription"
             android:layout_marginStart="0dp"
@@ -93,12 +97,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="16dp"
+        android:background="@android:color/white"
         android:id="@+id/lytWentTo">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_auto_wifi_24px"
+            android:src="@drawable/ic_wifi"
             android:layout_gravity="center_vertical"
             android:contentDescription="@string/imgContentDescription"
             android:layout_marginStart="0dp"

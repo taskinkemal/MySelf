@@ -19,6 +19,7 @@ import com.keplersegg.myself.R
 import com.keplersegg.myself.Room.Entity.Entry
 import com.keplersegg.myself.Room.Entity.TaskEntry
 import com.keplersegg.myself.async.SyncTasks
+import com.keplersegg.myself.fragments.AppUsageFragment
 import com.keplersegg.myself.models.TaskGeneralStats
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -167,7 +168,11 @@ class TasksAdapter(private val activity: MainActivity, private val day: Int) : R
         } else {
 
             holder.imgTaskType!!.visibility = View.VISIBLE
-            holder.imgTaskType.setImageResource(getTaskTypeImageResource(item.task!!.AutomationType!!))
+            if (item.task!!.AutomationType == AutoTaskType.AppUsage.typeId) {
+                holder.imgTaskType.setImageDrawable(AppUsageFragment.getApplicationIcon(activity, item.task!!.AutomationVar!!))
+            } else {
+                holder.imgTaskType.setImageResource(getTaskTypeImageResource(item.task!!.AutomationType!!))
+            }
         }
     }
 

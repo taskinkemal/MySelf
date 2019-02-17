@@ -4,8 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Window
 
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
@@ -45,11 +43,6 @@ class LoginActivity : AuthActivity(), ISetFacebookUser, ILoginHost, ISyncTasksHo
         this.requestWindowFeature(Window.FEATURE_NO_TITLE)
 
         setContentView(R.layout.activity_login)
-
-        Glide.with(this)
-                .load(R.drawable.login_background)
-                .apply(RequestOptions.centerCropTransform())
-                .into(imgLoginBackground)
 
         fbLoginManager = com.facebook.login.LoginManager.getInstance()
         fbCallbackManager = CallbackManager.Factory.create()

@@ -53,12 +53,12 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/colorNavBackground"
-        app:itemBackground="@color/colorNavBackground"
-        app:itemTextColor="#333"
-        app:itemIconTint="#333"
+        android:background="@drawable/app_background"
+        app:itemTextColor="@android:color/white"
+        app:itemIconTint="@android:color/white"
         app:theme="@style/AppTheme.ActionBar"
         app:headerLayout="@layout/nav_header_main"
+        android:theme="@style/NavigationView"
         app:menu="@menu/menu_navigation" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

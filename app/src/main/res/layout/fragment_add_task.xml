@@ -5,7 +5,9 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.AddTaskFragment"
-    android:background="@color/colorBackground"
+    android:background="@drawable/app_background"
+    android:backgroundTint="@color/colorPrimaryLight"
+    android:backgroundTintMode="screen"
     android:orientation="vertical">
 
     <TextView

@@ -4,7 +4,7 @@ package com.keplersegg.myself.fragments
 import android.os.Bundle
 import android.view.*
 import androidx.viewpager.widget.ViewPager
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.getbase.floatingactionbutton.FloatingActionButton
 
 import com.keplersegg.myself.R
 import com.keplersegg.myself.adapters.TaskPagerAdapter
@@ -13,17 +13,17 @@ import java.util.*
 import com.google.android.material.tabs.TabLayout
 
 
+
 class TasksPagerFragment : MasterFragment() {
 
     private var viewPager: ViewPager? = null
     private var tabLayout: TabLayout? = null
     private var fabAdd: FloatingActionButton? = null
+    private var fabAddAuto: FloatingActionButton? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.layout = R.layout.fragment_tasks_pager
-
-        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -33,6 +33,7 @@ class TasksPagerFragment : MasterFragment() {
         viewPager = rootView!!.findViewById(R.id.viewPager)
         tabLayout = rootView!!.findViewById(R.id.tabLayout)
         fabAdd = rootView!!.findViewById(R.id.fabAdd)
+        fabAddAuto = rootView!!.findViewById(R.id.fabAddAuto)
 
         val adapter = TaskPagerAdapter(childFragmentManager) // activity!!.supportFragmentManager)
         viewPager!!.adapter = adapter
@@ -43,7 +44,7 @@ class TasksPagerFragment : MasterFragment() {
 
             val tutorial = DialogAppTutorial()
             tutorial.activity = activity
-            tutorial.show(fragmentManager, "tutorial")
+            tutorial.show(fragmentManager!!, "tutorial")
         }
 
         return rootView
@@ -56,7 +57,6 @@ class TasksPagerFragment : MasterFragment() {
     }
 
     private fun createAdapter() {
-
 
         for (i: Int in 0 .. TaskPagerAdapter.NumOfTabs - 3) {
 
@@ -84,6 +84,7 @@ class TasksPagerFragment : MasterFragment() {
         })
 
         fabAdd!!.setOnClickListener { activity.NavigateFragment(true, AddTaskFragment.newInstance(0)) }
+        fabAddAuto!!.setOnClickListener { activity.NavigateFragment(true, AutoTaskSelectorFragment.newInstance()) }
     }
 
     private fun dateToString(days: Int): String {
@@ -97,20 +98,6 @@ class TasksPagerFragment : MasterFragment() {
         super.onResume()
         SetTitle(R.string.lbl_tasks)
         viewPager!!.currentItem = TaskPagerAdapter.NumOfTabs - 1
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-
-        inflater.inflate(R.menu.menu_tasks, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_AddTask -> activity.NavigateFragment(true, AddTaskFragment.newInstance(0))
-        }
-        return true
-
     }
 
     companion object {

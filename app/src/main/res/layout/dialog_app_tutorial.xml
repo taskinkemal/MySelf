@@ -18,9 +18,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SKIP"
+            android:text="@string/lbl_skip"
             android:id="@+id/lblSkip"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textColor="@android:color/white"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
@@ -36,9 +36,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="DONE"
+        android:text="@string/lbl_done"
         android:id="@+id/lblDone"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textColor="@android:color/white"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"

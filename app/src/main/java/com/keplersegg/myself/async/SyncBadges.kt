@@ -8,22 +8,25 @@ open class SyncBadges(private var activity: ISyncHost) {
 
     fun upsertBadge(score: Int, badges: ArrayList<UserBadge>) {
 
-        activity.GetApplication().user!!.Score = score
+        if (activity.GetApplication().user != null) {
 
-        for (i in 0 until badges.size) {
+            activity.GetApplication().user!!.Score = score
 
-            doAsync {
-                val existingBadge = activity.AppDB().userBadgeDao()[badges[i].BadgeId]
+            for (i in 0 until badges.size) {
 
-                val pushNewBadge = existingBadge != null && existingBadge.Level < badges[i].Level
+                doAsync {
+                    val existingBadge = activity.AppDB().userBadgeDao()[badges[i].BadgeId]
 
-                val rowsAffected = activity.AppDB().userBadgeDao().update(badges[i])
+                    val pushNewBadge = existingBadge != null && existingBadge.Level < badges[i].Level
 
-                if (rowsAffected == 0) {
-                    activity.AppDB().userBadgeDao().insert(badges[i])
-                    activity.GetApplication().dataStore.pushNewBadge(badges[i].BadgeId)
-                } else if (pushNewBadge) {
-                    activity.GetApplication().dataStore.pushNewBadge(badges[i].BadgeId)
+                    val rowsAffected = activity.AppDB().userBadgeDao().update(badges[i])
+
+                    if (rowsAffected == 0) {
+                        activity.AppDB().userBadgeDao().insert(badges[i])
+                        activity.GetApplication().dataStore.pushNewBadge(badges[i].BadgeId)
+                    } else if (pushNewBadge) {
+                        activity.GetApplication().dataStore.pushNewBadge(badges[i].BadgeId)
+                    }
                 }
             }
         }

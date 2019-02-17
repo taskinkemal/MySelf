@@ -62,18 +62,11 @@ object ServiceMethods {
 
     fun getTasksFromService(provider: IHttpProvider): List<Task>? {
 
-        val result = HttpClient.send(provider, "tasks", "get", null)
+        val result = HttpClient.send(Array<Task>::class, provider, "tasks", "get", null)
 
-        val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create()
+        if (result.hasError()) return null
 
-        if (result == null || !result.has("Items")) {
-
-            return null
-        }
-
-        val arrTasks = gson.fromJson<Array<Task>>(result.getJSONArray("Items").toString(), Array<Task>::class.java)
-
-        return arrTasks.toList()
+        return result.value!!.toList()
     }
 
     fun getEntriesFromService(provider: IHttpProvider): List<Entry>? {
@@ -81,32 +74,16 @@ object ServiceMethods {
         val end = Utils.getToday()
         val start = end - 5
 
-        val result = HttpClient.send(provider, "entries?start=" + start + "&end=" + end, "get", null)
+        val result = HttpClient.send(Array<Entry>::class, provider, "entries?start=" + start + "&end=" + end, "get", null)
 
-        val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create()
+        if (result.hasError()) return null
 
-        if (result == null || !result.has("Items")) {
-
-            return null
-        }
-
-        val arrEntries = gson.fromJson<Array<Entry>>(result.getJSONArray("Items").toString(), Array<Entry>::class.java)
-
-        return arrEntries.toList()
+        return result.value!!.toList()
     }
 
     fun getUser(provider: IHttpProvider): User? {
 
-        val result = HttpClient.send(provider, "users", "get", null)
-
-        val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create()
-
-        if (result == null) {
-
-            return null
-        }
-
-        return gson.fromJson(result.toString(), User::class.java)
+        return HttpClient.send(User::class, provider, "users", "get", null).value
     }
 
     fun deleteGoal(provider: IHttpProvider, goalId: Int) {
@@ -140,17 +117,10 @@ object ServiceMethods {
 
     fun getGoalsFromService(provider: IHttpProvider): List<Goal>? {
 
-        val result = HttpClient.send(provider, "goals", "get", null)
+        val result = HttpClient.send(Array<Goal>::class, provider, "goals", "get", null)
 
-        val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create()
+        if (result.hasError()) return null
 
-        if (result == null || !result.has("Items")) {
-
-            return null
-        }
-
-        val arrGoals = gson.fromJson<Array<Goal>>(result.getJSONArray("Items").toString(), Array<Goal>::class.java)
-
-        return arrGoals.toList()
+        return result.value!!.toList()
     }
 }

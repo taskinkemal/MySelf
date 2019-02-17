@@ -42,7 +42,7 @@ class LoaderActivity : MasterActivity(), ISetFacebookUser, ILoginHost, IRefreshT
         ab?.hide()
 
         Glide.with(this)
-                .load(R.drawable.login_background)
+                .load(R.drawable.app_background)
                 .apply(RequestOptions.centerCropTransform())
                 .into(imgLoginBackground)
 
@@ -221,7 +221,7 @@ class LoaderActivity : MasterActivity(), ISetFacebookUser, ILoginHost, IRefreshT
     }
 
     private fun goToMain() {
-        AutoTasksManager().Run(applicationContext, Runnable { })
+        //AutoTasksManager().Run(applicationContext, Runnable { })
         NavigateToActivity("Main", true)
     }
 }

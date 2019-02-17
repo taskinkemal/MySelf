@@ -158,9 +158,9 @@ class MainActivity : AuthActivity(), ISyncTasksHost {
 
                 val badge = AppDB().userBadgeDao().get(newBadgeId)
                 val imageResourceId =
-                        if (newBadgeId == 1) R.drawable.ic_badge1_1
-                        else if (newBadgeId == 2) R.drawable.ic_badge1_2
-                        else R.drawable.ic_badge1_3
+                        if (newBadgeId == 1) R.drawable.ic_startup
+                        else if (newBadgeId == 2) R.drawable.ic_flag
+                        else R.drawable.ic_trophy
 
                 uiThread {
 

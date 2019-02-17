@@ -1,25 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.ProfileFragment"
-    android:background="@color/colorBackground"
-    android:orientation="vertical">
+    tools:context=".fragments.ProfileFragment">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:id="@+id/imgUserPicture"
+    <ImageView
+        android:id="@+id/lytHeader"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_alignParentTop="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/app_background"
+        android:tintMode="screen"
         android:contentDescription="@string/imgContentDescription"
-        android:src="@drawable/ic_baseline_account_circle_24px"
-        android:layout_marginTop="40dp"
-        android:layout_gravity="center"
-        app:civ_border_width="4dp"
-        app:civ_border_color="@color/colorPrimary"
         />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="100dp"
+            android:id="@+id/imgUserPicture"
+            android:contentDescription="@string/imgContentDescription"
+            android:src="@drawable/ic_baseline_account_circle_24px"
+            android:layout_gravity="center"
+            app:civ_border_width="4dp"
+            app:civ_border_color="@color/colorDivider"
+            />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,56 +42,34 @@
         android:layout_gravity="center"
         android:textStyle="bold"
         android:textSize="18sp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
         />
-
-    <View
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        style="@style/Divider" />
-
-    <TextView
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/logout"
-        android:id="@+id/txtLogout"
-        android:padding="10dp"
-        />
+        android:orientation="vertical"
+        android:id="@+id/lytScore">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lbl_score"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="0dp"
+            android:layout_gravity="center_horizontal"
+            />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/login"
-        android:id="@+id/txtLogin"
-        android:padding="10dp"
-        />
+        <TextView
+            android:id="@+id/lblScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/n_zero"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            />
+    </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        style="@style/Divider" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/lbl_score"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="0dp"
-        />
-
-    <TextView
-        android:id="@+id/lblScore"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/n_zero"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="10dp"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -89,7 +81,7 @@
             android:layout_width="wrap_content"
             android:layout_height="72dp"
             app:badgeId="1"
-            app:iconSrc="@drawable/ic_badge1_1"
+            app:iconSrc="@drawable/ic_startup"
             android:id="@+id/bvBadge1"
             android:layout_marginEnd="24dp"
             />
@@ -98,7 +90,7 @@
             android:layout_width="wrap_content"
             android:layout_height="72dp"
             app:badgeId="2"
-            app:iconSrc="@drawable/ic_badge1_2"
+            app:iconSrc="@drawable/ic_flag"
             android:id="@+id/bvBadge2"
             android:layout_marginEnd="24dp"
             />
@@ -107,10 +99,37 @@
             android:layout_width="wrap_content"
             android:layout_height="72dp"
             app:badgeId="3"
-            app:iconSrc="@drawable/ic_badge1_3"
+            app:iconSrc="@drawable/ic_trophy"
             android:id="@+id/bvBadge3"
             />
 
     </LinearLayout>
+    </LinearLayout>
 
-</LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="8dp"
+        >
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/logout"
+            android:id="@+id/txtLogout"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="@android:color/white"
+            android:padding="10dp"
+            />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/login"
+            android:id="@+id/txtLogin"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="@android:color/white"
+            android:padding="10dp"
+            />
+    </RelativeLayout>
+</RelativeLayout>

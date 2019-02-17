@@ -40,6 +40,10 @@
     <string name="lbl_successful">Successful</string>
     <string name="lbl_in_progress">In progress</string>
     <string name="lbl_failed">Failed</string>
+    <string name="lbl_skip">Skip</string>
+    <string name="lbl_done">Done</string>
+    <string name="fab_addManualTask">Add manual task</string>
+    <string name="fab_addAutomatedTask">Add automated task</string>
 
     <string name="timeFrameInADay">in a day</string>
     <string name="timeFrameInAWeek">in a week</string>

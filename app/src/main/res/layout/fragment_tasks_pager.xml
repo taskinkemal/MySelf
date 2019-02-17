@@ -11,7 +11,7 @@
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryLight"
+        android:background="@color/colorPrimary"
         android:elevation="6dp"
         app:tabTextColor="@android:color/white"
         android:minHeight="?attr/actionBarSize"
@@ -25,13 +25,33 @@
         android:layout_height="fill_parent"
         android:layout_below="@id/tabLayout"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAdd"
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
         android:src="@drawable/ic_baseline_add_24px_white"
-        android:layout_margin="16dp" />
+        app:fab_addButtonColorNormal="@color/colorAccent"
+        app:fab_labelStyle="@style/fab_labels_style">
 
+    <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_add_24px_white"
+        app:fab_colorNormal="@color/colorAccent"
+        app:fab_title="@string/fab_addManualTask"
+        />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabAddAuto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_add_24px_white"
+            app:fab_colorNormal="@color/colorAccent"
+            app:fab_title="@string/fab_addAutomatedTask"
+            />
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
 </RelativeLayout>

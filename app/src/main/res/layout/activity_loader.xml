@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@color/colorPrimaryLight"
     tools:context=".activities.LoaderActivity">
 
     <ImageView
@@ -12,9 +12,8 @@
         android:layout_height="match_parent"
         android:contentDescription="@string/imgContentDescription"
         android:scaleType="centerCrop"
-        tools:src="@drawable/login_background"
+        tools:src="@drawable/app_background"
         android:id="@+id/imgLoginBackground"
-        android:tint="@color/colorPrimaryTransparent"
         android:tintMode="screen" />
 
     <RelativeLayout

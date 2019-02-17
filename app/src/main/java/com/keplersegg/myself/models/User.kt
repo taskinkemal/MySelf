@@ -5,6 +5,7 @@ import com.keplersegg.myself.Room.Entity.UserBadge
 
 class User {
 
+    var UserCode: String = "orifhgjtks" //TODO: unique user code will be generated on the server
     var FirstName: String? = null
     var LastName: String? = null
     var Email: String? = null

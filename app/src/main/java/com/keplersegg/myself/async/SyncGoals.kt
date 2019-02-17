@@ -2,7 +2,6 @@ package com.keplersegg.myself.async
 
 import android.os.AsyncTask
 import com.keplersegg.myself.Room.Entity.Goal
-import com.keplersegg.myself.Room.Entity.UserBadge
 import com.keplersegg.myself.helper.ServiceMethods
 import com.keplersegg.myself.interfaces.ISyncGoalsHost
 

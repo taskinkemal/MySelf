@@ -5,7 +5,9 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.StatsTaskFragment"
-    android:background="#f5f5f5"
+    android:background="@drawable/app_background"
+    android:backgroundTint="@color/colorPrimaryLight"
+    android:backgroundTintMode="screen"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -30,6 +32,7 @@
         android:text="@string/lbl_goals"
         android:textStyle="bold"
         android:textSize="24sp"
+        android:textColor="@android:color/white"
         />
 
     <LinearLayout

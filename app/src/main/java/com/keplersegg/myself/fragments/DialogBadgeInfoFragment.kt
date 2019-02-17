@@ -25,10 +25,10 @@ class DialogBadgeInfoFragment : DialogFragment() {
     override fun onResume() {
 
         super.onResume()
-        val params = this.dialog.window!!.attributes
+        val params = this.dialog!!.window!!.attributes
         params.width = ViewGroup.LayoutParams.MATCH_PARENT
         params.height = LinearLayout.LayoutParams.WRAP_CONTENT
-        this.dialog.window!!.attributes = params
+        this.dialog!!.window!!.attributes = params
 
         setContent()
     }
@@ -37,7 +37,7 @@ class DialogBadgeInfoFragment : DialogFragment() {
 
         imgBadge.setImageResource(imageResourceId)
 
-        val badgeLevels = BadgeLevel.GetBadgeLevels(dialog.context).filter { b -> b.BadgeId == badgeId }
+        val badgeLevels = BadgeLevel.GetBadgeLevels(dialog!!.context).filter { b -> b.BadgeId == badgeId }
 
         val currentLevel = badgeLevels.firstOrNull { b -> b.Level == level }
         val nextLevel = badgeLevels.firstOrNull { b -> b.Level == level + 1 }

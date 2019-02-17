@@ -46,4 +46,14 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="NavigationView" >
+        <item name="android:listDivider">@color/colorDivider</item>
+        <item name="android:textColorSecondary">@color/colorDivider</item>
+    </style>
+
+    <style name="fab_labels_style">
+        <item name="android:background">@drawable/fab_label_background</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
 </resources>
