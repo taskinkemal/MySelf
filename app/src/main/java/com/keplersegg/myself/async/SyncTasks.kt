@@ -130,7 +130,7 @@ open class SyncTasks(private var activity: ISyncTasksHost) : AsyncTask<Void, Voi
 
             AutoTaskType.CallDuration -> {
 
-                result = PermissionsHelper.shouldRequestForPermission(activity.GetMasterActivity(), Manifest.permission.READ_CALL_LOG)
+                result = PermissionsHelper.shouldRequestForPermission(activity.GetMasterActivity(), Manifest.permission.READ_PHONE_STATE)
             }
             AutoTaskType.AppUsage -> {
 

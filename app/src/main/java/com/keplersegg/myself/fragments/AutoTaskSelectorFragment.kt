@@ -43,7 +43,7 @@ class AutoTaskSelectorFragment : MasterFragment() {
 
             AutoTaskType.CallDuration -> {
 
-                PermissionsHelper.CheckPermission(activity, Manifest.permission.READ_CALL_LOG, 1, Runnable {
+                PermissionsHelper.CheckPermission(activity, Manifest.permission.READ_PHONE_STATE, 1, Runnable {
                     NavigateToCallDuration()
                 })
             }

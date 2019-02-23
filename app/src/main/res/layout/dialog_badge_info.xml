@@ -22,7 +22,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
         tools:text="Infantry"
         android:id="@+id/lblNameCurrentLevel"
         android:textSize="24sp"
@@ -45,9 +44,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Next Level:"
+            android:text="@string/lblBadge_nextLevel"
             android:textSize="16sp"
-            android:textColor="@android:color/white"
             />
             <TextView
                 android:layout_width="wrap_content"
@@ -58,7 +56,6 @@
                 android:paddingEnd="4dp"
                 android:textSize="16sp"
                 android:id="@+id/lblNameNextLevel"
-                android:textColor="@android:color/white"
                 />
         </LinearLayout>
         <TextView
@@ -67,7 +64,6 @@
             android:id="@+id/lblDescNextLevel"
             tools:text="level decscription"
             android:textSize="16sp"
-            android:textColor="@android:color/white"
             />
     </LinearLayout>
 

@@ -89,6 +89,7 @@
     <string name="lblBadge_newBadge">New Achievement!</string>
     <string name="lblBadge_completed">You\'ve completed this achievement!</string>
     <string name="lbl_profile">Hesap</string>
+    <string name="lblBadge_nextLevel">Next Level:</string>
 
     <string name="permission_required_apps">MySelf requires your permission to access application usage data.</string>
     <string name="permission_error_apps">Please give permission to access application usage data.</string>

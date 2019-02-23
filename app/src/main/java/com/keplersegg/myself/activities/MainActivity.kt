@@ -52,7 +52,7 @@ class MainActivity : AuthActivity(), ISyncTasksHost {
         }
     }
 
-    protected fun setupNavigationView() {
+    private fun setupNavigationView() {
 
         navigation.setNavigationItemSelectedListener { menuItem ->
 
@@ -60,7 +60,7 @@ class MainActivity : AuthActivity(), ISyncTasksHost {
 
             lytDrawerHome.closeDrawers()
 
-            NavigateFromMenu(menuItem.itemId)
+            navigateFromMenu(menuItem.itemId)
 
             true
         }
@@ -94,7 +94,7 @@ class MainActivity : AuthActivity(), ISyncTasksHost {
         showNewBadgeDialog()
     }
 
-    fun NavigateFromMenu(menuItemID: Int) {
+    private fun navigateFromMenu(menuItemID: Int) {
 
         when (menuItemID) {
 
@@ -156,11 +156,13 @@ class MainActivity : AuthActivity(), ISyncTasksHost {
 
             doAsync {
 
-                val badge = AppDB().userBadgeDao().get(newBadgeId)
+                val badge = AppDB().userBadgeDao()[newBadgeId]
                 val imageResourceId =
-                        if (newBadgeId == 1) R.drawable.ic_startup
-                        else if (newBadgeId == 2) R.drawable.ic_flag
-                        else R.drawable.ic_trophy
+                        when (newBadgeId) {
+                            1 -> R.drawable.ic_startup
+                            2 -> R.drawable.ic_flag
+                            else -> R.drawable.ic_trophy
+                        }
 
                 uiThread {
 
@@ -177,11 +179,11 @@ class MainActivity : AuthActivity(), ISyncTasksHost {
         }
     }
 
-    private fun NavigateToCallDuration() {
+    private fun navigateToCallDuration() {
         NavigateFragment(true, AddTaskFragment.newInstance(AutoTaskType.CallDuration, null))
     }
 
-    private fun NavigateToAppUsage() {
+    private fun navigateToAppUsage() {
         NavigateFragment(true, AppUsageFragment.newInstance())
     }
 
@@ -192,10 +194,10 @@ class MainActivity : AuthActivity(), ISyncTasksHost {
 
                 when (requestCode) {
                     1 -> {
-                        NavigateToCallDuration()
+                        navigateToCallDuration()
                     }
                     2 -> {
-                        NavigateToAppUsage()
+                        navigateToAppUsage()
                     }
                     else -> {
 
@@ -205,7 +207,7 @@ class MainActivity : AuthActivity(), ISyncTasksHost {
 
                 when (requestCode) {
                     1 -> {
-                        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CALL_LOG)) {
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_PHONE_STATE)) {
                             showErrorMessage(getString(R.string.permission_error_phoneCalls))
                         }
                         else {

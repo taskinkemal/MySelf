@@ -218,7 +218,7 @@ open class MasterActivity : AppCompatActivity(), IHttpProvider, IErrorMessage {
 
             when (taskType) {
                 AutoTaskType.CallDuration -> {
-                    PermissionsHelper.CheckPermission(this, Manifest.permission.READ_CALL_LOG, 1, Runnable { })
+                    PermissionsHelper.CheckPermission(this, Manifest.permission.READ_PHONE_STATE, 1, Runnable { })
                 }
                 AutoTaskType.AppUsage -> {
 

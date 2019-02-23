@@ -24,7 +24,6 @@
         android:textStyle="bold"
         android:gravity="center_horizontal"
         android:layout_below="@id/imgTutorial"
-        android:textColor="@android:color/white"
         android:paddingTop="16dp"
         />
 
@@ -34,7 +33,6 @@
         android:id="@+id/lblTutorial"
         tools:text="This is the tutorial"
         android:gravity="center_horizontal"
-        android:textColor="@android:color/white"
         android:paddingTop="16dp"
         android:layout_below="@id/lblTutorialHeader"
         />
