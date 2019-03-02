@@ -92,7 +92,7 @@ class WentToFragment : ListFragment() {
         private fun toListItem(wifiConfig: WifiConfiguration): ListItem {
 
             val item = ListItem()
-            item.ItemId = wifiConfig.networkId
+            item.ItemId = wifiConfig.SSID
             item.Label = wifiConfig.SSID.replace("\"", "").trim()
 
             return item

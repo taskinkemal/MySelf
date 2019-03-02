@@ -68,6 +68,8 @@ class TasksFragment : MasterFragment(), IGetTasksHost {
 
         this.activity.runOnUiThread {
             adapter!!.updateData(items)
+
+            activity.updateWidget(items)
         }
     }
 

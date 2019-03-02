@@ -122,7 +122,7 @@ class AddTaskFragment : MasterFragment() {
         val label = txtLabel!!.text.toString()
         val dataType = if (swcUnits!!.isChecked) 1 else 0
         val unit = if (dataType == 1) txtUnits!!.text.toString() else ""
-        val automationVar : String? = automationData?.ItemId.toString()
+        val automationVar : String? = automationData?.ItemId
 
         if (label.length > 0 &&
                 (dataType == 0 || unit.length > 0)) {

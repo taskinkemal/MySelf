@@ -7,11 +7,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import com.keplersegg.myself.helper.AutoTaskType
 import com.keplersegg.myself.helper.Utils
-import com.keplersegg.myself.Room.AppDatabase
-import com.keplersegg.myself.Room.Entity.Entry
 import com.keplersegg.myself.Room.Entity.Task
+import com.keplersegg.myself.helper.TaskUpdater
 import org.jetbrains.anko.doAsync
-import java.util.*
 
 
 class WifiReceiver : BroadcastReceiver() {
@@ -29,44 +27,22 @@ class WifiReceiver : BroadcastReceiver() {
                 // e.g. To check the Network Name or other info:
                 val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
                 val wifiInfo = wifiManager.connectionInfo
-                val networkId = wifiInfo.networkId
+                val networkId = wifiInfo.ssid
 
                 doAsync {
 
-                    val tasks = getAppDB(context)
-                            .taskDao().all.filter { t -> t.AutomationType == AutoTaskType.WentTo.typeId && t.AutomationVar == networkId.toString() }
+                    val tasks2 = TaskUpdater.GetAppDB(context)
+                            .taskDao().all.filter { t -> t.AutomationType == AutoTaskType.WentTo.typeId }
+
+                    val tasks = TaskUpdater.GetAppDB(context)
+                            .taskDao().all.filter { t -> t.AutomationType == AutoTaskType.WentTo.typeId && t.Status == 1 && t.AutomationVar == networkId }
 
                     for (task: Task in tasks) {
 
-                        updateEntry(context, task.Id, Utils.getToday())
+                        TaskUpdater.UpdateEntry(context, task.Id, Utils.getToday(), 1)
                     }
                 }
             }
         }
-    }
-
-    private fun updateEntry(context: Context, taskId: Int, day: Int) {
-
-        var entry = getAppDB(context).entryDao()[day, taskId]
-
-        if (entry == null) {
-
-            entry = Entry()
-            entry.TaskId = taskId
-            entry.Day = day
-            entry.Value = 1
-            entry.ModificationDate = Date(System.currentTimeMillis())
-            getAppDB(context).entryDao().insert(entry)
-        }
-        else {
-            entry.Value = 1
-            entry.ModificationDate = Date(System.currentTimeMillis())
-            getAppDB(context).entryDao().update(entry)
-        }
-    }
-
-    private fun getAppDB(context: Context) : AppDatabase {
-        return AppDatabase
-                .getAppDatabase(context)!!
     }
 }

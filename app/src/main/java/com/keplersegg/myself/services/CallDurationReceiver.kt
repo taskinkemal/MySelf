@@ -4,13 +4,11 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.telephony.TelephonyManager
-import com.keplersegg.myself.Room.AppDatabase
-import com.keplersegg.myself.Room.Entity.Entry
 import com.keplersegg.myself.Room.Entity.Task
 import com.keplersegg.myself.helper.AutoTaskType
+import com.keplersegg.myself.helper.TaskUpdater
 import com.keplersegg.myself.helper.Utils
 import org.jetbrains.anko.doAsync
-import java.util.*
 
 class CallDurationReceiver : BroadcastReceiver() {
 
@@ -56,38 +54,13 @@ class CallDurationReceiver : BroadcastReceiver() {
 
         doAsync {
 
-            val tasks = getAppDB(context)
+            val tasks = TaskUpdater.GetAppDB(context)
                     .taskDao().getAll(1).filter { t -> AutoTaskType.valueOf(t.AutomationType!!) == AutoTaskType.CallDuration }
 
             for (task: Task in tasks) {
 
-                updateEntry(context, task.Id, today, minutes)
+                TaskUpdater.UpdateEntry(context, task.Id, today, minutes)
             }
-        }
-    }
-
-    private fun getAppDB(context: Context) : AppDatabase {
-        return AppDatabase
-                .getAppDatabase(context)!!
-    }
-
-    private fun updateEntry(context: Context, taskId: Int, day: Int, duration: Int) {
-
-        var entry = getAppDB(context).entryDao()[day, taskId]
-
-        if (entry == null) {
-
-            entry = Entry()
-            entry.TaskId = taskId
-            entry.Day = day
-            entry.Value = duration
-            entry.ModificationDate = Date(System.currentTimeMillis())
-            getAppDB(context).entryDao().insert(entry)
-        }
-        else {
-            entry.Value = duration
-            entry.ModificationDate = Date(System.currentTimeMillis())
-            getAppDB(context).entryDao().update(entry)
         }
     }
 }

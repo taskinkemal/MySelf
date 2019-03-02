@@ -56,7 +56,7 @@ class ListItemAdapter(private val hoster: IListItemHoster?, private val items: L
 
     override fun getItemId(position: Int): Long {
 
-        return items!!.list[position].ItemId.toLong()
+        return items!!.list[position].ItemId.hashCode().toLong()
     }
 
     override fun getItemCount(): Int {

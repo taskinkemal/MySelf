@@ -4,7 +4,7 @@ import android.graphics.drawable.Drawable
 
 class ListItem {
 
-    var ItemId: Int = 0
+    var ItemId: String = ""
     var ImageDrawable: Drawable? = null
     var Label: String = ""
 }

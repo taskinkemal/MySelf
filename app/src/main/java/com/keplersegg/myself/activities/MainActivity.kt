@@ -1,9 +1,13 @@
 package com.keplersegg.myself.activities
 
 import android.Manifest
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
@@ -17,10 +21,16 @@ import com.google.android.material.snackbar.Snackbar
 import com.keplersegg.myself.MySelfApplication
 import com.keplersegg.myself.fragments.*
 import com.keplersegg.myself.helper.AutoTaskType
+import com.keplersegg.myself.helper.TaskUpdater
+import com.keplersegg.myself.helper.Utils
 import com.keplersegg.myself.interfaces.ISyncTasksHost
+import com.keplersegg.myself.widgets.TasksWidget
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
+import android.widget.RemoteViews
+import com.keplersegg.myself.Room.Entity.TaskEntry
+
 
 class MainActivity : AuthActivity(), ISyncTasksHost {
 
@@ -36,6 +46,8 @@ class MainActivity : AuthActivity(), ISyncTasksHost {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        handleWidgetIntent(intent)
 
         setupNavigationView()
 
@@ -230,5 +242,77 @@ class MainActivity : AuthActivity(), ISyncTasksHost {
                 }
             }
         }
+    }
+
+    private fun handleWidgetIntent(intent: Intent?) {
+
+        if (intent == null) return
+
+        if (intent.action == AppWidgetManager.ACTION_APPWIDGET_UPDATE) {
+
+            val value = intent.getIntExtra("value", 0)
+
+            doAsync {
+
+                val task = TaskUpdater.GetAppDB(master)
+                        .taskEntryDao().getTasks(Utils.getToday()).first()
+
+                TaskUpdater.UpdateEntry(master, task.task!!.Id, Utils.getToday(), task.entry!!.Value + value)
+
+                uiThread {
+
+                }
+            }
+        }
+    }
+
+    public fun updateWidget(items: List<TaskEntry>) {
+
+        val appWidgetManager = AppWidgetManager.getInstance(master)
+        val remoteViews = RemoteViews(master.getPackageName(), R.layout.tasks_widget)
+        val thisWidget = ComponentName(master, TasksWidget::class.java)
+
+        remoteViews.removeAllViews(R.id.lytWidgetContainer)
+
+        val filteredItems = items.sortedBy { i -> i.task!!.AutomationType }
+        for (i in 0..items.size) {
+
+            if (i > 2) break
+
+            val componentWidget = RemoteViews(master.getPackageName(), R.layout.component_widget_task)
+            //Set the text of the TextView that is inside the above specified listEntryLayout RemoteViews
+            componentWidget.setTextViewText(R.id.lblTask, items[i].task!!.Label)
+
+            componentWidget.setTextViewText(R.id.lblValue, items[i].entry!!.Value.toString() + " " + items[i].task!!.Unit)
+
+            if (items[i].task!!.DataType == 1)
+                componentWidget.setViewVisibility(R.id.imgDone, View.GONE)
+            else
+                componentWidget.setViewVisibility(R.id.lblValue, View.GONE)
+
+            //Add the new remote view to the parent/containing Layout object
+            remoteViews.addView(R.id.lytWidgetContainer, componentWidget)
+        }
+
+        /*
+        remoteViews.setOnClickPendingIntent(R.id.imgMinus,
+                TasksWidget.getPendingIntent(master, -1))
+        remoteViews.setOnClickPendingIntent(R.id.imgPlus,
+                TasksWidget.getPendingIntent(master, 1))
+*/
+        appWidgetManager.updateAppWidget(thisWidget, remoteViews)
+/*
+        appWidgetManager.updateAppWidget(thisWidget, remoteViews)
+
+        val man = AppWidgetManager.getInstance(this)
+
+        val ids = man.getAppWidgetIds(
+                ComponentName(this, TasksWidget::class.java))
+
+        val updateIntent = Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
+        updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
+        updateIntent.putExtra("label", "Coffee")
+        sendBroadcast(updateIntent)
+        */
     }
 }
