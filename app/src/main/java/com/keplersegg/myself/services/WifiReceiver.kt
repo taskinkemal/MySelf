@@ -31,15 +31,13 @@ class WifiReceiver : BroadcastReceiver() {
 
                 doAsync {
 
-                    val tasks2 = TaskUpdater.GetAppDB(context)
-                            .taskDao().all.filter { t -> t.AutomationType == AutoTaskType.WentTo.typeId }
-
-                    val tasks = TaskUpdater.GetAppDB(context)
-                            .taskDao().all.filter { t -> t.AutomationType == AutoTaskType.WentTo.typeId && t.Status == 1 && t.AutomationVar == networkId }
+                    val tasks = TaskUpdater(context).AppDB()
+                            .taskDao().getAll(1)
+                            .filter { t -> t.AutomationType == AutoTaskType.WentTo.typeId && t.AutomationVar == networkId }
 
                     for (task: Task in tasks) {
 
-                        TaskUpdater.UpdateEntry(context, task.Id, Utils.getToday(), 1)
+                        TaskUpdater(context).updateEntry(task.Id, Utils.getToday(), 1)
                     }
                 }
             }

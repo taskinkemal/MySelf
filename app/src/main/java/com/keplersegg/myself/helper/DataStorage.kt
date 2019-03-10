@@ -18,6 +18,7 @@ class DataStorage(app: MySelfApplication) {
     private val newBadges = "newBadges"
     private val tutorialDone = "tutorialDone"
     private val appIcons = "appIcons"
+    private val callDuration = "callDuration"
 
     init {
 
@@ -40,11 +41,27 @@ class DataStorage(app: MySelfApplication) {
         return registerID
     }
     fun getTutorialDone() : Boolean { return getBoolean(tutorialDone) }
+    fun getTotalCallDuration(day: Int) : Long {
+
+        val data = getString(callDuration)
+
+        if (data != null && data.contains(':')) {
+            val splitted = data.split(':')
+            if (splitted.size == 2 && Integer.getInteger(splitted[0], 0) == day) {
+                val result = Integer.getInteger(splitted[1], 0)
+                return if (result != null) result.toLong() else 0
+            }
+        }
+
+        setTotalCallDuration(day, 0)
+        return 0
+    }
 
     fun setAccessToken(token: String?) { setValue(accessToken, token) }
     fun setFacebookToken(token: String?) { setValue(facebookToken, token) }
     fun setGoogleToken(token: String?) { setValue(googleToken, token) }
     fun setTutorialDone() { setBoolean(tutorialDone, true) }
+    fun setTotalCallDuration(day: Int, totalDuration: Long) { setValue(callDuration, "$day:$totalDuration") }
 
     private fun setValue(key: String, value: String?) {
 

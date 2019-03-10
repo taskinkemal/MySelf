@@ -71,6 +71,7 @@
     <string name="lbl_application">Application</string>
     <string name="lbl_network">Network</string>
     <string name="lbl_minutes">minute(s)</string>
+    <string name="lbl_hours">hour(s)</string>
     <string name="lbl_automation_is_enabled">Automation is enabled for this task!</string>
     <string name="lbl_automation">Automation</string>
     <string name="n_zero">0</string>

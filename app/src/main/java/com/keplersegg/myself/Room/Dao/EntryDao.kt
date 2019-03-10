@@ -32,8 +32,16 @@ interface EntryDao {
     @Query("SELECT TaskId, sum(Value) AS EntryCount FROM Entry group by TaskId")
     fun getCounts(): List<TaskEntryCount>
 
+    @Query("SELECT Day, Value FROM Entry where TaskId = :taskId order by Day desc limit 5")
+    fun getValues(taskId: Int): List<EntryValue>
+
     class TaskEntryCount {
         var TaskId: Int? = null
         var EntryCount: Int? = null
+    }
+
+    class EntryValue {
+        var Day: Int? = null
+        var Value: Int? = null
     }
 }

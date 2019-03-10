@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.keplersegg.myself.R
 import com.keplersegg.myself.activities.MainActivity
+import com.keplersegg.myself.components.PeekStatView
 import com.keplersegg.myself.fragments.AppUsageFragment
 import com.keplersegg.myself.fragments.StatsTaskFragment
 import com.keplersegg.myself.helper.AutoTaskType
@@ -22,7 +23,9 @@ class StatsMainAdapter(private val activity: MainActivity) : RecyclerView.Adapte
 
         val lblTask: TextView = itemView.findViewById(R.id.lblTask)
         val lblTotal: TextView = itemView.findViewById(R.id.lblTotal)
+        val lblUnits: TextView = itemView.findViewById(R.id.lblUnits)
         val imgAutomationType: ImageView = itemView.findViewById(R.id.imgAutomationType)
+        val psvStats: PeekStatView = itemView.findViewById(R.id.psvStats)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataObjectHolder {
@@ -42,25 +45,46 @@ class StatsMainAdapter(private val activity: MainActivity) : RecyclerView.Adapte
         // object item based on the position
         val item = if (items.size > position) items[position] else null
 
-        holder.lblTask.text = item!!.task!!.Label
-        holder.lblTotal.text = item.total.toString()
-        val imgResourceId = TaskGeneralStats.taskTypeImageResourceId(item.task!!.AutomationType)
-        if (imgResourceId == null) {
+        if (item?.task != null) {
 
-            holder.imgAutomationType.visibility = View.INVISIBLE
+            var total = item.total
+            var unit = item.task!!.Unit
+            val automationType = item.task!!.AutomationType
 
-        } else {
+            if (automationType == AutoTaskType.AppUsage.typeId) {
 
-            holder.imgAutomationType.visibility = View.VISIBLE
-            if (item.task!!.AutomationType == AutoTaskType.AppUsage.typeId) {
-                holder.imgAutomationType.setImageDrawable(AppUsageFragment.getApplicationIcon(activity, item.task!!.AutomationVar!!))
-            } else {
-                holder.imgAutomationType.setImageResource(imgResourceId)
+                if (total > 600) {
+
+                    total /= 60
+                    unit = activity.getString(R.string.lbl_hours)
+                }
             }
-        }
 
-        holder.itemView.setOnClickListener {
-            activity.NavigateFragment(true, StatsTaskFragment.newInstance(item.task!!.Id))
+            if (unit.isBlank()) unit = activity.getString(R.string.time_plural)
+
+            holder.lblTask.text = item.task!!.Label
+            holder.lblTotal.text = total.toString()
+            holder.lblUnits.text = unit
+            val imgResourceId = TaskGeneralStats.taskTypeImageResourceId(automationType)
+            if (imgResourceId == null) {
+
+                holder.imgAutomationType.visibility = View.INVISIBLE
+
+            } else {
+
+                holder.imgAutomationType.visibility = View.VISIBLE
+                if (automationType == AutoTaskType.AppUsage.typeId) {
+                    holder.imgAutomationType.setImageDrawable(AppUsageFragment.getApplicationIcon(activity, item.task!!.AutomationVar!!))
+                } else {
+                    holder.imgAutomationType.setImageResource(imgResourceId)
+                }
+            }
+
+            holder.psvStats.setValues(item.lastValues!!.toMutableList())
+
+            holder.itemView.setOnClickListener {
+                activity.NavigateFragment(true, StatsTaskFragment.newInstance(item.task!!.Id))
+            }
         }
     }
 

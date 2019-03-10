@@ -254,10 +254,10 @@ class MainActivity : AuthActivity(), ISyncTasksHost {
 
             doAsync {
 
-                val task = TaskUpdater.GetAppDB(master)
+                val task = master.AppDB()
                         .taskEntryDao().getTasks(Utils.getToday()).first()
 
-                TaskUpdater.UpdateEntry(master, task.task!!.Id, Utils.getToday(), task.entry!!.Value + value)
+                TaskUpdater(master).updateEntry(task.task!!.Id, Utils.getToday(), task.entry!!.Value + value)
 
                 uiThread {
 
@@ -266,32 +266,20 @@ class MainActivity : AuthActivity(), ISyncTasksHost {
         }
     }
 
-    public fun updateWidget(items: List<TaskEntry>) {
+    fun updateWidget(items: List<TaskEntry>) {
 
         val appWidgetManager = AppWidgetManager.getInstance(master)
-        val remoteViews = RemoteViews(master.getPackageName(), R.layout.tasks_widget)
+        val remoteViews = RemoteViews(master.packageName, R.layout.tasks_widget)
         val thisWidget = ComponentName(master, TasksWidget::class.java)
 
         remoteViews.removeAllViews(R.id.lytWidgetContainer)
 
         val filteredItems = items.sortedBy { i -> i.task!!.AutomationType }
-        for (i in 0..items.size) {
+        for (i in 0..filteredItems.size) {
 
             if (i > 2) break
 
-            val componentWidget = RemoteViews(master.getPackageName(), R.layout.component_widget_task)
-            //Set the text of the TextView that is inside the above specified listEntryLayout RemoteViews
-            componentWidget.setTextViewText(R.id.lblTask, items[i].task!!.Label)
-
-            componentWidget.setTextViewText(R.id.lblValue, items[i].entry!!.Value.toString() + " " + items[i].task!!.Unit)
-
-            if (items[i].task!!.DataType == 1)
-                componentWidget.setViewVisibility(R.id.imgDone, View.GONE)
-            else
-                componentWidget.setViewVisibility(R.id.lblValue, View.GONE)
-
-            //Add the new remote view to the parent/containing Layout object
-            remoteViews.addView(R.id.lytWidgetContainer, componentWidget)
+            remoteViews.addView(R.id.lytWidgetContainer, CreateComponentWidget(filteredItems[i]))
         }
 
         /*
@@ -314,5 +302,21 @@ class MainActivity : AuthActivity(), ISyncTasksHost {
         updateIntent.putExtra("label", "Coffee")
         sendBroadcast(updateIntent)
         */
+    }
+
+    private fun CreateComponentWidget(taskEntry: TaskEntry): RemoteViews {
+
+        val componentWidget = RemoteViews(master.packageName, R.layout.component_widget_task)
+        componentWidget.setTextViewText(R.id.lblTask, taskEntry.task!!.Label)
+
+        val value = if (taskEntry.entry != null) taskEntry.entry!!.Value else 0
+        componentWidget.setTextViewText(R.id.lblValue, value.toString() + " " + taskEntry.task!!.Unit)
+
+        if (taskEntry.task!!.DataType == 1)
+            componentWidget.setViewVisibility(R.id.imgDone, View.GONE)
+        else
+            componentWidget.setViewVisibility(R.id.lblValue, View.GONE)
+
+        return componentWidget
     }
 }

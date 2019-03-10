@@ -7,6 +7,7 @@ class TaskGeneralStats {
 
     var task: Task? = null
     var total: Int = 0
+    var lastValues: ArrayList<Int>? = null
 
     companion object {
 
