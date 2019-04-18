@@ -47,6 +47,8 @@ class LineStatView @JvmOverloads constructor(
 
             typedArray.recycle()
         }
+
+        this.background =  ContextCompat.getDrawable(context, android.R.color.transparent)
     }
 
     fun setValue(value: Int) {

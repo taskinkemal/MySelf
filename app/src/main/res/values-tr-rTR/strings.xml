@@ -45,6 +45,8 @@
     <string name="lbl_done">Done</string>
     <string name="fab_addManualTask">Add manual task</string>
     <string name="fab_addAutomatedTask">Add automated task</string>
+    <string name="lbl_trends">Trends</string>
+    <string name="lbl_highest_days">Highest days</string>
 
     <string name="timeFrameInADay">in a day</string>
     <string name="timeFrameInAWeek">in a week</string>
