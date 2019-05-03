@@ -11,7 +11,10 @@ import com.keplersegg.myself.adapters.TaskPagerAdapter
 import java.text.DateFormatSymbols
 import java.util.*
 import com.google.android.material.tabs.TabLayout
-
+import com.keplersegg.myself.async.SyncTasks
+import com.keplersegg.myself.helper.AutoTaskType
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
 
 class TasksPagerFragment : MasterFragment() {
@@ -39,13 +42,6 @@ class TasksPagerFragment : MasterFragment() {
         viewPager!!.adapter = adapter
         viewPager!!.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
         createAdapter()
-
-        if (!activity.app.dataStore.getTutorialDone()) {
-
-            val tutorial = DialogAppTutorial()
-            tutorial.activity = activity
-            tutorial.show(fragmentManager!!, "tutorial")
-        }
 
         return rootView
     }
@@ -98,6 +94,27 @@ class TasksPagerFragment : MasterFragment() {
         super.onResume()
         SetTitle(R.string.lbl_tasks)
         viewPager!!.currentItem = TaskPagerAdapter.NumOfTabs - 1
+
+        doAsync {
+            val automatedTasks = activity.master.AppDB()
+                    .taskDao()
+                    .all
+                    .filter { t -> t.AutomationType != null && SyncTasks.PermissionChecker.isPermissionMissing(activity, t.AutomationType) }
+                    .map { t -> AutoTaskType.valueOf(t.AutomationType!!)!! }
+                    .distinct()
+
+            uiThread {
+                if (!automatedTasks.isEmpty()) {
+                    activity.master.requestPermissions(automatedTasks)
+                }
+                else if (!activity.app.dataStore.getTutorialDone()) {
+
+                    val tutorial = DialogAppTutorial()
+                    tutorial.activity = activity
+                    tutorial.show(fragmentManager!!, "tutorial")
+                }
+            }
+        }
     }
 
     companion object {

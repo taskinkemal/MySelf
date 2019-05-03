@@ -10,6 +10,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.keplersegg.myself.R
 import com.keplersegg.myself.activities.MasterActivity
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
+
+
 
 object PermissionsHelper {
 
@@ -29,7 +33,15 @@ object PermissionsHelper {
         if (!checkForUsageSettingsPermission(activity))
         {
             activity.showErrorMessage(activity.getString(R.string.permission_required_apps))
-            activity.startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
+            doAsync {
+                uiThread {
+                    val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+                    activity.startActivity(intent)
+                }
+            }
         }
 
         if (!checkForUsageSettingsPermission(activity)) {
@@ -44,14 +56,7 @@ object PermissionsHelper {
 
         if (ContextCompat.checkSelfPermission(activity, permission)
                 != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-            } else {
-                // Permission is not granted
-                return true
-            }
+            return !ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)
         }
 
         return false

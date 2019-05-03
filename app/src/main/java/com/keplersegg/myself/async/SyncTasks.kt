@@ -26,7 +26,7 @@ open class SyncTasks(private var activity: ISyncTasksHost) : AsyncTask<Void, Voi
 
                 upsertTask(list[i])
 
-                if (isPermissionMissing(list[i].AutomationType)) missingPermissions.add(AutoTaskType.valueOf(list[i].AutomationType!!)!!)
+                if (PermissionChecker.isPermissionMissing(activity, list[i].AutomationType)) missingPermissions.add(AutoTaskType.valueOf(list[i].AutomationType!!)!!)
             }
 
             val listLocal = activity.AppDB().taskDao().all
@@ -52,7 +52,7 @@ open class SyncTasks(private var activity: ISyncTasksHost) : AsyncTask<Void, Voi
                         ServiceMethods.uploadTask(activity, listLocal[i])
                     }
 
-                    if (isPermissionMissing(listLocal[i].AutomationType)) missingPermissions.add(AutoTaskType.valueOf(listLocal[i].AutomationType!!)!!)
+                    if (PermissionChecker.isPermissionMissing(activity, listLocal[i].AutomationType)) missingPermissions.add(AutoTaskType.valueOf(listLocal[i].AutomationType!!)!!)
                 }
             }
 
@@ -120,29 +120,6 @@ open class SyncTasks(private var activity: ISyncTasksHost) : AsyncTask<Void, Voi
         return missingPermissions.distinct()
     }
 
-    private fun isPermissionMissing(autoTaskType: Int?) : Boolean {
-
-        if (autoTaskType == null || autoTaskType < 1 || autoTaskType > 3) return false
-
-        var result = false
-
-        when (AutoTaskType.valueOf(autoTaskType)!!) {
-
-            AutoTaskType.CallDuration -> {
-
-                result = PermissionsHelper.shouldRequestForPermission(activity.GetMasterActivity(), Manifest.permission.READ_PHONE_STATE)
-            }
-            AutoTaskType.AppUsage -> {
-
-                result = PermissionsHelper.checkForUsageSettingsPermission(activity.GetMasterActivity())
-                         // || PermissionsHelper.shouldRequestForPermission(activity.GetMasterActivity(), Manifest.permission.PACKAGE_USAGE_STATS)
-            }
-            AutoTaskType.WentTo -> { }
-        }
-
-        return result
-    }
-
     override fun onPostExecute(result: List<AutoTaskType>) {
 
         activity.onSyncTasksSuccess(result)
@@ -161,6 +138,32 @@ open class SyncTasks(private var activity: ISyncTasksHost) : AsyncTask<Void, Voi
         if (response != null) {
 
             SyncBadges(activity).upsertBadge(response.Score, response.NewBadges)
+        }
+    }
+
+    object PermissionChecker {
+
+        fun isPermissionMissing(activity: ISyncTasksHost, autoTaskType: Int?) : Boolean {
+
+            if (autoTaskType == null || autoTaskType < 1 || autoTaskType > 3) return false
+
+            var result = false
+
+            when (AutoTaskType.valueOf(autoTaskType)!!) {
+
+                AutoTaskType.CallDuration -> {
+
+                    result = PermissionsHelper.shouldRequestForPermission(activity.GetMasterActivity(), Manifest.permission.READ_PHONE_STATE)
+                }
+                AutoTaskType.AppUsage -> {
+
+                    result = !PermissionsHelper.checkForUsageSettingsPermission(activity.GetMasterActivity())
+                    // || PermissionsHelper.shouldRequestForPermission(activity.GetMasterActivity(), Manifest.permission.PACKAGE_USAGE_STATS)
+                }
+                AutoTaskType.WentTo -> { }
+            }
+
+            return result
         }
     }
 }

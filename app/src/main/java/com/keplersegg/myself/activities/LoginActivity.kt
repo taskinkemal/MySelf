@@ -44,7 +44,7 @@ class LoginActivity : AuthActivity(), ISetFacebookUser, ILoginHost, ISyncTasksHo
 
         setContentView(R.layout.activity_login)
 
-        fbLoginManager = com.facebook.login.LoginManager.getInstance()
+        fbLoginManager = LoginManager.getInstance()
         fbCallbackManager = CallbackManager.Factory.create()
         fbLoginManager!!.registerCallback(fbCallbackManager!!, object : FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
