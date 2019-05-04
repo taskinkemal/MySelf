@@ -19,7 +19,7 @@ class DialogNewBadgeFragment : DialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        return inflater.inflate(R.layout.dialog_badge_info, container, false)
+        return inflater.inflate(R.layout.dialog_new_badge, container, false)
     }
 
     override fun onResume() {

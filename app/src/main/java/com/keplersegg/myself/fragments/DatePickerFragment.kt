@@ -8,6 +8,8 @@ import androidx.fragment.app.DialogFragment
 import com.keplersegg.myself.helper.Utils
 import java.util.*
 
+
+
 class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
 
     lateinit var fragment: AddGoalFragment
@@ -29,7 +31,6 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
 
         val calendar = Calendar.getInstance()
         calendar.set(year, month, day)
-
         fragment.setDate(tag, Utils.getDay(calendar))
     }
 }

@@ -47,6 +47,16 @@
     <string name="fab_addAutomatedTask">Add automated task</string>
     <string name="lbl_trends">Trends</string>
     <string name="lbl_highest_days">Highest days</string>
+    <string name="err_add_task_label_required">Please enter a label for the task.</string>
+    <string name="confirm_delete_task">Do you really want to delete this habit?</string>
+    <string name="confirm_delete_goal">Do you really want to delete this goal?</string>
+    <string name="err_add_goal_task_required">Please select a habit.</string>
+    <string name="err_add_goal_target_value_required">Please set a valid target value.</string>
+    <string name="err_add_goal_valid_interval_required">Please set a valid interval.</string>
+    <string name="err_add_goal_valid_startDate">Please set a valid start date.</string>
+    <string name="err_login_facebook">Cannot authenticate via Facebook.</string>
+    <string name="err_login_google">Cannot authenticate via Google.</string>
+    <string name="err_login_user">Cannot authenticate the user.</string>
 
     <string name="timeFrameInADay">in a day</string>
     <string name="timeFrameInAWeek">in a week</string>

@@ -16,7 +16,7 @@ object Utils {
         val calZero = getCalZero()
 
         val msDiff = calendar.timeInMillis - calZero.timeInMillis
-        return TimeUnit.MILLISECONDS.toDays(msDiff).toInt()
+        return TimeUnit.MILLISECONDS.toDays(msDiff).toInt() + 1
     }
 
     private fun getDateWithoutTime(): Calendar {

@@ -198,7 +198,7 @@ class AddGoalFragment : MasterFragment() {
 
         if (task == null) {
 
-            showErrorMessage("Please select a task.")
+            showErrorMessage(getString(R.string.err_add_goal_task_required))
             return
         }
 
@@ -210,19 +210,19 @@ class AddGoalFragment : MasterFragment() {
 
         if (target < 0 || target == 0 && !isAutomatedTask) {
 
-            showErrorMessage("Please set a valid target value.")
+            showErrorMessage(getString(R.string.err_add_goal_target_value_required))
             return
         }
 
         if (endDay - startDay < 1) {
 
-            showErrorMessage("Please set a valid interval.")
+            showErrorMessage(getString(R.string.err_add_goal_valid_interval_required))
             return
         }
 
         if (startDay < Utils.getToday()) {
 
-            showErrorMessage("Please set a valid start date.")
+            showErrorMessage(getString(R.string.err_add_goal_valid_startDate))
             return
         }
 
@@ -317,7 +317,7 @@ class AddGoalFragment : MasterFragment() {
                 if (GoalId != -1) {
 
                     AlertDialog.Builder(activity)
-                            .setMessage("Do you really want to delete this goal?")
+                            .setMessage(R.string.confirm_delete_goal)
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .setPositiveButton(android.R.string.yes) { _, _ ->
                                 doAsync {

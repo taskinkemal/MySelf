@@ -26,8 +26,6 @@ class AddTaskFragment : MasterFragment() {
 
     private var task: Task? = null
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.layout = R.layout.fragment_add_task
@@ -134,6 +132,8 @@ class AddTaskFragment : MasterFragment() {
                     activity.NavigateFragment(true, fragment)
                 }
             }
+        } else {
+            activity.showErrorMessage(activity.getString(R.string.err_add_task_label_required))
         }
     }
 
@@ -244,7 +244,7 @@ class AddTaskFragment : MasterFragment() {
         inflater.inflate(R.menu.menu_add_task, menu)
         super.onCreateOptionsMenu(menu, inflater)
 
-        menu.getItem(1).isVisible = TaskId != 0
+        menu.findItem(R.id.menu_delete).isVisible = TaskId != 0
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -255,7 +255,7 @@ class AddTaskFragment : MasterFragment() {
                 if (task != null) {
 
                     AlertDialog.Builder(activity)
-                            .setMessage("Do you really want to delete this task?")
+                            .setMessage(R.string.confirm_delete_task)
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .setPositiveButton(android.R.string.yes) { _, _ ->
                                 doAsync {

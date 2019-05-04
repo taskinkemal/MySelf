@@ -132,11 +132,11 @@ class LoginActivity : AuthActivity(), ISetFacebookUser, ILoginHost, ISyncTasksHo
             toggleProgressBar(lytProgressBar, false)
 
             if (tokenType == TokenType.Facebook)
-                showErrorMessage("Cannot authenticate via Facebook")
+                showErrorMessage(getString(R.string.err_login_facebook))
             else if (tokenType == TokenType.Google)
-                showErrorMessage("Cannot authenticate via Google")
+                showErrorMessage(getString(R.string.err_login_google))
             else
-                showErrorMessage("Cannot authenticate user")
+                showErrorMessage(getString(R.string.err_login_user))
         }
     }
 

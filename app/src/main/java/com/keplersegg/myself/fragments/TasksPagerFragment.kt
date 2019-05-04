@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.viewpager.widget.ViewPager
 import com.getbase.floatingactionbutton.FloatingActionButton
+import com.getbase.floatingactionbutton.FloatingActionsMenu
 
 import com.keplersegg.myself.R
 import com.keplersegg.myself.adapters.TaskPagerAdapter
@@ -19,10 +20,11 @@ import org.jetbrains.anko.uiThread
 
 class TasksPagerFragment : MasterFragment() {
 
-    private var viewPager: ViewPager? = null
-    private var tabLayout: TabLayout? = null
-    private var fabAdd: FloatingActionButton? = null
-    private var fabAddAuto: FloatingActionButton? = null
+    private lateinit var viewPager: ViewPager
+    private lateinit var tabLayout: TabLayout
+    private lateinit var fabAdd: FloatingActionButton
+    private lateinit var fabAddAuto: FloatingActionButton
+    private lateinit var famAddMenu: FloatingActionsMenu
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,37 +39,24 @@ class TasksPagerFragment : MasterFragment() {
         tabLayout = rootView!!.findViewById(R.id.tabLayout)
         fabAdd = rootView!!.findViewById(R.id.fabAdd)
         fabAddAuto = rootView!!.findViewById(R.id.fabAddAuto)
+        famAddMenu = rootView!!.findViewById(R.id.famAddMenu)
 
         val adapter = TaskPagerAdapter(childFragmentManager) // activity!!.supportFragmentManager)
-        viewPager!!.adapter = adapter
-        viewPager!!.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
+        viewPager.adapter = adapter
+        viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
         createAdapter()
 
         return rootView
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        viewPager!!.adapter!!.notifyDataSetChanged()
-    }
-
     private fun createAdapter() {
 
-        for (i: Int in 0 .. TaskPagerAdapter.NumOfTabs - 3) {
+        tabLayout.tabGravity = TabLayout.GRAVITY_FILL
 
-            val title = dateToString(TaskPagerAdapter.NumOfTabs - 1 - i)
-            tabLayout!!.addTab(tabLayout!!.newTab().setText(title))
-        }
-        tabLayout!!.addTab(tabLayout!!.newTab().setText("Yesterday"))
-        tabLayout!!.addTab(tabLayout!!.newTab().setText("Today"))
-        tabLayout!!.tabGravity = TabLayout.GRAVITY_FILL
-
-        //var viewPager = view.findViewById<ViewPager>(R.id.viewPager)
-        tabLayout!!.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener
+        tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener
         {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                viewPager!!.currentItem = tab.position
+                viewPager.currentItem = tab.position
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
@@ -79,8 +68,14 @@ class TasksPagerFragment : MasterFragment() {
             }
         })
 
-        fabAdd!!.setOnClickListener { activity.NavigateFragment(true, AddTaskFragment.newInstance(0)) }
-        fabAddAuto!!.setOnClickListener { activity.NavigateFragment(true, AutoTaskSelectorFragment.newInstance()) }
+        fabAdd.setOnClickListener {
+            famAddMenu.collapse()
+            activity.NavigateFragment(true, AddTaskFragment.newInstance(0))
+        }
+        fabAddAuto.setOnClickListener {
+            famAddMenu.collapse()
+            activity.NavigateFragment(true, AutoTaskSelectorFragment.newInstance())
+        }
     }
 
     private fun dateToString(days: Int): String {
@@ -93,7 +88,18 @@ class TasksPagerFragment : MasterFragment() {
     override fun onResume() {
         super.onResume()
         SetTitle(R.string.lbl_tasks)
-        viewPager!!.currentItem = TaskPagerAdapter.NumOfTabs - 1
+
+        tabLayout.removeAllTabs()
+        for (i: Int in 0 .. TaskPagerAdapter.NumOfTabs - 3) {
+
+            val title = dateToString(TaskPagerAdapter.NumOfTabs - 1 - i)
+            tabLayout.addTab(tabLayout.newTab().setText(title))
+        }
+        tabLayout.addTab(tabLayout.newTab().setText("Yesterday"))
+        tabLayout.addTab(tabLayout.newTab().setText("Today"))
+
+        viewPager.adapter!!.notifyDataSetChanged()
+        viewPager.currentItem = TaskPagerAdapter.NumOfTabs - 1
 
         doAsync {
             val automatedTasks = activity.master.AppDB()
@@ -104,7 +110,7 @@ class TasksPagerFragment : MasterFragment() {
                     .distinct()
 
             uiThread {
-                if (!automatedTasks.isEmpty()) {
+                if (automatedTasks.isNotEmpty()) {
                     activity.master.requestPermissions(automatedTasks)
                 }
                 else if (!activity.app.dataStore.getTutorialDone()) {

@@ -46,19 +46,19 @@
     <string name="login_with_Facebook">Login with Facebook</string>
     <string name="login_with_Google">Login with Google</string>
     <string name="continue_without_account">Continue without an account</string>
-    <string name="lbl_tasks">Tasks</string>
-    <string name="lbl_task">Task</string>
+    <string name="lbl_tasks">Habits</string>
+    <string name="lbl_task">Habit</string>
     <string name="lbl_profile">Profile</string>
     <string name="logout">Logout</string>
     <string name="login">Login</string>
-    <string name="lbl_task_details">Task Details</string>
+    <string name="lbl_task_details">Habit Details</string>
     <string name="lbl_goal_details">Goal Details</string>
-    <string name="lbl_add_task">New Task</string>
-    <string name="lbl_add_automated_task">New Automated Task</string>
-    <string name="lbl_auto_task_selector">Select Auto Task</string>
+    <string name="lbl_add_task">New Habit</string>
+    <string name="lbl_add_automated_task">New Automated Habit</string>
+    <string name="lbl_auto_task_selector">Select Auto Habit</string>
     <string name="lbl_goals">Goals</string>
     <string name="lbl_add_goal">New Goal</string>
-    <string name="lbl_statistics">Statistics</string>
+    <string name="lbl_statistics">Stats</string>
     <string name="save">Save</string>
     <string name="unit">Unit</string>
     <string name="time_plural">time(s)</string>
@@ -72,7 +72,7 @@
     <string name="lbl_network">Network</string>
     <string name="lbl_minutes">minute(s)</string>
     <string name="lbl_hours">hour(s)</string>
-    <string name="lbl_automation_is_enabled">Automation is enabled for this task!</string>
+    <string name="lbl_automation_is_enabled">Automation is enabled for this habit!</string>
     <string name="lbl_automation">Automation</string>
     <string name="n_zero">0</string>
     <string name="lbl_score">Score</string>
@@ -86,10 +86,20 @@
     <string name="lbl_failed">Failed</string>
     <string name="lbl_skip">Skip</string>
     <string name="lbl_done">Done</string>
-    <string name="fab_addManualTask">Add manual task</string>
-    <string name="fab_addAutomatedTask">Add automated task</string>
+    <string name="fab_addManualTask">Add manual habit</string>
+    <string name="fab_addAutomatedTask">Add automated habit</string>
     <string name="lbl_trends">Trends</string>
     <string name="lbl_highest_days">Highest days</string>
+    <string name="err_add_task_label_required">Please enter a label for the habit.</string>
+    <string name="confirm_delete_task">Do you really want to delete this habit?</string>
+    <string name="confirm_delete_goal">Do you really want to delete this goal?</string>
+    <string name="err_add_goal_task_required">Please select a habit.</string>
+    <string name="err_add_goal_target_value_required">Please set a valid target value.</string>
+    <string name="err_add_goal_valid_interval_required">Please set a valid interval.</string>
+    <string name="err_add_goal_valid_startDate">Please set a valid start date.</string>
+    <string name="err_login_facebook">Cannot authenticate via Facebook.</string>
+    <string name="err_login_google">Cannot authenticate via Google.</string>
+    <string name="err_login_user">Cannot authenticate the user.</string>
 
     <string name="timeFrameInADay">in a day</string>
     <string name="timeFrameInAWeek">in a week</string>
@@ -113,7 +123,7 @@
     <string name="badge_name_3_2">Golden Expert</string>
     <string name="badge_name_3_3">Golden Master</string>
 
-    <string name="badge_desc_1_1">Enter data for 5 different tasks.</string>
+    <string name="badge_desc_1_1">Enter data for 5 different habits.</string>
     <string name="badge_desc_1_2">Enter data for 5 consecutive days.</string>
     <string name="badge_desc_1_3">Enter data for 30 consecutive days.</string>
     <string name="badge_desc_2_1">Add a goal.</string>
@@ -125,12 +135,12 @@
 
     <string name="tutorial_1">Welcome to MySelf!</string>
     <string name="tutorial_1_desc">MySelf will help you track your daily routines.</string>
-    <string name="tutorial_2">Tasks to help track yourself.</string>
-    <string name="tutorial_2_desc">Setup your tasks to track your daily routines. Cups of coffee, hour of exercise.</string>
+    <string name="tutorial_2">Habits to help track yourself.</string>
+    <string name="tutorial_2_desc">Setup your habits to track your daily routines. Cups of coffee, hour of exercise.</string>
     <string name="tutorial_3">Goals to help achieve the results.</string>
     <string name="tutorial_3_desc">Set your own goals to help achieve your results.</string>
     <string name="tutorial_4">Check your stats.</string>
-    <string name="tutorial_4_desc">Statistics will show you your tracking history.</string>
+    <string name="tutorial_4_desc">Stats will show you your tracking history.</string>
 
     <string name="lblBadge_newBadge">New Achievement!</string>
     <string name="lblBadge_completed">You\'ve completed this achievement!</string>
