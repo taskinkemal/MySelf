@@ -28,7 +28,7 @@ class MySelfApplication : Application() {
         androidDefaultUEH = Thread.getDefaultUncaughtExceptionHandler()
         Thread.setDefaultUncaughtExceptionHandler(handler)
 
-        MobileAds.initialize(this, "ca-app-pub-4857110393196284~6736902199");
+        MobileAds.initialize(this, "ca-app-pub-4857110393196284~6736902199")
     }
 
     fun clearSession() {

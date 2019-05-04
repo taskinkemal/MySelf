@@ -27,7 +27,6 @@ import android.content.ComponentName
 import com.keplersegg.myself.MySelfApplication
 import com.keplersegg.myself.async.SyncTasks
 import com.keplersegg.myself.helper.AutoTaskType
-import com.keplersegg.myself.helper.AutoTasksManager
 import com.keplersegg.myself.interfaces.ISyncTasksHost
 
 
@@ -56,7 +55,7 @@ class LoaderActivity : MasterActivity(), ISetFacebookUser, ILoginHost, IRefreshT
         if (LoginCheckSocialInternal()) {
 
         }
-        else if (accessToken != null && !accessToken.isEmpty()) {
+        else if (accessToken != null && accessToken.isNotEmpty()) {
 
             RefreshTokenTask(this).execute(accessToken, app.dataStore.getRegisterID())
         } else {

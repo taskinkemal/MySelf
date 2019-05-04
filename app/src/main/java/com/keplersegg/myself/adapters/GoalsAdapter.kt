@@ -98,7 +98,7 @@ class GoalsAdapter(private val activity: MainActivity) : RecyclerView.Adapter<Go
 
         val msDiff = cal.timeInMillis - today.timeInMillis
         val daysLeft = TimeUnit.MILLISECONDS.toDays(msDiff).toInt()
-        val sDaysLeft = if (daysLeft >= 0) " (" + daysLeft.toString() + " days remaining)" else ""
+        val sDaysLeft = if (daysLeft >= 0) " (" + daysLeft.toString() + " " + activity.getString(R.string.lbl_days_remaining) + ")" else ""
 
         var datePattern = "d MMMM yyyy"
         if (today.get(Calendar.YEAR) == cal.get(Calendar.YEAR)) {

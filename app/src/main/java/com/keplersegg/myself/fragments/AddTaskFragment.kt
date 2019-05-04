@@ -122,8 +122,8 @@ class AddTaskFragment : MasterFragment() {
         val unit = if (dataType == 1) txtUnits!!.text.toString() else ""
         val automationVar : String? = automationData?.ItemId
 
-        if (label.length > 0 &&
-                (dataType == 0 || unit.length > 0)) {
+        if (label.isNotEmpty() &&
+                (dataType == 0 || unit.isNotEmpty())) {
 
             doAsync {
                 AddOrUpdateTask(label, dataType, unit, automationType, automationVar)
@@ -248,7 +248,7 @@ class AddTaskFragment : MasterFragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.getItemId()) {
+        when (item.itemId) {
             R.id.menu_save -> SaveTask()
             R.id.menu_delete ->
             {

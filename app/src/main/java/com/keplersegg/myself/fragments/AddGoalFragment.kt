@@ -61,10 +61,10 @@ class AddGoalFragment : MasterFragment() {
         if (day > 0) {
             val cal = Utils.getDate(day)
             val sdf = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-            txt.setText(sdf.format(cal.time))
+            txt.text = sdf.format(cal.time)
         }
         else {
-            txt.setText("")
+            txt.text = ""
         }
     }
 
@@ -168,10 +168,10 @@ class AddGoalFragment : MasterFragment() {
         val resourceId = if (isAutomatedTask) R.array.spinner_goalMinMax_AutomatedTask else R.array.spinner_goalMinMax
 
         val spinnerArrayAdapter = ArrayAdapter<String>(activity, android.R.layout.simple_spinner_item,
-                activity.getResources().getStringArray(resourceId))
+                activity.resources.getStringArray(resourceId))
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout
                 .simple_spinner_dropdown_item)
-        spnGoalMinMax.setAdapter(spinnerArrayAdapter)
+        spnGoalMinMax.adapter = spinnerArrayAdapter
     }
 
     private fun GetGoalMinMaxValue(isAutomatedTask: Boolean) : Int {
@@ -306,11 +306,11 @@ class AddGoalFragment : MasterFragment() {
         inflater.inflate(R.menu.menu_add_task, menu)
         super.onCreateOptionsMenu(menu, inflater)
 
-        menu.getItem(1).isVisible = GoalId != -1
+        menu.findItem(R.id.menu_delete).isVisible = GoalId != -1
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.getItemId()) {
+        when (item.itemId) {
             R.id.menu_save -> SaveGoal()
             R.id.menu_delete ->
             {

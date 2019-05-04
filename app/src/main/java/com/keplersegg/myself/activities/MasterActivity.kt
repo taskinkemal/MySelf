@@ -44,7 +44,7 @@ open class MasterActivity : AppCompatActivity(), IHttpProvider, IErrorMessage {
         super.onCreate(savedInstanceState)
 
         master = this
-        app = getApplication() as MySelfApplication
+        app = application as MySelfApplication
 
         val window = window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
@@ -61,7 +61,7 @@ open class MasterActivity : AppCompatActivity(), IHttpProvider, IErrorMessage {
         logAnalyticsPageVisit()
     }
 
-    fun GetColor(id: Int): Int {
+    private fun GetColor(id: Int): Int {
         return ContextCompat.getColor(this, id)
     }
 
@@ -103,7 +103,7 @@ open class MasterActivity : AppCompatActivity(), IHttpProvider, IErrorMessage {
             NavigateToActivity(i, clearTop)
     }
 
-    protected fun NavigateToActivity(i: Intent?, clearTop: Boolean) {
+    private fun NavigateToActivity(i: Intent?, clearTop: Boolean) {
 
         if (clearTop)
         // ana sayfadan geri dön'e tıklandığında çıkış yapma diyaloğu gelmesi için.
@@ -237,7 +237,7 @@ open class MasterActivity : AppCompatActivity(), IHttpProvider, IErrorMessage {
         }
     }
 
-    fun logAnalyticsEvent(eventType: String, params: HashMap<String, String>?) {
+    private fun logAnalyticsEvent(eventType: String, params: HashMap<String, String>?) {
 
         val bundle = Bundle()
         if (params != null) {
@@ -249,7 +249,7 @@ open class MasterActivity : AppCompatActivity(), IHttpProvider, IErrorMessage {
         firebaseAnalytics.logEvent(eventType, bundle) //FirebaseAnalytics.Event
     }
 
-    fun logAnalyticsPageVisit() {
+    private fun logAnalyticsPageVisit() {
 
         firebaseAnalytics.setCurrentScreen(this, javaClass.simpleName, javaClass.simpleName)
     }

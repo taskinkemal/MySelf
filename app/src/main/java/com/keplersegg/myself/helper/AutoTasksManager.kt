@@ -123,14 +123,14 @@ open class AutoTasksManager {
     private fun getCalldetails(context: Context, daysBack: Int) : Int {
         var totalSeconds = 0
 
-        val strOrder = android.provider.CallLog.Calls.DATE + " DESC"
+        val strOrder = CallLog.Calls.DATE + " DESC"
 
         val fromDate = Utils.getDayBack(daysBack)
         val toDate = Utils.getDayBack(daysBack + 1)
 
         val whereValue = arrayOf(fromDate.toString(), toDate.toString())
 
-        val managedCursor = context.contentResolver.query(CallLog.Calls.CONTENT_URI, null, android.provider.CallLog.Calls.DATE + " BETWEEN ? AND ?", whereValue, strOrder)
+        val managedCursor = context.contentResolver.query(CallLog.Calls.CONTENT_URI, null, CallLog.Calls.DATE + " BETWEEN ? AND ?", whereValue, strOrder)
 
         if (managedCursor != null) {
 

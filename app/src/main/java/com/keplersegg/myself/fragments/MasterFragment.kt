@@ -14,7 +14,7 @@ import java.lang.Exception
 
 abstract class MasterFragment : Fragment(), IErrorMessage {
 
-    lateinit protected var activity: MainActivity
+    protected lateinit var activity: MainActivity
     protected var rootView: View? = null
     protected var layout: Int = 0
 
@@ -66,7 +66,7 @@ abstract class MasterFragment : Fragment(), IErrorMessage {
     }
 
 
-    fun logAnalyticsPageVisit() {
+    private fun logAnalyticsPageVisit() {
 
         activity.firebaseAnalytics.setCurrentScreen(activity, javaClass.simpleName, javaClass.simpleName)
     }

@@ -28,7 +28,7 @@ import org.jetbrains.anko.doAsync
 import java.util.Arrays
 
 
-class LoginActivity : AuthActivity(), ISetFacebookUser, ILoginHost, ISyncTasksHost {
+class LoginActivity : MasterActivity(), ISetFacebookUser, ILoginHost, ISyncTasksHost {
 
     override fun GetApplication(): MySelfApplication {
         return app
@@ -131,12 +131,11 @@ class LoginActivity : AuthActivity(), ISetFacebookUser, ILoginHost, ISyncTasksHo
 
             toggleProgressBar(lytProgressBar, false)
 
-            if (tokenType == TokenType.Facebook)
-                showErrorMessage(getString(R.string.err_login_facebook))
-            else if (tokenType == TokenType.Google)
-                showErrorMessage(getString(R.string.err_login_google))
-            else
-                showErrorMessage(getString(R.string.err_login_user))
+            when (tokenType) {
+                TokenType.Facebook -> showErrorMessage(getString(R.string.err_login_facebook))
+                TokenType.Google -> showErrorMessage(getString(R.string.err_login_google))
+                else -> showErrorMessage(getString(R.string.err_login_user))
+            }
         }
     }
 
@@ -165,6 +164,6 @@ class LoginActivity : AuthActivity(), ISetFacebookUser, ILoginHost, ISyncTasksHo
     }
 
     companion object {
-        private val RC_SIGN_IN = 430
+        private const val RC_SIGN_IN = 430
     }
 }

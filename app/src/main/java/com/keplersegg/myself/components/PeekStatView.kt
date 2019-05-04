@@ -8,9 +8,6 @@ import android.view.LayoutInflater
 import com.keplersegg.myself.R
 import android.widget.RelativeLayout
 
-
-
-
 class PeekStatView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,

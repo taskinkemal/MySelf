@@ -42,7 +42,7 @@ class LineStatView @JvmOverloads constructor(
             lblLabel.text = label
             lblValue.text = value.toString()
             lblUnit.text = unit
-            val drawable = lblValue.getBackground()
+            val drawable = lblValue.background
             drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN)
 
             typedArray.recycle()

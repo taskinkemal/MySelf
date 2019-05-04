@@ -72,17 +72,17 @@ class WentToFragment : ListFragment() {
 
             var isWifiDisabled = false
 
-            if (!wm.isWifiEnabled()) {
+            if (!wm.isWifiEnabled) {
 
                 context.showSnackbarMessage("Temporarily enabling wifi..")
                 isWifiDisabled = true
-                wm.setWifiEnabled(true)
+                wm.isWifiEnabled = true
             }
 
             val result = wm.configuredNetworks
 
             if (isWifiDisabled) {
-                wm.setWifiEnabled(false)
+                wm.isWifiEnabled = false
                 context.showSnackbarMessage("Wifi is disabled back..")
             }
 

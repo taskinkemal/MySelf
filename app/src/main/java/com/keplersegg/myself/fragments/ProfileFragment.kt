@@ -78,15 +78,10 @@ class ProfileFragment : MasterFragment(), ISignOut {
 
                     for (b in allBadges) {
 
-                        if (b.BadgeId == 1) {
-
-                            bvBadge1.setLevel(b.Level)
-                        } else if (b.BadgeId == 2) {
-
-                            bvBadge2.setLevel(b.Level)
-                        } else if (b.BadgeId == 3) {
-
-                            bvBadge3.setLevel(b.Level)
+                        when {
+                            b.BadgeId == 1 -> bvBadge1.setLevel(b.Level)
+                            b.BadgeId == 2 -> bvBadge2.setLevel(b.Level)
+                            b.BadgeId == 3 -> bvBadge3.setLevel(b.Level)
                         }
                     }
                 }
@@ -117,19 +112,6 @@ class ProfileFragment : MasterFragment(), ISignOut {
                     .into(imgUserPicture)
         }
     }
-//
-//    private fun setTint(img: ImageView, isEnabled: Boolean) {
-//
-//        if (isEnabled) {
-//            img.clearColorFilter()
-//        }
-//        else {
-//            val matrix = ColorMatrix()
-//            matrix.setSaturation(0f)
-//            val filter = ColorMatrixColorFilter(matrix)
-//            img.colorFilter = filter
-//        }
-//    }
 
     override fun onSignOut() {
 

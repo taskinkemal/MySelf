@@ -2,7 +2,6 @@ package com.keplersegg.myself.helper
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.graphics.drawable.Drawable
 import com.keplersegg.myself.MySelfApplication
 import java.util.*
 
@@ -17,7 +16,6 @@ class DataStorage(app: MySelfApplication) {
     private val deviceRegistrationID = "deviceRegistrationID"
     private val newBadges = "newBadges"
     private val tutorialDone = "tutorialDone"
-    private val appIcons = "appIcons"
     private val callDuration = "callDuration"
 
     init {

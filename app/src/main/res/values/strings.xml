@@ -100,6 +100,7 @@
     <string name="err_login_facebook">Cannot authenticate via Facebook.</string>
     <string name="err_login_google">Cannot authenticate via Google.</string>
     <string name="err_login_user">Cannot authenticate the user.</string>
+    <string name="lbl_days_remaining">days remaining</string>
 
     <string name="timeFrameInADay">in a day</string>
     <string name="timeFrameInAWeek">in a week</string>

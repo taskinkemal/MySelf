@@ -4,10 +4,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
 import com.keplersegg.myself.R
 import kotlinx.android.synthetic.main.component_day_stat.view.*
-import android.graphics.PorterDuff
 import java.util.*
 import java.text.SimpleDateFormat
 

@@ -17,7 +17,7 @@ class GoalStatView @JvmOverloads constructor(
         defStyleRes: Int = 0
 ) : CardView(context, attrs, defStyleRes) {
 
-    internal var total: Int = 0
+    private var total: Int = 0
     private var label: String? = ""
     private var color: Int = 0
 

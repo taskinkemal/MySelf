@@ -1,13 +1,9 @@
 package com.keplersegg.myself.activities
 
 import android.Manifest
-import android.appwidget.AppWidgetManager
-import android.content.ComponentName
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
@@ -21,18 +17,13 @@ import com.google.android.material.snackbar.Snackbar
 import com.keplersegg.myself.MySelfApplication
 import com.keplersegg.myself.fragments.*
 import com.keplersegg.myself.helper.AutoTaskType
-import com.keplersegg.myself.helper.TaskUpdater
-import com.keplersegg.myself.helper.Utils
 import com.keplersegg.myself.interfaces.ISyncTasksHost
-import com.keplersegg.myself.widgets.TasksWidget
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
-import android.widget.RemoteViews
-import com.keplersegg.myself.Room.Entity.TaskEntry
 
 
-class MainActivity : AuthActivity(), ISyncTasksHost {
+class MainActivity : MasterActivity(), ISyncTasksHost {
 
     override fun GetApplication(): MySelfApplication {
         return app
@@ -46,8 +37,6 @@ class MainActivity : AuthActivity(), ISyncTasksHost {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        handleWidgetIntent(intent)
 
         setupNavigationView()
 
@@ -86,7 +75,7 @@ class MainActivity : AuthActivity(), ISyncTasksHost {
 
         lblNavUserName.text = if (app.user != null) app.user!!.FirstName + " " + app.user!!.LastName else "Guest"
 
-        if (app.user != null && app.user!!.PictureUrl != null && !app.user!!.PictureUrl!!.isEmpty()) {
+        if (app.user != null && app.user!!.PictureUrl != null && app.user!!.PictureUrl!!.isNotEmpty()) {
 
             Glide.with(this)
                     .load(app.user!!.PictureUrl)
@@ -242,81 +231,5 @@ class MainActivity : AuthActivity(), ISyncTasksHost {
                 }
             }
         }
-    }
-
-    private fun handleWidgetIntent(intent: Intent?) {
-
-        if (intent == null) return
-
-        if (intent.action == AppWidgetManager.ACTION_APPWIDGET_UPDATE) {
-
-            val value = intent.getIntExtra("value", 0)
-
-            doAsync {
-
-                val task = master.AppDB()
-                        .taskEntryDao().getTasks(Utils.getToday()).first()
-
-                TaskUpdater(master).updateEntry(task.task!!.Id, Utils.getToday(), task.entry!!.Value + value)
-
-                uiThread {
-
-                }
-            }
-        }
-    }
-
-    fun updateWidget(items: List<TaskEntry>) {
-
-        val appWidgetManager = AppWidgetManager.getInstance(master)
-        val remoteViews = RemoteViews(master.packageName, R.layout.tasks_widget)
-        val thisWidget = ComponentName(master, TasksWidget::class.java)
-
-        remoteViews.removeAllViews(R.id.lytWidgetContainer)
-
-        val filteredItems = items.sortedBy { i -> i.task!!.AutomationType }
-        for (i in 0..filteredItems.size) {
-
-            if (i > 2) break
-
-            remoteViews.addView(R.id.lytWidgetContainer, CreateComponentWidget(filteredItems[i]))
-        }
-
-        /*
-        remoteViews.setOnClickPendingIntent(R.id.imgMinus,
-                TasksWidget.getPendingIntent(master, -1))
-        remoteViews.setOnClickPendingIntent(R.id.imgPlus,
-                TasksWidget.getPendingIntent(master, 1))
-*/
-        appWidgetManager.updateAppWidget(thisWidget, remoteViews)
-/*
-        appWidgetManager.updateAppWidget(thisWidget, remoteViews)
-
-        val man = AppWidgetManager.getInstance(this)
-
-        val ids = man.getAppWidgetIds(
-                ComponentName(this, TasksWidget::class.java))
-
-        val updateIntent = Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
-        updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
-        updateIntent.putExtra("label", "Coffee")
-        sendBroadcast(updateIntent)
-        */
-    }
-
-    private fun CreateComponentWidget(taskEntry: TaskEntry): RemoteViews {
-
-        val componentWidget = RemoteViews(master.packageName, R.layout.component_widget_task)
-        componentWidget.setTextViewText(R.id.lblTask, taskEntry.task!!.Label)
-
-        val value = if (taskEntry.entry != null) taskEntry.entry!!.Value else 0
-        componentWidget.setTextViewText(R.id.lblValue, value.toString() + " " + taskEntry.task!!.Unit)
-
-        if (taskEntry.task!!.DataType == 1)
-            componentWidget.setViewVisibility(R.id.imgDone, View.GONE)
-        else
-            componentWidget.setViewVisibility(R.id.lblValue, View.GONE)
-
-        return componentWidget
     }
 }

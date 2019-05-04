@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -33,7 +32,6 @@ class TasksAdapter(private val activity: MainActivity, private val day: Int) : R
     private val items: ArrayList<TaskEntry> = ArrayList()
 
     inner class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val lytListItem: LinearLayout? = itemView.findViewById(R.id.lytListItem)
         val lblLabel: TextView = itemView.findViewById(R.id.lblLabel)
         val imgDone: ImageButton? = itemView.findViewById(R.id.imgDone)
         val imgPlus: ImageButton? = itemView.findViewById(R.id.imgPlus)
